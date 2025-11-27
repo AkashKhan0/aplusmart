@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: aliceblue;
+  color: #2B2A29;
+}
+.universal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.universal_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fixed_width {
+  width: 100%;
+  max-width: 1300px;
+}
+
+ ::-webkit-scrollbar{
+  display: none;
+ }
+
+.admin_tabs {
+  border: 1px solid #686866;
+  transition: 0.3s all ease;
+  padding: 4px 12px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 3px;
+}
+.admin_tabs:hover {
+  background-color: #686866;
+  color: #FFFFFF;
+}
