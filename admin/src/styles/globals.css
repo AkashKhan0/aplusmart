@@ -41,3 +41,16 @@ body {
   background-color: #686866;
   color: #FFFFFF;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+  outline: none;
+}
+textarea{
+  outline: none;
+}

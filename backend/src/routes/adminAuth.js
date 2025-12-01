@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-const ADMIN_USERNAME = "aplusmartbd_admin";
-const ADMIN_PASSWORD = "eidai_password";
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "aplusmartbd_admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "eidai_password";
 
 // ADMIN LOGIN
 router.post("/login", async (req, res) => {

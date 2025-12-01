@@ -10,6 +10,9 @@ import Addproduct from "./Addproduct";
 import Offers from "./Offers";
 import Combo from "./Combo";
 import Faq from "./Faq";
+import ProductList from "./ProductList";
+import OfferList from "./OfferList";
+import ComboList from "./ComboList";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -32,6 +35,9 @@ export default function Dashboard() {
     },
     { id: 4, label: "combo", component: <Combo /> },
     { id: 5, label: "faq", component: <Faq /> },
+    { id: 6, label: "Products list", component: <ProductList /> },
+    { id: 7, label: "Offer list", component: <OfferList /> },
+    { id: 8, label: "Combo list", component: <ComboList /> },
     // add more tabs here
   ];
 
