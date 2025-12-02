@@ -159,7 +159,7 @@ export default function Maincategory() {
           <p className="text-center text-sm text-gray-500">No categories yet.</p>
         ) : (
           categories.map((item) => (
-            <div key={item._id} className="w-full flex items-center justify-between gap-2.5 border p-2">
+            <div key={item._id} className="w-full flex items-center justify-between gap-2.5 border px-2 py-1">
               <div className="flex items-center gap-5">
                 <p className="text-sm font-bold capitalize">{item.mainCategory}</p>
                 <p className="text-sm font-semibold capitalize">{item.subCategory}</p>

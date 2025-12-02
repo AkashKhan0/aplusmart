@@ -271,13 +271,13 @@ export default function Offers() {
           {/* basic info */}
           <div className="flex gap-2">
             <input
-              className="flex-1 py-2 px-3 border rounded"
+              className="w-full py-2 px-3 border rounded"
               placeholder="Product Name"
               value={form.name}
               onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
             />
             <input
-              className="w-52 py-2 px-3 border rounded"
+              className="w-full py-2 px-3 border rounded"
               placeholder="Brand"
               value={form.brand}
               onChange={(e) =>
@@ -316,7 +316,7 @@ export default function Offers() {
           <div className="flex gap-2">
             <input
               type="number"
-              className="py-2 px-3 border rounded"
+              className="w-full py-2 px-3 border rounded"
               placeholder="Regular Price"
               value={form.regularPrice}
               onChange={(e) =>
@@ -325,7 +325,7 @@ export default function Offers() {
             />
             <input
               type="number"
-              className="py-2 px-3 border rounded"
+              className="w-full py-2 px-3 border rounded"
               placeholder="Offer Price"
               value={form.offerPrice}
               onChange={(e) =>
@@ -333,7 +333,7 @@ export default function Offers() {
               }
             />
             <select
-              className="py-2 px-3 border rounded"
+              className="w-full py-2 px-3 border rounded"
               value={form.stockStatus}
               onChange={(e) =>
                 setForm((p) => ({ ...p, stockStatus: e.target.value }))
@@ -346,7 +346,7 @@ export default function Offers() {
           </div>
 
           {/* Colors */}
-          <div className="border">
+          <div className="border p-2">
             <p className="font-semibold mb-2">Colors</p>
             <div className="flex flex-wrap gap-3">
               {COLOR_LIST.map((c) => {
@@ -401,11 +401,11 @@ export default function Offers() {
           </div>
 
           {/* Short list */}
-          <div className="border p-3 rounded">
+          <div className="border p-2 rounded">
             <p className="font-semibold mb-2">Short List</p>
             <div className="flex gap-2 mb-2">
               <input
-                className="flex-1 py-1 px-2 border rounded"
+                className="w-full py-1 px-2 border rounded"
                 placeholder="Name"
                 value={shortInput.name}
                 onChange={(e) =>
@@ -413,7 +413,7 @@ export default function Offers() {
                 }
               />
               <input
-                className="w-48 py-1 px-2 border rounded"
+                className="w-full py-1 px-2 border rounded"
                 placeholder="Value"
                 value={shortInput.value}
                 onChange={(e) =>
@@ -452,7 +452,7 @@ export default function Offers() {
           </div>
 
           {/* Specifications */}
-          <div className="border p-3 rounded">
+          <div className="border p-2 rounded">
             <p className="font-semibold mb-2">Specifications</p>
 
             <div className="w-full flex flex-col gap-2.5">
@@ -477,7 +477,7 @@ export default function Offers() {
 
             <div className="flex gap-2 mb-2">
               <input
-                className="flex-1 py-1 px-2 border rounded"
+                className="w-full py-1 px-2 border rounded"
                 placeholder="List Name"
                 value={specInput.listInput.name}
                 onChange={(e) =>
@@ -488,7 +488,7 @@ export default function Offers() {
                 }
               />
               <input
-                className="w-48 py-1 px-2 border rounded"
+                className="w-full py-1 px-2 border rounded"
                 placeholder="List Value"
                 value={specInput.listInput.value}
                 onChange={(e) =>
