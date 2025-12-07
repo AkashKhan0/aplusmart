@@ -1,3 +1,4 @@
+import { AppProvider } from "../context/AppContext";
 import "../styles/globals.css";
 import LayoutClient from "./LayoutClient";
 
@@ -10,9 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <LayoutClient>
-          {children}
-        </LayoutClient>
+        <AppProvider>
+          <LayoutClient>{children}</LayoutClient>
+        </AppProvider>
       </body>
     </html>
   );

@@ -7,7 +7,7 @@
       "@/app/*": ["app/*"],
       "@/lib/*": ["lib/*"],
       "@/styles/*": ["styles/*"],
-      "@/models/*": ["models/*"]
+      "@/models/*": ["models/*"],
     }
   }
 }

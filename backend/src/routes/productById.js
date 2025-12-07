@@ -1,6 +1,5 @@
 import express from "express";
 import Product from "../models/Product.js";
-import { uploadImage } from "../utils/uploadImage.js";
 
 const router = express.Router();
 

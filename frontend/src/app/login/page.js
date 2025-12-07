@@ -1,46 +1,37 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAppContext } from "@/src/context/AppContext";
+// import { useAppContext } from "../components/AppContext";
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
 
+  const { login } = useAppContext();
+
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
-
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   const [emailPhoneError, setEmailPhoneError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  // Auto-login if token exists
-  useEffect(() => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (token) router.push(redirectTo);
-  }, []);
-
-  // Email / Phone Validation
   const validateEmailOrPhone = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const bdPhoneRegex = /^01[3-9]\d{8}$/;
 
-    if (!value.trim()) {
-      setEmailPhoneError("Email or phone is required.");
-    } else if (value.includes("@") && !emailRegex.test(value)) {
-      setEmailPhoneError("Enter a valid email.");
-    } else if (!value.includes("@") && !bdPhoneRegex.test(value)) {
-      setEmailPhoneError("Enter a valid Bangladeshi phone number.");
-    } else {
-      setEmailPhoneError("");
-    }
+    if (!value.trim()) setEmailPhoneError("Email or phone is required.");
+    else if (value.includes("@") && !emailRegex.test(value)) setEmailPhoneError("Enter a valid email.");
+    else if (!value.includes("@") && !bdPhoneRegex.test(value)) setEmailPhoneError("Enter a valid Bangladeshi phone number.");
+    else setEmailPhoneError("");
 
     setEmailOrPhone(value);
   };
@@ -54,43 +45,20 @@ export default function Page() {
       setEmailPhoneError("Email or phone is required.");
       return;
     }
-
     if (!password.trim()) {
       setPasswordError("Password is required.");
       return;
     }
-
     if (emailPhoneError) return;
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailOrPhone, password }),
-      });
+    const result = await login({ emailOrPhone, password, rememberMe });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setIsSuccess(true);
-        setMessage("Login successful! Redirecting...");
-
-        if (rememberMe) {
-          localStorage.setItem("token", data.token);
-        } else {
-          sessionStorage.setItem("token", data.token);
-        }
-
-        setTimeout(() => {
-          router.push(redirectTo);
-        }, 1000);
-
-      } else {
-        setMessage(data.error || "Login failed.");
-      }
-
-    } catch (error) {
-      setMessage("Server error. Please try again.");
+    if (result.success) {
+      setIsSuccess(true);
+      setMessage("Login successful! Redirecting...");
+      setTimeout(() => router.push(redirectTo), 1000);
+    } else {
+      setMessage(result.error);
     }
   };
 
@@ -103,7 +71,6 @@ export default function Page() {
 
           <form onSubmit={handleLogin} className="flex flex-col gap-1.5">
 
-            {/* Email / Phone */}
             <p className="font-semibold">Email / Phone</p>
             <div className="border rounded-sm mb-1">
               <input
@@ -116,7 +83,6 @@ export default function Page() {
             </div>
             {emailPhoneError && <p className="text-red-600 text-sm mb-2">{emailPhoneError}</p>}
 
-            {/* Password */}
             <div className="flex items-center justify-between">
               <p className="font-semibold">Password</p>
             </div>
@@ -132,7 +98,6 @@ export default function Page() {
                   setPasswordError("");
                 }}
               />
-
               <span
                 className="absolute right-3 top-2 cursor-pointer"
                 onClick={() => setShowPass(!showPass)}
@@ -142,7 +107,6 @@ export default function Page() {
             </div>
             {passwordError && <p className="text-red-600 text-sm mb-2">{passwordError}</p>}
 
-            {/* Remember Me */}
             <div className="flex items-center gap-2 mb-3">
               <input
                 type="checkbox"
@@ -154,7 +118,6 @@ export default function Page() {
               <label htmlFor="remember" className="cursor-pointer">Remember Me</label>
             </div>
 
-            {/* Button */}
             <button
               type="submit"
               className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg my-3"
@@ -162,7 +125,6 @@ export default function Page() {
               Login
             </button>
 
-            {/* Message */}
             {message && (
               <p className={`text-sm font-semibold mb-2 ${isSuccess ? "text-green-600" : "text-red-600"}`}>
                 {message}
