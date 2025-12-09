@@ -9,7 +9,6 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-
   // ---------------- States ----------------
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
@@ -334,7 +333,7 @@ export const AppProvider = ({ children }) => {
       setTimeout(() => setMessage(""), 2000);
       return;
     }
-const uniqueId = crypto.randomUUID();
+    const uniqueId = crypto.randomUUID();
     const cartItem = {
       id: uniqueId,
       productId: product._id,
@@ -353,26 +352,27 @@ const uniqueId = crypto.randomUUID();
   const cartCount = cart.length;
 
   // Update cart quantity
- const updateCartQuantity = (id, type) => {
-  const newCart = cart.map((item) => {
-    if (item.id === id) {
-      let step = user.role === "reseller" ? 50 : 1; // role-based step
-      let newQty = type === "inc" ? item.quantity + step : item.quantity - step;
+  const updateCartQuantity = (id, type) => {
+    const newCart = cart.map((item) => {
+      if (item.id === id) {
+        let step = user.role === "reseller" ? 50 : 1; // role-based step
+        let newQty =
+          type === "inc" ? item.quantity + step : item.quantity - step;
 
-      // Minimum quantity
-      if (user.role === "reseller") {
-        if (newQty < 50) newQty = 50;
-      } else {
-        if (newQty < 1) newQty = 1;
+        // Minimum quantity
+        if (user.role === "reseller") {
+          if (newQty < 50) newQty = 50;
+        } else {
+          if (newQty < 1) newQty = 1;
+        }
+
+        return { ...item, quantity: newQty };
       }
+      return item;
+    });
 
-      return { ...item, quantity: newQty };
-    }
-    return item;
-  });
-
-  saveCart(newCart);
-};
+    saveCart(newCart);
+  };
 
   // Remove item from cart
   const removeCartItem = (id) => {
@@ -394,17 +394,79 @@ const uniqueId = crypto.randomUUID();
 
   const saveCart = (newCart) => {
     setCart(newCart);
-    localStorage.setItem(getCartKey(), JSON.stringify(newCart));
+    try {
+      localStorage.setItem(getCartKey(), JSON.stringify(newCart));
+    } catch (err) {
+      console.error("saveCart error:", err);
+    }
   };
 
   const loadCart = () => {
-    const storedCart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
-    setCart(storedCart);
+    try {
+      const storedCart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
+      setCart(storedCart);
+    } catch (err) {
+      console.error("loadCart error:", err);
+      setCart([]);
+    }
   };
 
   useEffect(() => {
     if (user) loadCart();
   }, [user]);
+
+const orderId = String(Math.floor(100000 + Math.random() * 900000));
+
+  const placeOrder = ({
+    billing,
+    orderId,
+    shippingMethod,
+    shippingCharge,
+    paymentMethod,
+    items,
+    points,
+  }) => {
+    // generate 6-digit order id
+
+    // compute items total
+    const itemsTotal = items.reduce(
+      (acc, it) => acc + it.price * it.quantity,
+      0
+    );
+
+    const order = {
+      billing,
+      shippingMethod,
+      orderId,
+      shippingCharge,
+      paymentMethod,
+      items,
+      itemsTotal,
+      points,
+      grandTotal: itemsTotal + Number(shippingCharge || 0),
+      createdAt: new Date().toISOString(),
+    };
+
+    // save to sessionStorage so order-confirmation page can read it
+    try {
+      sessionStorage.setItem("latest_order", JSON.stringify(order));
+    } catch (err) {
+      console.error("sessionStorage error:", err);
+    }
+
+    // clear cart
+    try {
+      localStorage.removeItem(getCartKey());
+    } catch (err) {
+      console.error("clear cart error:", err);
+    }
+    setCart([]);
+
+    // redirect to confirmation page
+    router.push("/order-confirmation");
+  };
+
+
 
   // ---------------- Greeting ----------------
   useEffect(() => {
@@ -490,6 +552,7 @@ const uniqueId = crypto.randomUUID();
         cartCount,
         updateCartQuantity,
         removeCartItem,
+        placeOrder,orderId
       }}
     >
       {children}

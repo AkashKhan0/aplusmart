@@ -13,6 +13,7 @@ import Faq from "./Faq";
 import ProductList from "./ProductList";
 import OfferList from "./OfferList";
 import ComboList from "./ComboList";
+import Orderlist from "./Orderlist";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function Dashboard() {
     { id: 6, label: "Products list", component: <ProductList /> },
     { id: 7, label: "Offer list", component: <OfferList /> },
     { id: 8, label: "Combo list", component: <ComboList /> },
+    { id: 9, label: "Order list", component: <Orderlist /> },
     // add more tabs here
   ];
 

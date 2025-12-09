@@ -54,6 +54,12 @@ body {
   box-shadow: inset 0 0 2px rgba(255,255,255,0.2);
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .ftr_h1 {
   text-transform: uppercase;
   font-size: 14px;
@@ -107,4 +113,53 @@ body {
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 800;
+}
+.taka_font {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.buy_btn {
+  padding: 8px 24px;
+  background-color: #2B2A29;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: 0.3s all ease;
+  cursor: pointer;
+  font-size: 16px;
+}
+.buy_btn:hover {
+  background-color: #201f1f;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 5px 0px;
+  text-transform: capitalize;
+}
+.req_hash {
+  font-size: 16px;
+  color: red;
+}
+.checkout_inp {
+  width: 100%;
+  border: 1px solid #a6a6a6;
+  padding: 4px 10px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.i_agree {
+  color: #2B2A29;
+  font-size: 14px;
+  font-weight: 400;
+}
+.i_agree a {
+  color: #931905;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.i_agree a:hover {
+  text-decoration: underline;
 }

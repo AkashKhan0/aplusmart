@@ -55,7 +55,7 @@ export default function HeroCarousel() {
             {images[currentIndex].subtitle}
           </p>
 
-          <button className="px-6 py-2 bg-[#2B2A29] text-[#FFFFFF] font-semibold rounded hover:bg-[#201f1f] transition-all cursor-pointer">
+          <button className="buy_btn">
             Buy Now
           </button>
         </div>

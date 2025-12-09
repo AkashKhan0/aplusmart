@@ -28,6 +28,7 @@ import productRoutes from "./routes/products.js";
 import productById from "./routes/productById.js";
 import offersRoutes from "./routes/offers.js";
 import comboRoutes from "./routes/combos.js";
+import ordersRoutes from "./routes/orders.js";
 
 
 // Use Routes
@@ -41,6 +42,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/products", productById);
 app.use("/api/offers", offersRoutes);
 app.use("/api/combos", comboRoutes);
+app.use("/api/orders", ordersRoutes);
 
 
 
