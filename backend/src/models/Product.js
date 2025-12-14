@@ -36,6 +36,8 @@ const ProductSchema = new mongoose.Schema(
         list: [{ name: String, value: String }],
       },
     ],
+    offerStartDate: { type: Date },
+    offerEndDate: { type: Date },
   },
   { timestamps: true }
 );

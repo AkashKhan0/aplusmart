@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAppContext } from "@/src/context/AppContext";
-// import { useAppContext } from "../components/AppContext";
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
 
-  const { login } = useAppContext();
+  const { loginUser, user, authLoading } = useAppContext();
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -24,17 +23,6 @@ export default function Page() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  const validateEmailOrPhone = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const bdPhoneRegex = /^01[3-9]\d{8}$/;
-
-    if (!value.trim()) setEmailPhoneError("Email or phone is required.");
-    else if (value.includes("@") && !emailRegex.test(value)) setEmailPhoneError("Enter a valid email.");
-    else if (!value.includes("@") && !bdPhoneRegex.test(value)) setEmailPhoneError("Enter a valid Bangladeshi phone number.");
-    else setEmailPhoneError("");
-
-    setEmailOrPhone(value);
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,16 +39,36 @@ export default function Page() {
     }
     if (emailPhoneError) return;
 
-    const result = await login({ emailOrPhone, password, rememberMe });
+    const result = await loginUser({ emailOrPhone, password, rememberMe });
 
     if (result.success) {
       setIsSuccess(true);
       setMessage("Login successful! Redirecting...");
-      setTimeout(() => router.push(redirectTo), 1000);
+      // setTimeout(() => router.push(redirectTo), 1000);
     } else {
       setMessage(result.error);
+      setIsSuccess(false);
     }
   };
+
+  useEffect(() => {
+  if (authLoading) return;
+
+  if (user) {
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect") || "/";
+    router.replace(redirect);
+  }
+}, [authLoading, user]);
+
+if (authLoading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      Checking session...
+    </div>
+  );
+}
+
 
   return (
     <div className="w-full universal min-h-screen p-5">
@@ -78,7 +86,7 @@ export default function Page() {
                 className="w-full outline-none py-1 px-3"
                 placeholder="Email / Phone"
                 value={emailOrPhone}
-                onChange={(e) => validateEmailOrPhone(e.target.value)}
+                onChange={(e) => setEmailOrPhone(e.target.value)}
               />
             </div>
             {emailPhoneError && <p className="text-red-600 text-sm mb-2">{emailPhoneError}</p>}
@@ -110,7 +118,6 @@ export default function Page() {
             <div className="flex items-center gap-2 mb-3">
               <input
                 type="checkbox"
-                id="remember"
                 checked={rememberMe}
                 onChange={() => setRememberMe(!rememberMe)}
                 className="cursor-pointer"

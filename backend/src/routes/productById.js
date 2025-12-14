@@ -9,7 +9,9 @@ router.get("/:id", async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (!product) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Product not found" });
     }
 
     res.json({ success: true, product });
@@ -36,12 +38,16 @@ router.put("/:id", async (req, res) => {
       shortList,
       specifications,
       images,
+      offerStartDate,
+      offerEndDate,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (!product) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Product not found" });
     }
 
     // Update simple fields
@@ -57,11 +63,15 @@ router.put("/:id", async (req, res) => {
 
     // Update arrays safely
     product.colors = Array.isArray(colors) ? colors : product.colors;
-    product.shortList = Array.isArray(shortList) ? shortList : product.shortList;
+    product.shortList = Array.isArray(shortList)
+      ? shortList
+      : product.shortList;
     product.specifications = Array.isArray(specifications)
       ? specifications
       : product.specifications;
     product.images = Array.isArray(images) ? images : product.images;
+    product.offerStartDate = offerStartDate ? new Date(offerStartDate) : product.offerStartDate;
+    product.offerEndDate = offerEndDate ? new Date(offerEndDate) : product.offerEndDate;
 
     await product.save();
 
@@ -77,7 +87,9 @@ router.delete("/:id", async (req, res) => {
     const deleted = await Product.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Product not found" });
     }
 
     res.json({ success: true, message: "Product deleted successfully" });

@@ -1,12 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import Link from "next/link";
 
 export default function Navbar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  // CLOSE WHEN CLICK OUTSIDE
+  const [categories, setCategories] = useState([]);
+
+  // Load main categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/categories`);
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Close sidebar when clicking outside
   useEffect(() => {
     function handleOutsideClick(e) {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
@@ -14,26 +32,19 @@ export default function Navbar({ isOpen, setIsOpen }) {
       }
     }
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
+    if (isOpen) document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen, setIsOpen]);
 
-  // SIDEBAR ANIMATION CLASSES
   const sidebarClass = isOpen ? "translate-x-0" : "-translate-x-full";
 
   return (
     <>
-      {/* BACKDROP */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-40"
           onClick={() => setIsOpen(false)}
-        ></div>
+        />
       )}
 
       <div
@@ -47,37 +58,21 @@ export default function Navbar({ isOpen, setIsOpen }) {
           <RxCross2 />
         </div>
 
-
-        <div className="text-[#FFFFFF] font-semibold text-lg w-full">
-            <ul className="w-full flex flex-col gap-2.5 text-base">
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
-                <li>Blog</li>
-            </ul>
+        <div className="text-[#FFFFFF] font-semibold text-lg w-full mt-10">
+          <ul className="w-full flex flex-col gap-2.5 text-base">
+            {categories.map((cat) => (
+              <li key={cat._id}>
+                <Link
+                  href={`/products?mainCategory=${encodeURIComponent(cat.mainCategory)}`}
+                  onClick={() => setIsOpen(false)}
+                  className="hover:text-red-500 transition-colors capitalize"
+                >
+                  {cat.mainCategory}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-
-
       </div>
     </>
   );

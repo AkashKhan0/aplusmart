@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Allproducts() {
+export default function Homecombo() {
   const [products, setProducts] = useState([]);
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
 
@@ -29,12 +29,12 @@ export default function Allproducts() {
         <div className="fixed_width px-5 universal_column h-full min-h-screen">
           <div className="w-full max-w-[200px]">
             <Image
-            src="/images/clock.gif"
-            alt="Please wait"
-            width={500}
-            height={500}
-            className="w-full h-full object-contain"
-          />
+              src="/images/clock.gif"
+              alt="Please wait"
+              width={500}
+              height={500}
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
       </div>
@@ -42,26 +42,24 @@ export default function Allproducts() {
 
   return (
     <div className="w-full universal_column py-10">
-      {/* all products */}
-      <div className="fixed_width px-5">
+      {/* Combo products */}
+      <div className="fixed_width px-5 mt-10">
         <div className="w-full flex flex-col items-center justify-center mb-5">
           <h1 className="text-lg sm:text-xl md:text-xl uppercase font-medium tracking-[3px]">
-            All Products
+            Combo Products
           </h1>
-          <p className="text-base">Check & Get Your Desired Product!</p>
+          <p className="text-base">Unlock Exclusive Combo Offers</p>
         </div>
 
-        {/* all products list */}
+        {/* Combo products list */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {products
             .filter(
               (product) =>
-                product.mainCategory?.toLowerCase() !== "offer" &&
-                product.subCategory?.toLowerCase() !== "offer" &&
-                product.mainCategory?.toLowerCase() !== "combo" &&
-                product.subCategory?.toLowerCase() !== "combo"
+                product.mainCategory?.toLowerCase() === "combo" ||
+                product.subCategory?.toLowerCase() === "combo"
             )
-            .slice(0, 40)
+            .slice(0, 10)
             .map((product) => (
               <Link key={product._id} href={`/products/${product._id}`}>
                 <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
@@ -77,6 +75,7 @@ export default function Allproducts() {
                         % off
                       </div>
                     )}
+
                   <div className="w-full h-[250px] p-2">
                     <Image
                       src={product.images[0] || "/images/placeholder.png"}
@@ -92,12 +91,10 @@ export default function Allproducts() {
                       {product.name}
                     </h1>
 
-                    <p className="text-[#931905] flex items-center gap-2">
-                      <span className="taka">৳</span>
-                      {product.offerPrice}
+                    <p className="text-[#931905] flex gap-3">
+                      ৳ {product.offerPrice}
                       <del className="text-sm text-[#2B2A29]">
-                        <span className="taka">৳</span>
-                        {product.regularPrice}
+                        ৳ {product.regularPrice}
                       </del>
                     </p>
                   </div>
@@ -106,7 +103,6 @@ export default function Allproducts() {
             ))}
         </div>
       </div>
-
     </div>
   );
 }

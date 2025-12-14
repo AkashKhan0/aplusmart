@@ -224,7 +224,7 @@ export default function Offers() {
   };
 
   return (
-    <div className="w-full p-5">
+    <div className="w-full">
       <h1 className="text-2xl font-semibold mb-3">Offers Products</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">

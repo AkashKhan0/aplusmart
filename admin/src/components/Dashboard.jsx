@@ -14,6 +14,7 @@ import ProductList from "./ProductList";
 import OfferList from "./OfferList";
 import ComboList from "./ComboList";
 import Orderlist from "./Orderlist";
+import Useroffer from "./Useroffer";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -29,17 +30,10 @@ export default function Dashboard() {
       label: "products",
       component: <Addproduct />,
     },
-    {
-      id: 3,
-      label: "offers",
-      component: <Offers />,
-    },
-    { id: 4, label: "combo", component: <Combo /> },
-    { id: 5, label: "faq", component: <Faq /> },
-    { id: 6, label: "Products list", component: <ProductList /> },
-    { id: 7, label: "Offer list", component: <OfferList /> },
-    { id: 8, label: "Combo list", component: <ComboList /> },
-    { id: 9, label: "Order list", component: <Orderlist /> },
+    { id: 3, label: "faq", component: <Faq /> },
+    { id: 4, label: "Products list", component: <ProductList /> },
+    { id: 5, label: "Order list", component: <Orderlist /> },
+    { id: 6, label: "User Offer", component: <Useroffer /> },
     // add more tabs here
   ];
 

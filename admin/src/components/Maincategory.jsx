@@ -5,7 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 export default function Maincategory() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL; // should be http://localhost:5000
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [categories, setCategories] = useState([]);

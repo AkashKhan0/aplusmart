@@ -200,7 +200,7 @@ export default function Addproduct() {
 
 
   return (
-    <div className="w-full p-5">
+    <div className="w-full">
       <h1 className="text-2xl font-semibold mb-3">Add Product</h1>
 
       <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -262,6 +262,36 @@ export default function Addproduct() {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* offer date setup */}
+        <div className="w-full">
+          {productData.mainCategory === "offer" && (
+  <div className="w-full flex items-center gap-2 my-2">
+    <div className="w-full">
+      <label className="block mb-1">Offer Start Date:</label>
+      <input
+        type="date"
+        value={productData.offerStartDate || ""}
+        onChange={(e) =>
+          setProductData((prev) => ({ ...prev, offerStartDate: e.target.value }))
+        }
+        className="w-full py-1 px-2 border rounded-md"
+      />
+    </div>
+    <div className="w-full">
+      <label className="block mb-1">Offer End Date:</label>
+      <input
+        type="date"
+        value={productData.offerEndDate || ""}
+        onChange={(e) =>
+          setProductData((prev) => ({ ...prev, offerEndDate: e.target.value }))
+        }
+        className="w-full py-1 px-2 border rounded-md"
+      />
+    </div>
+  </div>
+)}
         </div>
 
         {/* Product info */}

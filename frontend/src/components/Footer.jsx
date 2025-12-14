@@ -12,6 +12,7 @@ export default function Footer() {
           <div className="w-full flex flex-col sm:flex-col md:flex-row items-stretch gap-2.5">
             <div className="w-full smw-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
               <h1 className="ftr_h1">support</h1>
+
               <div className="w-fit flex items-center text-sm gap-2.5">
                 <div className="w-[15px] h-[15px] mt-[3px]">
                   <IoMdCall />
@@ -31,61 +32,52 @@ export default function Footer() {
             <div className="w-full smw-full md:w-[40%] flex flex-col items-center sm:items-center md:items-start">
               <h1 className="ftr_h1">About Us</h1>
 
+              {/* desktop part */}
               <div className="w-full hidden sm:hidden md:flex gap-2.5">
                 <div className="w-full flex flex-col text-sm gap-1.5 ftr_span">
                   <Link href="">
-                    <span>Online Delivery</span>
+                    <p>Online Delivery</p>
                   </Link>
                   <Link href="">
-                    <span>About Us</span>
+                    <p>Contact Us</p>
                   </Link>
                   <Link href="">
-                    <span>Contact Us</span>
-                  </Link>
-                  <Link href="">
-                    <span>Brands</span>
+                    <p>Star Point Policy</p>
                   </Link>
                 </div>
                 <div className="w-full flex flex-col text-sm gap-1.5 ftr_span">
-                  <Link href="">
-                    <span>Terms and Conditions</span>
+                  <Link href="/terms-condition">
+                    <p>Terms and Conditions</p>
                   </Link>
-                  <Link href="">
-                    <span>Star Point Policy</span>
+                  <Link href="/privacy-policy">
+                    <p>Privacy Policy</p>
                   </Link>
-                  <Link href="">
-                    <span>Privacy Policy</span>
-                  </Link>
-                  <Link href="">
-                    <span>Refund and Return Policy</span>
+                  <Link href="/return&refund-policy">
+                    <p>Refund and Return Policy</p>
                   </Link>
                 </div>
               </div>
+
+              {/* mobile part */}
               <div className="w-full flex sm:flex md:hidden gap-2.5">
                 <div className="w-full flex flex-wrap justify-center ftr_span text-sm gap-5 gap-y-1">
-                  <Link href="">
-                    <span>Online Delivery</span>
+                  <Link href="/">
+                    <p>Online Delivery</p>
                   </Link>
-                  <Link href="">
-                    <span>About Us</span>
+                  <Link href="/">
+                    <p>Contact Us</p>
                   </Link>
-                  <Link href="">
-                    <span>Contact Us</span>
+                  <Link href="/terms-condition">
+                    <p>Terms and Conditions</p>
                   </Link>
-                  <Link href="">
-                    <span>Brands</span>
+                  <Link href="/">
+                    <p>Star Point Policy</p>
                   </Link>
-                  <Link href="">
-                    <span>Terms and Conditions</span>
+                  <Link href="/privacy-policy">
+                    <p>Privacy Policy</p>
                   </Link>
-                  <Link href="">
-                    <span>Star Point Policy</span>
-                  </Link>
-                  <Link href="">
-                    <span>Privacy Policy</span>
-                  </Link>
-                  <Link href="">
-                    <span>Refund and Return Policy</span>
+                  <Link href="/return&refund-policy">
+                    <p>Refund and Return Policy</p>
                   </Link>
                 </div>
               </div>

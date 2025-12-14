@@ -43,7 +43,7 @@ export default function OfferList() {
   };
 
   return (
-    <div className="p-5">
+    <div className="">
       <h1 className="text-2xl font-bold mb-4">🔥 Offer Product List</h1>
 
       {/* ================== TABLE ================== */}

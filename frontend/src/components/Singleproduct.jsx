@@ -2,36 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { useAppContext } from "../context/AppContext";
+import { useParams } from "next/navigation";
 
 export default function Singleproduct() {
   const { id } = useParams();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const {
-    user,
-    product,
-    setProduct,
-    relatedProducts,
-    setRelatedProducts,
-    activeImage,
-    setActiveImage,
-    quantity,
-    selectedColors,
-    message,
-    increment,
-    decrement,
-    handleColorSelect,
-    handleBuyNow,
-  } = useAppContext();
-
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [activeImage, setActiveImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
-  // ---------------- Load product ----------------
+  // Load product
   useEffect(() => {
     async function loadProduct() {
       try {
@@ -123,13 +107,22 @@ export default function Singleproduct() {
 
               {/* Short info */}
               <div className="my-5">
-                <p className="text-lg font-medium capitalize mb-2">{product.shortTitle}</p>
-                <p className="text-base font-normal">{product.shortDescription}</p>
+                <p className="text-lg font-medium capitalize mb-2">
+                  {product.shortTitle}
+                </p>
+                <p className="text-base font-normal">
+                  {product.shortDescription}
+                </p>
                 {product.shortList?.length > 0 && (
                   <ul className="list-none text-sm">
                     {product.shortList.map((item) => (
-                      <li key={item._id} className="flex items-center gap-5 my-1">
-                        <span className="font-medium w-fit sm:w-[120px] md:w-[120px]">{item.name}</span>
+                      <li
+                        key={item._id}
+                        className="flex items-center gap-5 my-1"
+                      >
+                        <span className="font-medium w-fit sm:w-[120px] md:w-[120px]">
+                          {item.name}
+                        </span>
                         <span className="text-gray-700">{item.value}</span>
                       </li>
                     ))}
@@ -138,47 +131,33 @@ export default function Singleproduct() {
               </div>
 
               {/* Color section */}
-              <div className="w-full flex flex-wrap items-center gap-5">
-                <div className="text-base font-medium capitalize">available color :</div>
-                {product?.colors?.map((color, index) => {
-                  const isSelected = selectedColors.includes(color);
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => handleColorSelect(color)}
-                      title={color}
-                      style={{ backgroundColor: color }}
-                      className={`w-5 h-5 rounded-full cursor-pointer border transition-all ${
-                        isSelected ? "ring-4 ring-[#931905] scale-110" : "hover:scale-110"
-                      }`}
-                    ></div>
-                  );
-                })}
+              <div className="w-full flex flex-wrap items-center gap-2">
+                <div className="text-base font-medium capitalize">
+                  available color :
+                </div>
+                {product?.colors?.map((color, index) => (
+                  <div
+                    key={index}
+                    title={color}
+                    style={{ backgroundColor: color }}
+                    className="w-5 h-5 rounded-full border"
+                  ></div>
+                ))}
               </div>
 
-              {/* Quantity + Buy Now */}
-              <div className="w-full flex items-stretch gap-5 my-5">
-                <div className="flex items-center gap-1">
-                  <div className="w-10 cursor-pointer h-10 bg-[#FFFFFF] universal" onClick={decrement}>
-                    <FaMinus />
-                  </div>
-                  <div className="w-fit min-w-20 h-10 cursor-pointer px-3 bg-[#FFFFFF] universal text-lg font-medium">
-                    {quantity}
-                  </div>
-                  <div className="w-10 cursor-pointer h-10 bg-[#FFFFFF] universal" onClick={increment}>
-                    <FaPlus />
-                  </div>
-                </div>
-                <div className="bg-[#FFFFFF]">
-                  <button
-                    className="h-full w-full px-5 text-base cursor-pointer rounded-sm uppercase font-medium bg-[#931905] text-[#FFFFFF]"
-                    onClick={handleBuyNow}
-                  >
-                    buy now
-                  </button>
-                </div>
+              {/* status section */}
+              <div className="w-full flex items-center mt-2">
+                <p className="w-fit flex items-center gap-2 capitalize font-bold">
+                  {product.stockStatus}
+                  <span
+                    className={`w-3 h-3 rounded-full ${
+                      product.stockStatus === "inStock"
+                        ? "bg-green-600"
+                        : "bg-red-600"
+                    }`}
+                  ></span>
+                </p>
               </div>
-              {message && <p className="text-red-600 mt-2 text-base font-medium">{message}</p>}
             </div>
           </div>
 
@@ -187,17 +166,25 @@ export default function Singleproduct() {
             <div className="w-full flex items-stretch gap-2.5">
               {/* Specifications */}
               <div className="w-full sm:w-[70%] md:w-[70%] bg-[#FFFFFF] p-3 rounded-md">
-                <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">Specification</h1>
+                <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
+                  Specification
+                </h1>
                 {product.specifications?.length > 0 ? (
                   product.specifications.map((spec) => (
                     <div key={spec._id} className="mb-4 pb-3">
-                      <h3 className="font-medium text-base capitalize">{spec.title}</h3>
-                      <p className="text-base text-gray-600 mb-2">{spec.description}</p>
+                      <h3 className="font-medium text-base capitalize">
+                        {spec.title}
+                      </h3>
+                      <p className="text-base text-gray-600 mb-2">
+                        {spec.description}
+                      </p>
                       {spec.list?.length > 0 && (
                         <ul className="text-base ml-2">
                           {spec.list.map((item) => (
                             <li key={item._id} className="flex gap-2 mb-1">
-                              <span className="font-medium w-[120px]">{item.name}:</span>
+                              <span className="font-medium w-[120px]">
+                                {item.name}:
+                              </span>
                               <span>{item.value}</span>
                             </li>
                           ))}
@@ -231,7 +218,9 @@ export default function Singleproduct() {
                           />
                         </div>
                         <div className="w-full">
-                          <p className="text-base font-medium capitalize">{item.name}</p>
+                          <p className="text-base font-medium capitalize">
+                            {item.name}
+                          </p>
                           <p className="text-sm font-normal flex items-center gap-2.5">
                             <strong>৳ {item.offerPrice}</strong>
                             <del>৳ {item.regularPrice}</del>

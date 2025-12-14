@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useAppContext } from "../context/AppContext";
 
 export default function Universalnav({ openMenu, fixedOnTop }) {
-  const { search, setSearch, handleSearch, handleAccountClick, cartCount } = useAppContext();
+  const { search, setSearch, handleSearch, cartCount } = useAppContext();
 
   return (
     <div
@@ -54,12 +54,12 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
           </div>
 
           <div className="w-full sm:w-full md:w-fit flex items-center justify-between gap-5">
+            <Link href="/profile">
             <div
-              onClick={handleAccountClick}
               className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#931905] rounded-sm universal gap-2.5 text-[#FFFFFF] text-base cursor-pointer"
             >
               <p className="capitalize">account</p> <FaUser />
-            </div>
+            </div></Link>
             <Link href="/cart">
               <div className="flex items-center gap-3 text-base">
                 <IoCart /> <p className="uppercase font-medium flex items-center gap-1.5"> <span className="text-[#FFCE1B] rounded-full universal">{cartCount}</span> cart</p>

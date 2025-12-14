@@ -5,6 +5,8 @@ import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import Universalnav from "../components/Universalnav";
 import Allproducts from "../components/Allproducts";
+import Homeoffer from "../components/Homeoffer";
+import Homecombo from "../components/Homecombo";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +36,8 @@ export default function Home() {
       <Hero openMenu={openMenu} />
       <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
       <Allproducts />
+      <Homeoffer />
+      <Homecombo />
     </>
   );
 }

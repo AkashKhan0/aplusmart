@@ -88,7 +88,7 @@ export default function ComboList() {
 
   // ================= RENDER
   return (
-    <div className="p-6">
+    <div className="">
       <h1 className="text-2xl font-semibold mb-4">
         Combo Product List
       </h1>

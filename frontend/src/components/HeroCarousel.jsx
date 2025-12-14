@@ -1,70 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const images = [
-  {
-    url: "/images/Best_Deals.png",
-    title: "Best Deals of The Season",
-    subtitle: "Up to 40% Off on Electronics",
-  },
-  {
-    url: "/images/New_Arrivals.png",
-    title: "New Arrivals",
-    subtitle: "Trending Fashion Products",
-  },
-  {
-    url: "/images/smart_home_gadgets.png",
-    title: "Smart Home Gadgets",
-    subtitle: "Upgrade Your Lifestyle",
-  },
-];
+const defaultSlide = {
+  image: "/images/Best_Deals.png",
+  title: "Best Deals of The Season",
+  subtitle: "Up to 20% Off on Electronics",
+  buttonUrl: "/offers"
+};
 
 export default function HeroCarousel() {
+  const [offers, setOffers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const API = `${process.env.NEXT_PUBLIC_API_URL}/api/user-offers`;
+
+  // Fetch data from backend
+  const fetchOffers = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(API);
+      const data = await res.json();
+      setOffers(data);
+    } catch (err) {
+      console.error("Error fetching offers:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOffers();
+  }, []);
 
   const nextSlide = () => {
     setCurrentIndex((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1
+      offers.length > 0 ? (prev === offers.length - 1 ? 0 : prev + 1) : 0
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
+      offers.length > 0 ? (prev === 0 ? offers.length - 1 : prev - 1) : 0
     );
   };
 
+  // Current slide: backend data if exists, else default
+  const current = offers.length > 0 ? offers[currentIndex] : defaultSlide;
+
   return (
     <div className="relative w-full h-fit overflow-hidden">
-
       {/* Background */}
       <div
         className="w-full h-full bg-cover sm:bg-contain bg-no-repeat bg-position-[center_bottom] transition-all duration-300 py-14 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
-        style={{ backgroundImage: `url(${images[currentIndex].url})` }}
+        style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
         <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 py-16">
-
           <h2 className="text-4xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
-            {images[currentIndex].title}
+            {current.title}
           </h2>
 
           <p className="text-lg font-semibold text-[#2B2A29] mb-10">
-            {images[currentIndex].subtitle}
+            {current.subtitle}
           </p>
 
-          <button className="buy_btn">
-            Buy Now
-          </button>
+          <Link href={current.buttonUrl}>
+            <button className="buy_btn">Buy Now</button>
+          </Link>
         </div>
       </div>
 
       {/* Prev Button */}
       <button
         onClick={prevSlide}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition"
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronLeft />
       </button>
@@ -72,7 +85,7 @@ export default function HeroCarousel() {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition"
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronRight />
       </button>

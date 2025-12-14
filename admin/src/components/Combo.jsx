@@ -185,7 +185,7 @@ export default function Combo() {
 
   // ---------- Render ----------
   return (
-    <div className="w-full p-5 max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Add Combo Offer</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">

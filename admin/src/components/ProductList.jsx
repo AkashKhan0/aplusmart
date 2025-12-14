@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
-import { uploadImage } from "@/lib/uploadImage"; // যদি image আপডেট করতে চাও
+import { uploadImage } from "@/lib/uploadImage";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [editProduct, setEditProduct] = useState(null); // Edit Modal
+  const [editProduct, setEditProduct] = useState(null);
   const [editImages, setEditImages] = useState([]);
 
   // Fetch all products
@@ -122,7 +122,7 @@ export default function ProductList() {
   };
 
   return (
-    <div className="p-5">
+    <div className="">
       <h1 className="text-2xl font-semibold mb-3">All Products</h1>
 
       {message && <p className="mb-3 text-green-600">{message}</p>}
@@ -209,10 +209,10 @@ export default function ProductList() {
       {/* Edit Modal */}
       {editProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded w-3/4 max-w-2xl">
-            <h2 className="text-xl font-semibold mb-3">Edit Product</h2>
+          <div className="bg-white p-5 rounded w-[60%] max-w-3xl">
+            <h2 className="text-xl font-semibold mb-2">Edit Product</h2>
 
-            <div className="flex flex-col gap-2 max-h-[70vh] overflow-y-auto">
+            <div className="flex flex-col gap-2 max-h-[80vh] overflow-y-auto">
               <input
                 type="text"
                 name="name"
@@ -221,6 +221,60 @@ export default function ProductList() {
                 onChange={handleChange}
                 className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
               />
+              {/* category update */}
+              <div className="flex items-center gap-2">
+                {/* Main Category */}
+<input
+  type="text"
+  name="mainCategory"
+  placeholder="Main Category"
+  value={editProduct.mainCategory}
+  onChange={handleChange}
+  className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+/>
+
+{/* Sub Category */}
+<input
+  type="text"
+  name="subCategory"
+  placeholder="Sub Category"
+  value={editProduct.subCategory}
+  onChange={handleChange}
+  className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+/></div>
+
+{/* date update for offer product */}
+<div className="w-full flex items-center gap-2">
+
+{/* Offer Dates */}
+{(editProduct.mainCategory === "offer" || editProduct.subCategory === "offer") && (
+  <div className="w-full flex gap-2">
+    <div className="flex flex-col w-full">
+      <label>Offer Start Date:</label>
+      <input
+        type="date"
+        name="offerStartDate"
+        value={editProduct.offerStartDate ? editProduct.offerStartDate.split("T")[0] : ""}
+        onChange={handleChange}
+        className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+      />
+    </div>
+    <div className="flex flex-col w-full">
+      <label>Offer End Date:</label>
+      <input
+        type="date"
+        name="offerEndDate"
+        value={editProduct.offerEndDate ? editProduct.offerEndDate.split("T")[0] : ""}
+        onChange={handleChange}
+        className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+      />
+    </div>
+  </div>
+)}
+
+  </div>
+              
+
               <input
                 type="text"
                 name="brand"

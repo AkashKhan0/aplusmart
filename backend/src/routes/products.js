@@ -45,17 +45,12 @@ router.get("/", async (req, res) => {
 /* CREATE PRODUCT */
 router.post("/", async (req, res) => {
   try {
-    console.log("CREATE PRODUCT PAYLOAD:", req.body);
-
     const product = await Product.create(req.body);
-
     return res.status(201).json({
       success: true,
       product,
     });
   } catch (error) {
-    console.error("PRODUCT CREATE ERROR:", error);
-
     return res.status(500).json({
       success: false,
       error: error.message,
@@ -64,8 +59,7 @@ router.post("/", async (req, res) => {
 });
 
 
-// ✅ GET SINGLE PRODUCT + RELATED PRODUCTS
-// URL → /products/:id
+// ✅ GET SINGLE PRODUCT BY ID + RELATED PRODUCTS
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;

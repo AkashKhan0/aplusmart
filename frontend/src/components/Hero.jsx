@@ -14,17 +14,11 @@ import { useAppContext } from "../context/AppContext";
 
 export default function Hero({ openMenu }) {
   const { user, search, setSearch, handleSearch, handleAccountClick, cartCount } = useAppContext();
-  const handleAccountButtonClick = () => {
-    if (user) {
-      handleAccountClick();
-    } else {
-      handleAccountClick();
-    }
-  };
+
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B]">
-      <div className="fixed_width h-full px-5">
+      <div className="fixed_width h-full">
         {/* Top offers/deals/combo bar */}
         <div className="w-full flex items-start justify-center top_nav_bar">
           <div className="w-full max-w-[900px] bg-[#2B2A29] top_bg_nav">
@@ -65,7 +59,7 @@ export default function Hero({ openMenu }) {
           </div>
 
           {/* menu search bar account cart */}
-          <div className="w-full max-w-[900px] flex flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-center gap-5 px-0 sm:px-16 md:px-0">
+          <div className="w-full max-w-[900px] flex flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-center gap-5 px-5 sm:px-16 md:px-0">
             <div className="w-full flex items-center justify-between gap-5">
               <div
                 className="font-semibold text-4xl cursor-pointer"
@@ -100,12 +94,13 @@ export default function Hero({ openMenu }) {
 
             {/* Account + Cart */}
             <div className="w-full sm:w-full md:w-fit flex items-center justify-between gap-5">
+              <Link href="/profile">
               <div
-                onClick={handleAccountButtonClick}
+                // onClick={handleAccountClick}
                 className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] rounded-sm universal gap-2.5 text-[#2B2A29] text-base cursor-pointer"
               >
                 <p className="capitalize">account</p> <FaUser />
-              </div>
+              </div></Link>
 
               <Link href="/cart">
                 <div className="flex items-center gap-3 text-base">
