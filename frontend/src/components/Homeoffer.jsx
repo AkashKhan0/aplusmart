@@ -63,18 +63,28 @@ export default function Homeoffer() {
             .map((product) => (
               <Link key={product._id} href={`/products/${product._id}`}>
                 <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
-                  {product.offerPrice &&
-                    product.regularPrice &&
-                    product.offerPrice < product.regularPrice && (
-                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium">
-                        {Math.round(
-                          ((product.regularPrice - product.offerPrice) /
-                            product.regularPrice) *
-                            100
-                        )}
-                        % off
+                  {product?.offerPrice > 0 &&
+                  product?.regularPrice > 0 &&
+                  product.offerPrice < product.regularPrice ? (
+                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                      {Math.round(
+                        ((product.regularPrice - product.offerPrice) /
+                          product.regularPrice) *
+                          100
+                      )}
+                      % off
+                    </div>
+                  ) : (
+                    /* Earn Points */
+                    product?.offerPrice > 0 && (
+                      <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                        Earn Points
+                        <span className="text-[#c9c601]">
+                          {Math.min(Math.floor(product.offerPrice / 100), 500)}
+                        </span>
                       </div>
-                    )}
+                    )
+                  )}
 
                   <div className="w-full h-[250px] p-2">
                     <Image
@@ -91,11 +101,14 @@ export default function Homeoffer() {
                       {product.name}
                     </h1>
 
-                    <p className="text-[#931905] flex gap-3">
-                      ৳ {product.offerPrice}
-                      <del className="text-sm text-[#2B2A29]">
-                        ৳ {product.regularPrice}
-                      </del>
+                    <p className="text-[#931905] flex items-center gap-1">
+                      <span className="taka">৳-</span> {product.offerPrice}
+                      {product?.regularPrice > 0 && (
+                        <del className="text-sm text-[#2B2A29]">
+                          <span className="taka">৳-</span>
+                          {product.regularPrice}
+                        </del>
+                      )}
                     </p>
                   </div>
                 </div>

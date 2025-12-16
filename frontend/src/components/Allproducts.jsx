@@ -29,12 +29,12 @@ export default function Allproducts() {
         <div className="fixed_width px-5 universal_column h-full min-h-screen">
           <div className="w-full max-w-[200px]">
             <Image
-            src="/images/clock.gif"
-            alt="Please wait"
-            width={500}
-            height={500}
-            className="w-full h-full object-contain"
-          />
+              src="/images/clock.gif"
+              alt="Please wait"
+              width={500}
+              height={500}
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
       </div>
@@ -57,26 +57,35 @@ export default function Allproducts() {
             .filter(
               (product) =>
                 product.mainCategory?.toLowerCase() !== "offer" &&
-                product.subCategory?.toLowerCase() !== "offer" &&
-                product.mainCategory?.toLowerCase() !== "combo" &&
-                product.subCategory?.toLowerCase() !== "combo"
+                product.mainCategory?.toLowerCase() !== "combo"
             )
             .slice(0, 40)
             .map((product) => (
               <Link key={product._id} href={`/products/${product._id}`}>
                 <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
-                  {product.offerPrice &&
-                    product.regularPrice &&
-                    product.offerPrice < product.regularPrice && (
-                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium">
-                        {Math.round(
-                          ((product.regularPrice - product.offerPrice) /
-                            product.regularPrice) *
-                            100
-                        )}
-                        % off
+                  {/* % OFF */}
+                  {product?.offerPrice > 0 &&
+                  product?.regularPrice > 0 &&
+                  product.offerPrice < product.regularPrice ? (
+                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                      {Math.round(
+                        ((product.regularPrice - product.offerPrice) /
+                          product.regularPrice) *
+                          100
+                      )}
+                      % off
+                    </div>
+                  ) : (
+                    /* Earn Points */
+                    product?.offerPrice > 0 && (
+                      <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                        Earn Points
+                        <span className="text-[#c9c601]">
+                          {Math.min(Math.floor(product.offerPrice / 100), 500)}
+                        </span>
                       </div>
-                    )}
+                    )
+                  )}
                   <div className="w-full h-[250px] p-2">
                     <Image
                       src={product.images[0] || "/images/placeholder.png"}
@@ -92,13 +101,15 @@ export default function Allproducts() {
                       {product.name}
                     </h1>
 
-                    <p className="text-[#931905] flex items-center gap-2">
-                      <span className="taka">৳</span>
+                    <p className="text-[#931905] flex items-center gap-1">
+                      <span className="taka">৳-</span>
                       {product.offerPrice}
-                      <del className="text-sm text-[#2B2A29]">
-                        <span className="taka">৳</span>
-                        {product.regularPrice}
-                      </del>
+                      {product?.regularPrice > 0 && (
+                        <del className="text-sm text-[#2B2A29]">
+                          <span className="taka">৳-</span>
+                          {product.regularPrice}
+                        </del>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -106,7 +117,6 @@ export default function Allproducts() {
             ))}
         </div>
       </div>
-
     </div>
   );
 }

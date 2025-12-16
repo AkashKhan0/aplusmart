@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function Navbar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
   const [categories, setCategories] = useState([]);
 
   // Load main categories
@@ -35,7 +34,6 @@ export default function Navbar({ isOpen, setIsOpen }) {
     if (isOpen) document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen, setIsOpen]);
-
   const sidebarClass = isOpen ? "translate-x-0" : "-translate-x-full";
 
   return (
@@ -61,15 +59,19 @@ export default function Navbar({ isOpen, setIsOpen }) {
         <div className="text-[#FFFFFF] font-semibold text-lg w-full mt-10">
           <ul className="w-full flex flex-col gap-2.5 text-base">
             {categories.map((cat) => (
-              <li key={cat._id}>
-                <Link
-                  href={`/products?mainCategory=${encodeURIComponent(cat.mainCategory)}`}
+              <Link
+                key={cat._id}
+                href={`/search?subCategory=${encodeURIComponent(
+                  cat.subCategory
+                )}`}
+              >
+                <li
                   onClick={() => setIsOpen(false)}
                   className="hover:text-red-500 transition-colors capitalize"
                 >
-                  {cat.mainCategory}
-                </Link>
-              </li>
+                  {cat.subCategory}
+                </li>
+              </Link>
             ))}
           </ul>
         </div>

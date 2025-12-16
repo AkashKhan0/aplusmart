@@ -7,41 +7,61 @@ import Image from "next/image";
 
 export default function Searchresult() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q");
+  
+  const q = searchParams.get("q");
+  const mainCategory = searchParams.get("mainCategory");
+  const subCategory = searchParams.get("subCategory");
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!query) return;
-    console.log("ENV:", process.env.NEXT_PUBLIC_API_URL);
+useEffect(() => {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
+
+    if (q) url += `q=${q}`;
+    if (mainCategory) url += `mainCategory=${mainCategory}`;
+    if (subCategory) url += `subCategory=${subCategory}`;
+
     const fetchProducts = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?q=${query}`
-        );
-
+        const res = await fetch(url);
         const data = await res.json();
-        setProducts(data.products);
+        setProducts(data.products || []);
       } catch (err) {
+        console.log(err);
       } finally {
         setLoading(false);
       }
     };
-    console.log(process.env.NEXT_PUBLIC_API_URL);
 
     fetchProducts();
-  }, [query]);
+  }, [q, mainCategory, subCategory]);
 
   if (loading)
-    return <p className="text-center py-10">Searching products...</p>;
+    return (
+      <>
+        <div className="w-full universal py-10">
+          <div className="fixed_width px-5 universal_column h-full min-h-screen">
+            <div className="w-full max-w-[200px]">
+              <Image
+                src="/images/clock.gif"
+                alt="Please wait"
+                width={500}
+                height={500}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </>
+    );
 
   return (
     <>
       <div className="w-full h-fit universal">
         <div className="fixed_width h-full min-h-screen px-5 py-10">
           <h2 className="text-xl font-bold mb-5">
-            Results for: <span className="text-red-500">{query}</span>
+            Results for: <span className="text-red-500">{q || mainCategory || subCategory}</span>
           </h2>
 
           {products.length === 0 ? (
@@ -52,9 +72,33 @@ export default function Searchresult() {
                 <Link
                   key={item._id}
                   href={`/products/${item._id}`}
-                  className="bg-white rounded-md hover:shadow-md cursor-pointer transition p-2"
                 >
-                  <div className="w-full h-[250px]">
+                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                    {/* % OFF */}
+                  {item?.offerPrice > 0 &&
+                  item?.regularPrice > 0 &&
+                  item.offerPrice < item.regularPrice ? (
+                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                      {Math.round(
+                        ((item.regularPrice - item.offerPrice) /
+                          item.regularPrice) *
+                          100
+                      )}
+                      % off
+                    </div>
+                  ) : (
+                    /* Earn Points */
+                    item?.offerPrice > 0 && (
+                      <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                        Earn Points
+                        <span className="text-[#c9c601]">
+                          {Math.min(Math.floor(item.offerPrice / 100), 500)}
+                        </span>
+                      </div>
+                    )
+                  )}
+
+                  <div className="w-full h-[250px] p-2">
                     <Image
                       src={item.images?.[0]}
                       alt={item.name}
@@ -67,12 +111,17 @@ export default function Searchresult() {
                     <h1 className="text-base font-medium text-center capitalize">
                       {item.name}
                     </h1>
-                    <p className="text-[#931905] flex gap-3">
-                      ৳{item.offerPrice}
-                      <del className="text-sm text-[#2B2A29]">
-                        ৳{item.regularPrice}
-                      </del>
+                    <p className="text-[#931905] flex items-center gap-1">
+                      <span className="taka">৳-</span>
+                      {item.offerPrice}
+                      {item?.regularPrice > 0 && (
+                        <del className="text-sm text-[#2B2A29]">
+                          <span className="taka">৳-</span>
+                          {item.regularPrice}
+                        </del>
+                      )}
                     </p>
+                  </div>
                   </div>
                 </Link>
               ))}

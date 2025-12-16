@@ -1,6 +1,5 @@
 "use client";
 
-
 import Image from "next/image";
 import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
@@ -11,10 +10,51 @@ import { BiSolidOffer } from "react-icons/bi";
 import { LuPackagePlus } from "react-icons/lu";
 import HeroCarousel from "./HeroCarousel";
 import { useAppContext } from "../context/AppContext";
+import { useEffect, useRef, useState } from "react";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Hero({ openMenu }) {
-  const { user, search, setSearch, handleSearch, handleAccountClick, cartCount } = useAppContext();
+  const {
+    user,
+    search,
+    setSearch,
+    handleSearch,
+    handleAccountClick,
+    cartCount,
+  } = useAppContext();
 
+  const dropdownRef = useRef(null);
+
+  const [categories, setCategories] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("category");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/categories`);
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B]">
@@ -68,8 +108,41 @@ export default function Hero({ openMenu }) {
                 <IoMdMenu />
               </div>
 
-              <div className="py-1 px-4 font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn">
-                <p className="capitalize">category</p> <FaCaretDown />
+              <div className="py-1 font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn">
+                <div className="relative" ref={dropdownRef}>
+                  {/* Button */}
+                  <div
+                    onClick={() => setOpen(!open)}
+                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn flex items-center justify-between min-w-[100px]"
+                  >
+                    <p className="capitalize">{selected || "Category"}</p>
+                    <FaCaretDown />
+                  </div>
+
+                  {/* Dropdown */}
+                  {open && (
+                    <div className="absolute left-0 mt-1 w-full bg-[#2B2A29] shadow-lg z-50">
+                      {categories.map((cat) => (
+                        <Link
+                          key={cat._id}
+                          href={`/search?mainCategory=${encodeURIComponent(
+                            cat.mainCategory
+                          )}`}
+                        >
+                          <div
+                            onClick={() => {
+                              setSelected(cat.mainCategory);
+                              setOpen(false);
+                            }}
+                            className="px-4 w-full py-1 border-b border-b-[#333333] text-white hover:bg-[#3a3938] cursor-pointer capitalize"
+                          >
+                            {cat.mainCategory}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Search form */}
@@ -95,16 +168,23 @@ export default function Hero({ openMenu }) {
             {/* Account + Cart */}
             <div className="w-full sm:w-full md:w-fit flex items-center justify-between gap-5">
               <Link href="/profile">
-              <div
-                // onClick={handleAccountClick}
-                className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] rounded-sm universal gap-2.5 text-[#2B2A29] text-base cursor-pointer"
-              >
-                <p className="capitalize">account</p> <FaUser />
-              </div></Link>
+                <div
+                  // onClick={handleAccountClick}
+                  className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] rounded-sm universal gap-2.5 text-[#2B2A29] text-base cursor-pointer"
+                >
+                  <p className="capitalize">account</p> <FaUser />
+                </div>
+              </Link>
 
               <Link href="/cart">
-                <div className="flex items-center gap-3 text-base">
-                  <IoCart /> <p className="uppercase font-medium flex items-center gap-1.5"><span className="text-[#931905] rounded-full universal">{cartCount}</span>cart</p>
+                <div className="flex items-center gap-1 text-base relative">
+                  <IoCart />
+                  <span className="text-[#931905] rounded-full universal absolute -top-[11px] left-2 font-bold">
+                    0
+                  </span>
+                  <p className="uppercase font-medium flex items-center gap-1">
+                    cart
+                  </p>
                 </div>
               </Link>
             </div>

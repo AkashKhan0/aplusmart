@@ -123,21 +123,29 @@ export default function Offers() {
 
                       {status === "active" && timeLeft && (
                         <div className="bg-[#3c3c3c] text-white text-xs px-3 w-fit h-6 flex items-center gap-2 rounded-br-full rounded-tr-full">
-                          <span>
+                          <div>
                             {Math.round(
                               ((product.regularPrice - product.offerPrice) /
                                 product.regularPrice) *
                                 100
                             )}
                             % OFF
-                          </span>
+                          </div>
                           <span>|</span>
-                          <span>
-                            {timeLeft.days > 0 && `${timeLeft.days}d `}
-                            {String(timeLeft.hours).padStart(2, "0")}:
-                            {String(timeLeft.minutes).padStart(2, "0")}:
-                            {String(timeLeft.seconds).padStart(2, "0")}
-                          </span>
+                          <div className="flex items-center gap-0.5">
+                            <span className="offer_count">
+                              {timeLeft.days > 0 && `${timeLeft.days}d `}
+                            </span>
+                            <span className="offer_count">
+                              {String(timeLeft.hours).padStart(2, "0")}h
+                            </span>
+                            <span className="offer_count">
+                              {String(timeLeft.minutes).padStart(2, "0")}m
+                            </span>
+                            <span className="offer_count">
+                              {String(timeLeft.seconds).padStart(2, "0")}s
+                            </span>
+                          </div>
                         </div>
                       )}
 

@@ -9,11 +9,9 @@ const ProductSchema = new mongoose.Schema(
     brand: { type: String },
     regularPrice: {
       type: Number,
-      default: 0,
     },
     offerPrice: {
       type: Number,
-      default: 0,
     },
     stockStatus: {
       type: String,

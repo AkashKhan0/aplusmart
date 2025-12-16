@@ -8,27 +8,42 @@ const router = express.Router();
 // URL → /products/search?q=iphone
 router.get("/search", async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q, mainCategory, subCategory } = req.query;
 
-    if (!q || !q.trim()) {
-      return res.json({ products: [] });
+    let filter = {};
+
+    // Normal search
+    if (q) {
+      const regex = new RegExp(q.trim(), "i");
+      filter.$or = [
+        { name: regex },
+        { brand: regex },
+        { mainCategory: regex },
+        { subCategory: regex },
+      ];
     }
 
-    const products = await Product.find({
-      $or: [
-        { name: { $regex: q.trim(), $options: "i" } },
-        { brand: { $regex: q.trim(), $options: "i" } },
-        { mainCategory: { $regex: q.trim(), $options: "i" } },
-        { subCategory: { $regex: q.trim(), $options: "i" } },
-      ],
-    }).sort({ createdAt: -1 });
+    // Filter by mainCategory
+    if (mainCategory) {
+      filter.mainCategory = new RegExp(mainCategory, "i");
+    }
 
-    return res.status(200).json({ products });
+    // Filter by subCategory
+    if (subCategory) {
+      filter.subCategory = new RegExp(subCategory, "i");
+    }
+
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.status(200).json({ products });
   } catch (error) {
     console.log("SEARCH ERROR:", error);
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 // ================= GET ALL PRODUCTS =================
 router.get("/", async (req, res) => {
