@@ -119,7 +119,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .buy_btn {
-  padding: 8px 24px;
+  padding: 5px 24px;
   background-color: #2B2A29;
   color: #ffffff;
   font-weight: 600;

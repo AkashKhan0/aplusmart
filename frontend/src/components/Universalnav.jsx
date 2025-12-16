@@ -61,8 +61,10 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
               <p className="capitalize">account</p> <FaUser />
             </div></Link>
             <Link href="/cart">
-              <div className="flex items-center gap-3 text-base">
-                <IoCart /> <p className="uppercase font-medium flex items-center gap-1.5"> <span className="text-[#FFCE1B] rounded-full universal">{cartCount}</span> cart</p>
+              <div className="flex items-center gap-3 text-base relative">
+                <IoCart /><span className="text-[#FFFFFF] rounded-full universal absolute -top-3 left-2 font-bold">
+                    0
+                  </span> <p className="uppercase font-medium flex items-center gap-1.5"> <span className="text-[#FFCE1B] rounded-full universal">{cartCount}</span> cart</p>
               </div>
             </Link>
           </div>

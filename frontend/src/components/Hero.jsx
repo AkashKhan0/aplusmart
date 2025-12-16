@@ -179,7 +179,7 @@ export default function Hero({ openMenu }) {
               <Link href="/cart">
                 <div className="flex items-center gap-1 text-base relative">
                   <IoCart />
-                  <span className="text-[#931905] rounded-full universal absolute -top-[11px] left-2 font-bold">
+                  <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
                     0
                   </span>
                   <p className="uppercase font-medium flex items-center gap-1">

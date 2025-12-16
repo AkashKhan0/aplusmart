@@ -11,16 +11,18 @@ export default function ProductList() {
   const [message, setMessage] = useState("");
   const [editProduct, setEditProduct] = useState(null);
   const [editImages, setEditImages] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch all products
+  // ================= FETCH =================
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products`
+      );
       const data = await res.json();
       setProducts(Array.isArray(data) ? data : data.products || []);
     } catch (err) {
-      console.error(err);
       setMessage("Failed to fetch products");
     } finally {
       setLoading(false);
@@ -31,172 +33,155 @@ export default function ProductList() {
     fetchProducts();
   }, []);
 
-  // Delete product
+  // ================= SEARCH =================
+  const filteredProducts = products.filter((p) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      p.name?.toLowerCase().includes(term) ||
+      p.mainCategory?.toLowerCase().includes(term) ||
+      p.subCategory?.toLowerCase().includes(term) ||
+      p.brand?.toLowerCase().includes(term) ||
+      p._id?.toLowerCase().includes(term)
+    );
+  });
+
+  // ================= DELETE =================
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setMessage("Product deleted successfully");
-        setProducts((prev) => prev.filter((p) => p._id !== id));
-      } else {
-        setMessage(data.error || "Delete failed");
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage("Delete failed");
-    }
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
+      { method: "DELETE" }
+    );
+    setProducts((prev) => prev.filter((p) => p._id !== id));
   };
 
-  // Open edit modal
+  // ================= EDIT =================
   const handleEdit = (product) => {
     setEditProduct({ ...product });
     setEditImages(product.images || []);
   };
 
-  // Handle input change in modal
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle colors toggle
   const toggleColor = (color) => {
-    setEditProduct((prev) => {
-      const alreadySelected = prev.colors.includes(color);
-      return {
-        ...prev,
-        colors: alreadySelected
-          ? prev.colors.filter((c) => c !== color)
-          : [...prev.colors, color],
-      };
-    });
+    setEditProduct((prev) => ({
+      ...prev,
+      colors: prev.colors.includes(color)
+        ? prev.colors.filter((c) => c !== color)
+        : [...prev.colors, color],
+    }));
   };
 
-  // Handle image selection
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
-    const uploadedUrls = [];
     for (let file of files) {
       const url = await uploadImage(file, "products");
-      uploadedUrls.push(url);
+      setEditImages((prev) => [...prev, url]);
     }
-    setEditImages((prev) => [...prev, ...uploadedUrls]);
   };
 
-  // Update product API
   const handleUpdate = async () => {
-    try {
-      const payload = {
-        ...editProduct,
-        images: editImages,
-        regularPrice: Number(editProduct.regularPrice || 0),
-        offerPrice: Number(editProduct.offerPrice || 0),
-        colors: editProduct.colors,
-      };
+    const payload = {
+      ...editProduct,
+      images: editImages,
+      regularPrice: Number(editProduct.regularPrice || 0),
+      offerPrice: Number(editProduct.offerPrice || 0),
+    };
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${editProduct._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      const data = await res.json();
-      if (res.ok) {
-        setMessage("Product updated successfully");
-        setEditProduct(null);
-        fetchProducts(); // refresh table
-      } else {
-        setMessage(data.error || "Update failed");
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/products/${editProduct._id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       }
-    } catch (err) {
-      console.error(err);
-      setMessage("Update failed");
-    }
+    );
+
+    setEditProduct(null);
+    fetchProducts();
   };
 
+  // ================= UI =================
   return (
-    <div className="">
+    <div>
+      {/* Search */}
+      <div className="w-full flex justify-center mb-3">
+        <input
+          type="search"
+          className="w-[50%] border py-1 px-3 rounded-md"
+          placeholder="Search by name, category, brand, id..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <h1 className="text-2xl font-semibold mb-3">All Products</h1>
 
-      {message && <p className="mb-3 text-green-600">{message}</p>}
       {loading ? (
-        <p>Loading products...</p>
+        <p>Loading...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border px-2 py-1">Image</th>
-                <th className="border px-2 py-1">Name</th>
-                <th className="border px-2 py-1">Category</th>
-                <th className="border px-2 py-1">Brand</th>
-                <th className="border px-2 py-1">Price</th>
-                <th className="border px-2 py-1">Stock</th>
-                <th className="border px-2 py-1">Colors</th>
-                <th className="border px-2 py-1">Actions</th>
+          <table className="min-w-full border">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="border">Image</th>
+                <th className="border">Name</th>
+                <th className="border">Category</th>
+                <th className="border">Brand</th>
+                <th className="border">Price</th>
+                <th className="border">Stock</th>
+                <th className="border">Colors</th>
+                <th className="border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(products) && products.length > 0 ? (
-                products.map((prod) => (
-                  <tr key={prod._id} className="text-center">
-                    <td className="border px-2 py-1">
-                      {prod.images && prod.images[0] ? (
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((p) => (
+                  <tr key={p._id} className="text-center">
+                    <td className="border">
+                      {p.images?.[0] && (
                         <img
-                          src={prod.images[0]}
-                          alt={prod.name}
-                          className="w-12 h-12 object-cover mx-auto"
+                          src={p.images[0]}
+                          className="w-12 h-12 mx-auto object-cover"
                         />
-                      ) : (
-                        "-"
                       )}
                     </td>
-                    <td className="border px-2 py-1">{prod.name}</td>
-                    <td className="border px-2 py-1">
-                      {prod.mainCategory} / {prod.subCategory}
+                    <td className="border">{p.name}</td>
+                    <td className="border">
+                      {p.mainCategory} / {p.subCategory}
                     </td>
-                    <td className="border px-2 py-1">{prod.brand || "-"}</td>
-                    <td className="border px-2 py-1">
-                      <span className="text-2xl">৳-</span>{prod.offerPrice || prod.regularPrice || 0}/-
+                    <td className="border">{p.brand || "-"}</td>
+                    <td className="border">
+                      ৳ {p.offerPrice || p.regularPrice}
                     </td>
-                    <td className="border px-2 py-1">
-                      {prod.stockStatus === "inStock" ? (
-                        <MdCheckCircle className="text-green-600 inline" />
+                    <td className="border">
+                      {p.stockStatus === "inStock" ? (
+                        <MdCheckCircle className="text-green-600 mx-auto" />
                       ) : (
-                        <MdCancel className="text-red-600 inline" />
+                        <MdCancel className="text-red-600 mx-auto" />
                       )}
                     </td>
-                    <td className="border px-2 py-1">
-                      {prod.colors && prod.colors.length > 0
-                        ? prod.colors.join(", ")
-                        : "-"}
-                    </td>
-                    <td className="px-2 py-1 flex items-center justify-center gap-2 pt-5">
-                      <button
-                        onClick={() => handleEdit(prod)}
-                        className="text-blue-600 hover:text-blue-800 text-xl"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(prod._id)}
-                        className="text-red-600 hover:text-red-800 text-xl"
-                      >
-                        <FaTrash />
-                      </button>
+                    <td className="border">{p.colors?.join(", ")}</td>
+                    <td className="border">
+                      <div className="flex justify-center gap-2">
+                        <FaEdit
+                          className="cursor-pointer text-blue-600"
+                          onClick={() => handleEdit(p)}
+                        />
+                        <FaTrash
+                          className="cursor-pointer text-red-600"
+                          onClick={() => handleDelete(p._id)}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td className="border px-2 py-1 text-center" colSpan={8}>
+                  <td colSpan={8} className="border text-center py-2">
                     No products found
                   </td>
                 </tr>
@@ -206,185 +191,149 @@ export default function ProductList() {
         </div>
       )}
 
-      {/* Edit Modal */}
+      {/* ================= EDIT MODAL (FULL) ================= */}
       {editProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded w-[60%] max-w-3xl">
-            <h2 className="text-xl font-semibold mb-2">Edit Product</h2>
+          <div className="bg-white p-5 rounded w-[60%] max-w-3xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-3">Edit Product</h2>
 
-            <div className="flex flex-col gap-2 max-h-[80vh] overflow-y-auto">
+            <input
+              name="name"
+              value={editProduct.name}
+              onChange={handleChange}
+              className="w-full border p-1 mb-2"
+            />
+
+            <div className="flex gap-2 mb-2">
               <input
-                type="text"
-                name="name"
-                placeholder="Product Name"
-                value={editProduct.name}
+                name="mainCategory"
+                value={editProduct.mainCategory}
                 onChange={handleChange}
-                className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                className="w-full border p-1"
               />
-              {/* category update */}
-              <div className="flex items-center gap-2">
-                {/* Main Category */}
-<input
-  type="text"
-  name="mainCategory"
-  placeholder="Main Category"
-  value={editProduct.mainCategory}
-  onChange={handleChange}
-  className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-/>
-
-{/* Sub Category */}
-<input
-  type="text"
-  name="subCategory"
-  placeholder="Sub Category"
-  value={editProduct.subCategory}
-  onChange={handleChange}
-  className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-/></div>
-
-{/* date update for offer product */}
-<div className="w-full flex items-center gap-2">
-
-{/* Offer Dates */}
-{(editProduct.mainCategory === "offer" || editProduct.subCategory === "offer") && (
-  <div className="w-full flex gap-2">
-    <div className="flex flex-col w-full">
-      <label>Offer Start Date:</label>
-      <input
-        type="date"
-        name="offerStartDate"
-        value={editProduct.offerStartDate ? editProduct.offerStartDate.split("T")[0] : ""}
-        onChange={handleChange}
-        className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-      />
-    </div>
-    <div className="flex flex-col w-full">
-      <label>Offer End Date:</label>
-      <input
-        type="date"
-        name="offerEndDate"
-        value={editProduct.offerEndDate ? editProduct.offerEndDate.split("T")[0] : ""}
-        onChange={handleChange}
-        className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-      />
-    </div>
-  </div>
-)}
-
-  </div>
-              
-
               <input
-                type="text"
-                name="brand"
-                placeholder="Brand"
-                value={editProduct.brand}
+                name="subCategory"
+                value={editProduct.subCategory}
                 onChange={handleChange}
-                className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                className="w-full border p-1"
               />
-              <div className="flex gap-2">
+            </div>
+
+            {(editProduct.mainCategory === "offer" ||
+              editProduct.subCategory === "offer") && (
+              <div className="flex gap-2 mb-2">
                 <input
-                  type="number"
-                  name="regularPrice"
-                  placeholder="Regular Price"
-                  value={editProduct.regularPrice}
+                  type="date"
+                  name="offerStartDate"
+                  value={
+                    editProduct.offerStartDate
+                      ? editProduct.offerStartDate.split("T")[0]
+                      : ""
+                  }
                   onChange={handleChange}
-                  className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                  className="border p-1 w-full"
                 />
                 <input
-                  type="number"
-                  name="offerPrice"
-                  placeholder="Offer Price"
-                  value={editProduct.offerPrice}
+                  type="date"
+                  name="offerEndDate"
+                  value={
+                    editProduct.offerEndDate
+                      ? editProduct.offerEndDate.split("T")[0]
+                      : ""
+                  }
                   onChange={handleChange}
-                  className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                  className="border p-1 w-full"
                 />
               </div>
+            )}
 
-              {/* Stock Status */}
-              <div className="flex gap-2">
-                {["inStock", "outOfStock", "upcoming"].map((status) => (
-                  <label key={status} className="flex items-center gap-1">
-                    <input
-                      type="radio"
-                      checked={editProduct.stockStatus === status}
-                      onChange={() =>
-                        setEditProduct((prev) => ({ ...prev, stockStatus: status }))
-                      }
-                    />
-                    {status}
-                  </label>
-                ))}
-              </div>
+            <input
+              name="brand"
+              value={editProduct.brand}
+              onChange={handleChange}
+              className="w-full border p-1 mb-2"
+            />
 
-              {/* Colors */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                {[
-                  "#000000",
-                  "#FFFFFF",
-                  "#808080",
-                  "#008000",
-                  "#800080",
-                  "#FF0000",
-                  "#1656AD",
-                  "#401E12",
-                  "#F0C807",
-                  "#EE0943",
-                  "#3C20A3",
-                  "#00B496",
-                ].map((color) => (
-                  <label key={color} className="flex items-center gap-2">
-                    <div
-                      className="w-5 h-5 border"
-                      style={{ backgroundColor: color }}
-                    ></div>
-                    <input
-                      type="checkbox"
-                      checked={editProduct.colors.includes(color)}
-                      onChange={() => toggleColor(color)}
-                    />
-                    <span>{color}</span>
-                  </label>
-                ))}
-              </div>
+            <div className="flex gap-2 mb-2">
+              <input
+                type="number"
+                name="regularPrice"
+                value={editProduct.regularPrice}
+                onChange={handleChange}
+                className="border p-1 w-full"
+              />
+              <input
+                type="number"
+                name="offerPrice"
+                value={editProduct.offerPrice}
+                onChange={handleChange}
+                className="border p-1 w-full"
+              />
+            </div>
 
-              {/* Images */}
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {editImages.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt="product"
-                    className="w-12 h-12 object-cover border"
-                  />
-                ))}
-                <label className="w-12 h-12 flex items-center justify-center rounded-md border border-[#2B2A29] cursor-pointer text-3xl text-[#898383]">
-                  +
+            {/* Stock */}
+            <div className="flex gap-3 mb-2">
+              {["inStock", "outOfStock", "upcoming"].map((s) => (
+                <label key={s} className="flex gap-1 items-center">
                   <input
-                    type="file"
-                    multiple
-                    className="hidden"
-                    onChange={handleImageChange}
+                    type="radio"
+                    checked={editProduct.stockStatus === s}
+                    onChange={() =>
+                      setEditProduct((p) => ({ ...p, stockStatus: s }))
+                    }
                   />
+                  {s}
                 </label>
-              </div>
+              ))}
+            </div>
 
-              {/* Buttons */}
-              <div className="flex gap-2 mt-3 justify-end">
-                <button
-                  onClick={() => setEditProduct(null)}
-                  className="py-1 px-3 border rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleUpdate}
-                  className="py-1 px-3 bg-[#2B2A29] text-white rounded"
-                >
-                  Save
-                </button>
-              </div>
+            {/* Colors */}
+            <div className="flex flex-wrap gap-2 mb-2">
+              {[
+                "#000000",
+                "#FFFFFF",
+                "#808080",
+                "#008000",
+                "#800080",
+                "#FF0000",
+                "#1656AD",
+                "#401E12",
+                "#F0C807",
+                "#EE0943",
+                "#3C20A3",
+                "#00B496",
+              ].map((c) => (
+                <label key={c} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={editProduct.colors.includes(c)}
+                    onChange={() => toggleColor(c)}
+                  />
+                  <span>{c}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* Images */}
+            <div className="flex gap-2 flex-wrap mb-3">
+              {editImages.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  className="w-12 h-12 object-cover border"
+                />
+              ))}
+              <input type="file" multiple onChange={handleImageChange} />
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setEditProduct(null)}>Cancel</button>
+              <button
+                onClick={handleUpdate}
+                className="bg-black text-white px-4 py-1"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>

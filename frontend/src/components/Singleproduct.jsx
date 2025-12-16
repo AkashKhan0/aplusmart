@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 export default function Singleproduct() {
   const { id } = useParams();
@@ -39,7 +40,22 @@ export default function Singleproduct() {
     loadProduct();
   }, [id]);
 
-  if (loading) return <p className="text-center py-20">Loading product...</p>;
+  if (loading)
+    return (
+      <div className="w-full universal py-10">
+        <div className="fixed_width px-5 universal_column h-full min-h-screen">
+          <div className="w-full max-w-[200px]">
+            <Image
+              src="/images/clock.gif"
+              alt="Please wait"
+              width={500}
+              height={500}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      </div>
+    );
   if (!product) return <p className="text-center py-20">Product not found</p>;
 
   return (
@@ -90,9 +106,14 @@ export default function Singleproduct() {
               </h1>
               <div className="w-full flex flex-wrap items-center gap-2.5 my-2">
                 <p className="pro_p_b_s_B">
-                  price : <strong>{product.offerPrice}</strong>
-                  <del className="text-[#931905]">{product.regularPrice}</del>
-                  <span className="taka">৳</span>
+                  price : <span className="taka">৳-</span>
+                  <strong>{product.offerPrice}</strong>
+                  {product.regularPrice > 0 && (
+                    <del className="text-[#931905]">
+                      <span className="taka">৳- </span>
+                      {product.regularPrice}
+                    </del>
+                  )}
                 </p>
                 <p className="pro_p_b_s_B">
                   brand : <strong>{product.brand}</strong>
@@ -147,17 +168,61 @@ export default function Singleproduct() {
 
               {/* status section */}
               <div className="w-full flex items-center mt-2">
-                <p className="w-fit flex items-center gap-2 capitalize font-bold">
-                  {product.stockStatus}
-                  <span
-                    className={`w-3 h-3 rounded-full ${
-                      product.stockStatus === "inStock"
-                        ? "bg-green-600"
-                        : "bg-red-600"
-                    }`}
-                  ></span>
-                </p>
+                {product.offerPrice > 0 &&
+                product.regularPrice > 0 &&
+                product.offerPrice < product.regularPrice ? (
+                  <div className="w-fit h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase px-3">
+                    {Math.round(
+                      ((product.regularPrice - product.offerPrice) /
+                        product.regularPrice) *
+                        100
+                    )}
+                    % off
+                  </div>
+                ) : (
+                  /* Earn Points */
+                  product.offerPrice > 0 && (
+                    <div className="w-fit h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1.5 justify-center text-sm font-medium px-3">
+                      Earn Points
+                      <span className="text-[#c9c601] flex items-center">
+                        {Math.min(Math.floor(product.offerPrice / 100), 500)} ⭐
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
+
+              {/* count product & buy product */}
+              {product.stockStatus === "inStock" ? (
+                <div className="w-full flex flex-col sm:flex-row md:flex-row gap-5 mt-3">
+                  {/* product quantity */}
+                  <div className="flex items-stretch gap-1.5">
+                    <div className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer">
+                      <FaMinus />
+                    </div>
+                    <div className="universal w-fit h-8 px-2 border border-[#ddd] font-bold text-lg">
+                      {" "}
+                      100{" "}
+                    </div>
+                    <div className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer">
+                      <FaPlus />
+                    </div>
+                  </div>
+
+                  {/* buy now */}
+                  <div className="buy_btn uppercase">buy now</div>
+                </div>
+              ) : (
+                <p
+                  className={`mt-3 font-semibold capitalize text-lg ${
+                    product.stockStatus === "outOfStock"
+                      ? "text-red-500"
+                      : "text-yellow-500"
+                  }`}
+                >
+                  Out of stock, new stock coming soon!
+                </p>
+              )}
             </div>
           </div>
 
