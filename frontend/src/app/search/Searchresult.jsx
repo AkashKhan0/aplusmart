@@ -89,10 +89,11 @@ useEffect(() => {
                   ) : (
                     /* Earn Points */
                     item?.offerPrice > 0 && (
-                      <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
                         Earn Points
-                        <span className="text-[#c9c601]">
-                          {Math.min(Math.floor(item.offerPrice / 100), 500)}
+                        <span className="text-[#c9c601] flex items-center">
+                          {Math.min(Math.floor(item.offerPrice / 100), 500)}{" "}
+                          ⭐
                         </span>
                       </div>
                     )
@@ -111,13 +112,13 @@ useEffect(() => {
                     <h1 className="text-base font-medium text-center capitalize">
                       {item.name}
                     </h1>
-                    <p className="text-[#931905] flex items-center gap-1">
+                    <p className="text-[#931905] flex items-center gap-1 font-bold">
                       <span className="taka">৳-</span>
-                      {item.offerPrice}
+                      {Number(item.offerPrice).toLocaleString("en-IN")}
                       {item?.regularPrice > 0 && (
                         <del className="text-sm text-[#2B2A29]">
                           <span className="taka">৳-</span>
-                          {item.regularPrice}
+                          {Number(item.regularPrice).toLocaleString("en-IN")}
                         </del>
                       )}
                     </p>

@@ -101,12 +101,13 @@ export default function Homeoffer() {
                       {product.name}
                     </h1>
 
-                    <p className="text-[#931905] flex items-center gap-1">
-                      <span className="taka">৳-</span> {product.offerPrice}
+                    <p className="text-[#931905] flex items-center gap-1 font-bold">
+                      <span className="taka">৳-</span>{" "}
+                      {Number(product.offerPrice).toLocaleString("en-IN")}
                       {product?.regularPrice > 0 && (
                         <del className="text-sm text-[#2B2A29]">
                           <span className="taka">৳-</span>
-                          {product.regularPrice}
+                          {Number(product.regularPrice).toLocaleString("en-IN")}
                         </del>
                       )}
                     </p>

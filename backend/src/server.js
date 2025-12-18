@@ -7,16 +7,17 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
+app.use(express.json());
 
 // Middlewares
 // app.use(cors());
 app.use(
   cors({
     origin: [
-    "http://localhost:3000", // admin
-    "http://localhost:3001"  // যদি আলাদা port হয়
+      process.env.USER_FRONTEND_URL,
+      process.env.ADMIN_FRONTEND_URL
   ],
-    credentials: true,               // cookies allow
+    credentials: true, 
   })
 );
 app.use(express.json());
@@ -30,33 +31,27 @@ mongoose
 
 // Import Routes
 import authRoutes from "./routes/auth.js";
-import userProfileRoute from "./routes/user.js";
 import adminAuthRoutes from "./routes/adminAuth.js";
 import faqRoutes from "./routes/faq.js";
 import categoriesRoutes from "./routes/categories.js";
 import uploadRoutes from "./routes/upload.js";
 import productRoutes from "./routes/products.js";
 import productById from "./routes/productById.js";
-// import offersRoutes from "./routes/offers.js";
-// import comboRoutes from "./routes/combos.js";
 import userOfferRoutes from "./routes/userOffers.js";
-// import ordersRoutes from "./routes/orders.js";
+import userRoutes from "./routes/users.js";
 
 
 
 // Use Routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/user", userProfileRoute);
-app.use("/api/admin", adminAuthRoutes);
 app.use("/api/faq", faqRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/products", productById);
-// app.use("/api/offers", offersRoutes);
-// app.use("/api/combos", comboRoutes);
-// app.use("/api/orders", ordersRoutes);
 app.use("/api/user-offers", userOfferRoutes);
+app.use("/api/admin", adminAuthRoutes);
+app.use("/api/users", userRoutes);
 
 
 

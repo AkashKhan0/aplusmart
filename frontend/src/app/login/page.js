@@ -143,6 +143,9 @@ if (authLoading) {
               <Link href="/signup" className="text-blue-600 font-semibold">Please Register...</Link>
             </div>
 
+            <div className="flex items-center justify-center">
+              <p className="text-base font-medium text-green-600 cursor-pointer hover:text-green-800 duration-300">Forget password?</p>
+            </div>
           </form>
         </div>
       </div>

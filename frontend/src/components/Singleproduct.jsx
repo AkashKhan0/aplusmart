@@ -107,11 +107,11 @@ export default function Singleproduct() {
               <div className="w-full flex flex-wrap items-center gap-2.5 my-2">
                 <p className="pro_p_b_s_B">
                   price : <span className="taka">৳-</span>
-                  <strong>{product.offerPrice}</strong>
+                  <strong>{Number(product.offerPrice).toLocaleString("en-IN")}</strong>
                   {product.regularPrice > 0 && (
-                    <del className="text-[#931905]">
+                    <del className="text-[#931905] font-bold">
                       <span className="taka">৳- </span>
-                      {product.regularPrice}
+                      {Number(product.regularPrice).toLocaleString("en-IN")}
                     </del>
                   )}
                 </p>
@@ -194,7 +194,7 @@ export default function Singleproduct() {
 
               {/* count product & buy product */}
               {product.stockStatus === "inStock" ? (
-                <div className="w-full flex flex-col sm:flex-row md:flex-row gap-5 mt-3">
+                <div className="w-full flex flex-col sm:flex-row md:flex-row gap-5 mt-5">
                   {/* product quantity */}
                   <div className="flex items-stretch gap-1.5">
                     <div className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer">
@@ -214,7 +214,7 @@ export default function Singleproduct() {
                 </div>
               ) : (
                 <p
-                  className={`mt-3 font-semibold capitalize text-lg ${
+                  className={`mt-3 font-semibold capitalize text-lg mt-5 ${
                     product.stockStatus === "outOfStock"
                       ? "text-red-500"
                       : "text-yellow-500"

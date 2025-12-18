@@ -16,31 +16,27 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setMsg("");
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setMsg(data.error);
-        return;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
       }
+    );
 
-      // Save token
-      localStorage.setItem("adminToken", data.token);
+    const data = await res.json();
 
-      router.push("/");
-    } catch (error) {
-      setMsg("Server error");
+    if (!res.ok) {
+      setMsg(data.error);
+      return;
     }
+
+    localStorage.setItem("adminToken", data.token);
+    router.push("/");
   };
+
+
 
   return (
     <div className="w-full universal min-h-screen p-5">

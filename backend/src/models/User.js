@@ -9,11 +9,8 @@ const userSchema = new mongoose.Schema(
     },
 
     // COMMON FIELDS
-    emailOrPhone: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    email: { type: String, required: true, unique: true, sparse: true, },
+    phone: { type: String, required: true, unique: true, sparse: true, },
     password: { type: String, required: true },
 
     // CUSTOMER FIELDS
