@@ -30,7 +30,10 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                 />
               </Link>
             </div>
-            <div className="font-semibold text-4xl cursor-pointer" onClick={openMenu}>
+            <div
+              className="font-semibold text-4xl cursor-pointer"
+              onClick={openMenu}
+            >
               <IoMdMenu />
             </div>
 
@@ -55,16 +58,23 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
 
           <div className="w-full sm:w-full md:w-fit flex items-center justify-between gap-5">
             <Link href="/profile">
-            <div
-              className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#931905] rounded-sm universal gap-2.5 text-[#FFFFFF] text-base cursor-pointer"
-            >
-              <p className="capitalize">account</p> <FaUser />
-            </div></Link>
+              <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#931905] rounded-sm universal gap-2.5 text-[#FFFFFF] text-base cursor-pointer">
+                <p className="capitalize">account</p> <FaUser />
+              </div>
+            </Link>
             <Link href="/cart">
               <div className="flex items-center gap-1 text-base relative">
-                <IoCart /><span className="text-[#FFFFFF] rounded-full universal absolute -top-3 left-2 font-bold">
-                    0
-                  </span> <p className="uppercase font-medium flex items-center gap-1.5"> <span className="text-[#FFCE1B] rounded-full universal">{cartCount}</span> cart</p>
+                <IoCart />
+                <span className="text-[#FFFFFF] rounded-full universal absolute -top-3 left-2 font-bold">
+                  0
+                </span>{" "}
+                <p className="uppercase font-medium flex items-center gap-1.5">
+                  {" "}
+                  <span className="text-[#FFCE1B] rounded-full universal">
+                    {cartCount}
+                  </span>{" "}
+                  cart
+                </p>
               </div>
             </Link>
           </div>

@@ -39,6 +39,7 @@ import productRoutes from "./routes/products.js";
 import productById from "./routes/productById.js";
 import userOfferRoutes from "./routes/userOffers.js";
 import userRoutes from "./routes/users.js";
+import userAuthRoutes from "./routes/userauth.js";
 
 
 
@@ -52,6 +53,7 @@ app.use("/api/products", productById);
 app.use("/api/user-offers", userOfferRoutes);
 app.use("/api/admin", adminAuthRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/userauth", userAuthRoutes);
 
 
 
