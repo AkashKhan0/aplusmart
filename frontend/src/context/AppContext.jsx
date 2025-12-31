@@ -9,6 +9,10 @@ export const AppProvider = ({ children }) => {
   const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
+  // cart update trigger
+  const [user, setUser] = useState(null);
+  const [cart, setCart] = useState([]);
+
   // ---------------- Common States ----------------
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
@@ -122,6 +126,106 @@ export const AppProvider = ({ children }) => {
     setSearch("");
   };
 
+  // 🔹 Fetch user
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
+          { credentials: "include" }
+        );
+        const data = await res.json();
+        if (data.user) setUser(data.user);
+        else setUser(null);
+      } catch {
+        setUser(null);
+      }
+    }
+    fetchUser();
+  }, []);
+
+  // 🔹 Fetch cart from COOKIE (🔥 FIX)
+  useEffect(() => {
+
+    if (!user) {
+    setCart([]);
+    return;
+  }
+
+    async function fetchCart() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setCart(Array.isArray(data.cart) ? data.cart : []);
+      } catch {
+        setCart([]);
+      }
+    }
+
+    fetchCart();
+  }, []);
+
+  // 🔹 Save cart to COOKIE
+  const syncCart = async (updatedCart) => {
+    setCart(updatedCart);
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart: updatedCart }),
+    });
+  };
+
+  const addToCart = (newItem) => {
+    const existingIndex = cart.findIndex((item) => item._id === newItem._id && item.role === newItem.role);
+
+    let updatedCart = [...cart];
+
+    if (existingIndex !== -1) {
+      // product already exists
+      const existing = updatedCart[existingIndex];
+      // merge colors (no duplicate)
+      const mergedColors = Array.from(
+        new Set([...(existing.colors || []), ...(newItem.colors || [])])
+      );
+      updatedCart[existingIndex] = {
+        ...existing,
+        quantity: existing.quantity + newItem.quantity,
+        colors: mergedColors,
+      };
+    } else {
+      // first time add
+      updatedCart.push(newItem);
+    }
+    syncCart(updatedCart);
+  };
+
+  const updateQuantity = (id, quantity) => {
+    if (quantity < 1) return;
+
+    const updated = cart.map((item) =>
+      item._id === id ? { ...item, quantity } : item
+    );
+
+    syncCart(updated);
+  };
+
+  const removeFromCart = (id) => {
+    const updated = cart.filter((item) => item._id !== id);
+    syncCart(updated);
+  };
+
+  const clearCart = async () => {
+    setCart([]);
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+  };
+
   // ---------------- Greeting ----------------
   useEffect(() => {
     const updateGreeting = () => {
@@ -167,16 +271,23 @@ export const AppProvider = ({ children }) => {
         setConfirm,
         validateEmail,
         validatePhone,
-
         resellerName,
         setResellerName,
-
         showPass,
         setShowPass,
         showConfirm,
         setShowConfirm,
-
         registerUser,
+
+        // cart update
+        cart,
+        setCart,
+        addToCart,
+        clearCart,
+        updateQuantity,
+        removeFromCart,
+        user,
+        setUser,
       }}
     >
       {children}

@@ -10,7 +10,7 @@ export default function OrderList() {
     <div className="w-full universal_column">
       <h1 className="text-2xl font-bold text-[#931905] ">All Orders</h1>
       <div className="w-full max-w-[60%] border my-5 flex items-stretch">
-        <input type="search" placeholder="search product" className="w-full py-2 px-3" />
+        <input type="search" placeholder="search product" className="w-full py-1 px-3" />
         <button className="px-3 border bg-[#666] text-white uppercase">search</button>
       </div>
       <div className="overflow-x-auto w-full">
@@ -52,14 +52,14 @@ export default function OrderList() {
                 </p>
                 <p>Total amount </p>
               </td>
-              <td className="p-2 border">
+              <td className="p-2 border text-center">
                 <select className="border outline-none rounded px-1 py-0.5">
-                  <option value="pending">Not Yet! ❌</option>
-                  <option value="confirmed">Delivery Fee ⛟</option>
-                  <option value="shipped">Paid ✔ </option>
+                  <option value="notyet">Not Yet! ❌</option>
+                  <option value="delivery_fee">Delivery Fee ⛟</option>
+                  <option value="paid">Paid ✔ </option>
                 </select>
               </td>
-              <td className="p-2 border">
+              <td className="p-2 border text-center">
                 <select className="border outline-none rounded px-1 py-0.5">
                   <option value="pending">Pending ⴵ</option>
                   <option value="confirmed">Confirmed ✔</option>
@@ -68,7 +68,7 @@ export default function OrderList() {
                   <option value="cancelled">Cancelled ⊘</option>
                 </select>
               </td>
-              <td className="p-2 border text-2xl">
+              <td className="p-2 border text-2xl text-center">
                 <button className="text-red-600 hover:text-red-800 mr-3">
                   <FiTrash2 />
                 </button>

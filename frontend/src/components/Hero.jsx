@@ -14,14 +14,7 @@ import { useEffect, useRef, useState } from "react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Hero({ openMenu }) {
-  const {
-    user,
-    search,
-    setSearch,
-    handleSearch,
-    handleAccountClick,
-    cartCount,
-  } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart } = useAppContext();
 
   const dropdownRef = useRef(null);
 
@@ -179,9 +172,17 @@ export default function Hero({ openMenu }) {
               <Link href="/cart">
                 <div className="flex items-center gap-1 text-base relative">
                   <IoCart />
-                  <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
-                    0
-                  </span>
+
+                  {cart.length > 0 ? (
+                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
+                      {cart.length}
+                    </span>
+                  ) : (
+                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
+                      0
+                    </span>
+                  )}
+
                   <p className="uppercase font-medium flex items-center gap-1">
                     cart
                   </p>

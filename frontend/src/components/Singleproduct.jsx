@@ -5,10 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { useAppContext } from "../context/AppContext";
 
 export default function Singleproduct() {
   const { id } = useParams();
   const API = process.env.NEXT_PUBLIC_API_URL;
+
+  const { user, addToCart } = useAppContext();
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -16,7 +19,11 @@ export default function Singleproduct() {
   const [loading, setLoading] = useState(true);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
-  // Load product
+  const [selectedColor, setSelectedColor] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
   useEffect(() => {
     async function loadProduct() {
       try {
@@ -28,9 +35,9 @@ export default function Singleproduct() {
         setProduct(productData);
         setRelatedProducts(related);
 
-        if (productData?.images?.length > 0) {
+        if (productData?.images?.length > 0)
           setActiveImage(productData.images[0]);
-        }
+        if (user?.role === "reseller") setQuantity(50);
       } catch (err) {
         console.error("LOAD FAILED:", err);
       } finally {
@@ -38,7 +45,44 @@ export default function Singleproduct() {
       }
     }
     loadProduct();
-  }, [id]);
+  }, [id, user]);
+
+  const handleQuantityChange = (type) => {
+    if (!user) {
+      if (type === "inc") setQuantity((prev) => prev + 1);
+      if (type === "dec") setQuantity((prev) => Math.max(1, prev - 1));
+    } else if (user.role === "customer") {
+      if (type === "inc") setQuantity((prev) => prev + 1);
+      if (type === "dec") setQuantity((prev) => Math.max(1, prev - 1));
+    } else if (user.role === "reseller") {
+      if (type === "inc") setQuantity((prev) => prev + 50);
+      if (type === "dec") setQuantity((prev) => Math.max(50, prev - 50));
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (!user) return;
+    if (!selectedColor || selectedColor.length === 0) {
+      setMessage("Please select a color!");
+      setMessageType("error");
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
+    const cartItem = {
+      _id: product._id,
+      name: product.name,
+      images: product.images,
+      offerPrice: product.offerPrice,
+      regularPrice: product.regularPrice,
+      quantity,
+      colors: selectedColor,
+      role: user.role,
+    };
+    addToCart(cartItem);
+    setMessage("Added to cart!");
+    setMessageType("success");
+    setTimeout(() => setMessage(""), 2000);
+  };
 
   if (loading)
     return (
@@ -56,6 +100,7 @@ export default function Singleproduct() {
         </div>
       </div>
     );
+
   if (!product) return <p className="text-center py-20">Product not found</p>;
 
   return (
@@ -107,7 +152,9 @@ export default function Singleproduct() {
               <div className="w-full flex flex-wrap items-center gap-2.5 my-2">
                 <p className="pro_p_b_s_B">
                   price : <span className="taka">৳-</span>
-                  <strong>{Number(product.offerPrice).toLocaleString("en-IN")}</strong>
+                  <strong>
+                    {Number(product.offerPrice).toLocaleString("en-IN")}
+                  </strong>
                   {product.regularPrice > 0 && (
                     <del className="text-[#931905] font-bold">
                       <span className="taka">৳- </span>
@@ -141,7 +188,7 @@ export default function Singleproduct() {
                         key={item._id}
                         className="flex items-center gap-5 my-1"
                       >
-                        <span className="font-medium w-fit sm:w-[120px] md:w-[120px]">
+                        <span className="font-medium w-[120px]">
                           {item.name}
                         </span>
                         <span className="text-gray-700">{item.value}</span>
@@ -151,153 +198,145 @@ export default function Singleproduct() {
                 )}
               </div>
 
-              {/* Color section */}
-              <div className="w-full flex flex-wrap items-center gap-2">
-                <div className="text-base font-medium capitalize">
-                  available color :
-                </div>
+              {/* Color */}
+              <div className="w-full flex flex-wrap items-center gap-2 my-3">
+                <span className="font-medium mr-2">Select Color:</span>
                 {product?.colors?.map((color, index) => (
                   <div
                     key={index}
-                    title={color}
                     style={{ backgroundColor: color }}
-                    className="w-5 h-5 rounded-full border"
+                    className={`w-6 h-6 rounded-full border cursor-pointer ${
+                      selectedColor.includes(color)
+                        ? "border-black border-2"
+                        : "border-gray-300"
+                    }`}
+                    // onClick={() => setSelectedColor(color)}
+                    onClick={() => {
+                      if (selectedColor.includes(color)) {
+                        // deselect color
+                        setSelectedColor(
+                          selectedColor.filter((c) => c !== color)
+                        );
+                      } else {
+                        // select color
+                        setSelectedColor([...selectedColor, color]);
+                      }
+                    }}
+                    title={color}
                   ></div>
                 ))}
               </div>
 
-              {/* status section */}
-              <div className="w-full flex items-center mt-2">
-                {product.offerPrice > 0 &&
-                product.regularPrice > 0 &&
-                product.offerPrice < product.regularPrice ? (
-                  <div className="w-fit h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase px-3">
-                    {Math.round(
-                      ((product.regularPrice - product.offerPrice) /
-                        product.regularPrice) *
-                        100
-                    )}
-                    % off
+              {/* Quantity */}
+              <div className="w-full flex items-center gap-3 my-5">
+                <div className="flex items-stretch gap-1.5">
+                  <div
+                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center"
+                    onClick={() => handleQuantityChange("dec")}
+                  >
+                    <FaMinus />
                   </div>
-                ) : (
-                  /* Earn Points */
-                  product.offerPrice > 0 && (
-                    <div className="w-fit h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1.5 justify-center text-sm font-medium px-3">
-                      Earn Points
-                      <span className="text-[#c9c601] flex items-center">
-                        {Math.min(Math.floor(product.offerPrice / 100), 500)} ⭐
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-
-              {/* count product & buy product */}
-              {product.stockStatus === "inStock" ? (
-                <div className="w-full flex flex-col sm:flex-row md:flex-row gap-5 mt-5">
-                  {/* product quantity */}
-                  <div className="flex items-stretch gap-1.5">
-                    <div className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer">
-                      <FaMinus />
-                    </div>
-                    <div className="universal w-fit h-8 px-2 border border-[#ddd] font-bold text-lg">
-                      {" "}
-                      100{" "}
-                    </div>
-                    <div className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer">
-                      <FaPlus />
-                    </div>
+                  <div className="universal w-fit h-8 px-3 border border-[#ddd] font-bold text-lg flex items-center justify-center">
+                    {quantity}
                   </div>
-
-                  {/* buy now */}
-                  <div className="buy_btn uppercase">buy now</div>
+                  <div
+                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center"
+                    onClick={() => handleQuantityChange("inc")}
+                  >
+                    <FaPlus />
+                  </div>
                 </div>
-              ) : (
-                <p
-                  className={`mt-3 font-semibold capitalize text-lg mt-5 ${
-                    product.stockStatus === "outOfStock"
-                      ? "text-red-500"
-                      : "text-yellow-500"
+
+                <button
+                  onClick={handleBuyNow}
+                  disabled={!user}
+                  className={`buy_btn uppercase ${
+                    !user ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  Out of stock, new stock coming soon!
+                  buy now
+                </button>
+              </div>
+              {message && (
+                <p
+                  className={`text-sm mt-1 ${
+                    messageType === "error" ? "text-red-600" : "text-green-600"
+                  }`}
+                >
+                  {message}
                 </p>
               )}
             </div>
           </div>
 
           {/* Specifications + Related */}
-          <div className="w-full mt-5">
-            <div className="w-full flex items-stretch gap-2.5">
-              {/* Specifications */}
-              <div className="w-full sm:w-[70%] md:w-[70%] bg-[#FFFFFF] p-3 rounded-md">
-                <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
-                  Specification
-                </h1>
-                {product.specifications?.length > 0 ? (
-                  product.specifications.map((spec) => (
-                    <div key={spec._id} className="mb-4 pb-3">
-                      <h3 className="font-medium text-base capitalize">
-                        {spec.title}
-                      </h3>
-                      <p className="text-base text-gray-600 mb-2">
-                        {spec.description}
-                      </p>
-                      {spec.list?.length > 0 && (
-                        <ul className="text-base ml-2">
-                          {spec.list.map((item) => (
-                            <li key={item._id} className="flex gap-2 mb-1">
-                              <span className="font-medium w-[120px]">
-                                {item.name}:
-                              </span>
-                              <span>{item.value}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p>No specifications available.</p>
-                )}
-              </div>
+          <div className="w-full mt-5 flex gap-2.5">
+            {/* Specifications */}
+            <div className="w-full sm:w-[70%] md:w-[70%] p-3 rounded-md">
+              <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
+                Specification
+              </h1>
+              {product.specifications?.length > 0 ? (
+                product.specifications.map((spec) => (
+                  <div key={spec._id} className="mb-4 pb-3">
+                    <h3 className="font-medium text-base capitalize">
+                      {spec.title}
+                    </h3>
+                    <p className="text-base text-gray-600 mb-2">
+                      {spec.description}
+                    </p>
+                    {spec.list?.length > 0 && (
+                      <ul className="text-base ml-2">
+                        {spec.list.map((item) => (
+                          <li key={item._id} className="flex gap-2 mb-1">
+                            <span className="font-medium w-[120px]">
+                              {item.name}:
+                            </span>
+                            <span>{item.value}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>No specifications available.</p>
+              )}
+            </div>
 
-              {/* Related products */}
-              <div className="w-full sm:w-[30%] md:w-[30%] bg-[#FFFFFF] p-3 rounded-md h-fit min-h-[200px]">
-                <div className="w-full">
-                  <h1 className="text-center text-lg font-bold capitalize text-[#931905] mb-3">
-                    Related Product
-                  </h1>
-                  {relatedProducts.length > 0 ? (
-                    relatedProducts.map((item) => (
-                      <Link
-                        key={item._id}
-                        href={`/products/${item._id}`}
-                        className="w-full flex gap-2.5 items-start shadow-lg transition duration-200 p-2 rounded-sm"
-                      >
-                        <div className="w-20 h-[60px]">
-                          <img
-                            src={item.images?.[0] || "/placeholder.png"}
-                            alt={item.name}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                        <div className="w-full">
-                          <p className="text-base font-medium capitalize">
-                            {item.name}
-                          </p>
-                          <p className="text-sm font-normal flex items-center gap-2.5">
-                            <strong>৳ {item.offerPrice}</strong>
-                            <del>৳ {item.regularPrice}</del>
-                          </p>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <p className="text-center">No related products</p>
-                  )}
-                </div>
-              </div>
+            {/* Related products */}
+            <div className="w-full sm:w-[30%] md:w-[30%] bg-white p-3 rounded-md min-h-[200px]">
+              <h1 className="text-center text-lg font-bold capitalize text-[#931905] mb-3">
+                Related Product
+              </h1>
+              {relatedProducts.length > 0 ? (
+                relatedProducts.map((item) => (
+                  <Link
+                    key={item._id}
+                    href={`/products/${item._id}`}
+                    className="w-full flex gap-2.5 items-start shadow-lg transition duration-200 p-2 rounded-sm"
+                  >
+                    <div className="w-20 h-[60px]">
+                      <img
+                        src={item.images?.[0] || "/placeholder.png"}
+                        alt={item.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="w-full">
+                      <p className="text-base font-medium capitalize">
+                        {item.name}
+                      </p>
+                      <p className="text-sm font-normal flex items-center gap-2.5">
+                        <strong>৳ {item.offerPrice}</strong>
+                        <del>৳ {item.regularPrice}</del>
+                      </p>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-center">No related products</p>
+              )}
             </div>
           </div>
         </div>

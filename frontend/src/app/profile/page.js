@@ -9,11 +9,11 @@ import { FaBoxOpen, FaUser } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { BsShop } from "react-icons/bs";
+import { useAppContext } from "@/src/context/AppContext";
 
 export default function ProfilePage() {
   const router = useRouter();
-
-  const [user, setUser] = useState(null);
+  const { user, setCart, setUser } = useAppContext();
   const [loading, setLoading] = useState(true);
 
   // ================= FETCH PROFILE =================
@@ -39,13 +39,12 @@ export default function ProfilePage() {
 
   // ================= LOGOUT =================
   const handleLogout = async () => {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/userauth/logout`,
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/userauth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    setUser(null);
+    setCart([]);
     router.push("/login");
   };
 
@@ -59,22 +58,20 @@ export default function ProfilePage() {
 
   return (
     <div className="w-full h-fit min-h-screen flex justify-center">
-      <div className="fixed_width h-full p-5 universal_column">
+      <div className="fixed_width h-full p-3 universal_column">
         {/* ================= HEADER ================= */}
-        <div className="w-full max-w-[1000px] flex items-center justify-between gap-2 my-5">
-          <div className="w-full flex items-center justify-start gap-1.5">
+        <div className="w-full max-w-[1000px] flex flex-col sm:flex-row md:flex-row items-center justify-between gap-2 my-5">
+          <div className="w-full flex items-center justify-center sm:justify-start md:justify-start gap-2.5">
             <div className="universal">
               {user?.role === "reseller" ? (
-                <BsShop className="text-[#2B2A29] text-6xl" />
+                <BsShop className="text-[#2B2A29] text-4xl sm:text-5xl" />
               ) : (
-                <FaUser className="text-[#2B2A29] text-6xl" />
+                <FaUser className="text-[#2B2A29] text-4xl sm:text-5xl" />
               )}
             </div>
 
             <div>
-              <h1 className="font-medium text-[12px] capitalize">
-                welcome!
-              </h1>
+              <h1 className="font-medium text-[12px] capitalize">welcome!</h1>
 
               <h1 className="text-xl font-semibold capitalize block sm:hidden">
                 {user?.fullName || user?.resellerName}
@@ -83,24 +80,28 @@ export default function ProfilePage() {
               <h1 className="text-xl font-semibold capitalize hidden sm:block">
                 {user?.fullName || user?.resellerName}
               </h1>
-
-              <p className="text-[12px] text-gray-700">
-                {user?.email}
-              </p>
-
-              {user?.shopName && (
-                <p className="text-[12px] text-gray-700">
-                  {user.shopName}
-                </p>
-              )}
             </div>
           </div>
 
-          <div className="w-fit flex items-center justify-end gap-5">
+          <div className="w-full sm:w-fit md:w-fit flex items-center justify-between sm:justify-end md:justify-end gap-5">
             <div className="w-fit universal_column">
-              <p className="text-base font-medium">Points</p>
+              <p className="text-base font-medium flex items-center">
+                Points <span className="text-xs">⭐</span>
+              </p>
               <p className="text-xl font-semibold text-[#931905]">
                 <strong>0</strong>
+              </p>
+            </div>
+
+            <div
+              className="flex items-stretch gap-0 cursor-pointer"
+              onClick={handleLogout}
+            >
+              <p className="text-red-600 rotate-90 text-[10px] font-bold">
+                logout
+              </p>
+              <p className="text-red-600 text-4xl">
+                <FiLogOut />
               </p>
             </div>
           </div>
@@ -109,7 +110,7 @@ export default function ProfilePage() {
         {/* ================= DASHBOARD ================= */}
         <div className="w-full mt-5 flex flex-col sm:flex-row md:flex-row items-stretch gap-5">
           {/* ===== Sidebar ===== */}
-          <div className="w-full sm:w-[300px] flex flex-row sm:flex-col md:flex-col gap-3">
+          <div className="w-full sm:w-[300px] flex flex-row sm:flex-col md:flex-col gap-3 items-stretch justify-between h-full ">
             <div className="py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full">
               <div className="w-10 h-10 border rounded-full universal text-3xl text-[#931905] p-2">
                 <HiClipboardDocumentList />
@@ -124,15 +125,6 @@ export default function ProfilePage() {
               <p className="text-[12px] sm:text-base capitalize">
                 Transactions
               </p>
-            </div>
-
-            <div className="w-full flex mb-3 py-2 px-0 sm:px-5 md:px-5 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] shadow-lg">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-1.5 text-red-600 text-sm font-semibold hover:text-red-700 transition-all duration-300 cursor-pointer"
-              >
-                <FiLogOut size={18} /> Logout
-              </button>
             </div>
           </div>
 

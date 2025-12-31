@@ -74,7 +74,16 @@ export const getProfile = async (req, res) => {
 
 // ================= LOGOUT =================
 export const logoutUser = async (req, res) => {
-  res.clearCookie("userToken");
+  // clear auth cookie
+  res.clearCookie("userToken", {
+    path: "/",
+  });
+
+  // 🔥 clear cart cookie
+  res.clearCookie("cart", {
+    path: "/",
+  });
+
   res.json({ message: "Logged out" });
 };
 

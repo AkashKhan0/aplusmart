@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { FaHandPointRight } from "react-icons/fa";
-import { useAppContext } from "@/src/context/AppContext";
 import Link from "next/link";
 import { IoMdStar } from "react-icons/io";
 
@@ -74,7 +73,6 @@ const districts = [
 ];
 
 export default function CheckoutPage() {
-  const { cart, placeOrder, orderId } = useAppContext();
 
   // Billing fields
   const [fullName, setFullName] = useState("");
@@ -105,11 +103,6 @@ export default function CheckoutPage() {
     return 0;
   };
 
-  // computed totals
-  const itemsTotal = cart.reduce((acc, it) => acc + it.price * it.quantity, 0);
-  const shippingCharge = getShippingCharge(selectedDistrict, shippingMethod);
-  const grandTotal = itemsTotal + Number(shippingCharge);
-  const earnedPoints = Math.floor(itemsTotal / 100);
 
 
   // Filtered district list for search
@@ -137,80 +130,6 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   };
 
-  // Handle place order click
-  const onPlaceOrder = async (e) => {
-    e.preventDefault();
-    // Validate
-    if (!validateForm()) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
-    if (!termsChecked) {
-      return;
-    }
-
-    // Prepare billing object
-    const billing = {
-      fullName,
-      address,
-      city,
-      phone,
-      email,
-      thana,
-      comment,
-      district: selectedDistrict,
-    };
-
-    // Prepare items (copy from cart)
-    const items = cart.map((it) => ({
-      productId: it.productId || it._id || null,
-      name: it.name,
-      quantity: it.quantity,
-      price: it.price,
-      colors: it.colors || [],
-      image: it.image || null,
-    }));
-
- 
-    // Call context placeOrder
-   const payload = {
-    billing,
-    orderId,
-    items,
-    shippingMethod: shippingMethod === "home" ? "Home Delivery" : "Request Express",
-    shippingCharge,
-    paymentMethod,
-    points: earnedPoints,
-    grandTotal
-  };
-
-  try {
-    const token = localStorage.getItem("token"); // JWT
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) {
-        const text = await res.text(); // in case HTML returned
-        let msg = text;
-        try { msg = JSON.parse(text).error; } catch {}
-        alert(msg || "Order failed");
-        console.log(msg)
-        return;
-      }
-    const data = await res.json();
-    if (res.ok) {
-      sessionStorage.setItem("latest_order", JSON.stringify(data.order));
-      placeOrder({ ...data.order, orderId }); // clear cart in context
-    } else {
-      alert(data.error || "Order failed");
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
 
   return (
     <>
@@ -222,7 +141,6 @@ export default function CheckoutPage() {
 
           <form
             className="flex flex-col items-stretch gap-1"
-            onSubmit={onPlaceOrder}
           >
             {/* name */}
             <div className="w-full flex flex-col">
@@ -233,12 +151,7 @@ export default function CheckoutPage() {
                 type="text"
                 placeholder="your full name ..."
                 className="checkout_inp"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
               />
-              {errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
-              )}
             </div>
 
             {/* address */}
@@ -250,12 +163,7 @@ export default function CheckoutPage() {
                 type="text"
                 placeholder="House number and Street name"
                 className="checkout_inp mb-2"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
               />
-              {errors.address && (
-                <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-              )}
             </div>
 
             {/* Town / City */}
@@ -267,12 +175,7 @@ export default function CheckoutPage() {
                 type="text"
                 placeholder="Town / City"
                 className="checkout_inp mb-2"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
               />
-              {errors.city && (
-                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-              )}
             </div>
 
             {/* Phone Number */}
@@ -284,12 +187,7 @@ export default function CheckoutPage() {
                 type="tel"
                 placeholder="Phone Number"
                 className="checkout_inp mb-2"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-              )}
             </div>
 
             {/* Email address */}
@@ -301,12 +199,7 @@ export default function CheckoutPage() {
                 type="email"
                 placeholder="example@gmail.com"
                 className="checkout_inp mb-2"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
             </div>
 
             {/* Upazila/Thana */}
@@ -318,12 +211,7 @@ export default function CheckoutPage() {
                 type="text"
                 placeholder="Upazila/Thana"
                 className="checkout_inp mb-2"
-                value={thana}
-                onChange={(e) => setThana(e.target.value)}
               />
-              {errors.thana && (
-                <p className="text-red-500 text-sm mt-1">{errors.thana}</p>
-              )}
             </div>
 
             {/* District */}
@@ -376,8 +264,7 @@ export default function CheckoutPage() {
             {/* Message (NOT required) */}
             <div className="w-full flex flex-col">
               <label>Message</label>
-              <textarea placeholder="Message" className="checkout_inp mb-2" value={comment}
-                onChange={(e) => setComment(e.target.value)} />
+              <textarea placeholder="Message" className="checkout_inp mb-2" />
             </div>
 
             {/* order payment system */}
@@ -400,20 +287,16 @@ export default function CheckoutPage() {
 
                 <tbody>
                   {/* render cart items */}
-                  {cart.map((it) => (
-                    <tr
-                      key={it.id || it.productId || it._id}
-                      className="text-left"
+                    <tr className="text-left"
                     >
                       <td className="p-2 border border-[#dddddd]">
-                        {it.name} x {it.quantity}
+                        it.name x it.quantity
                       </td>
                       <td className="p-2 border border-[#dddddd]">
-                        <span className="taka">৳ -</span>{" "}
-                        {it.price * it.quantity} /-
+                        <span className="taka">৳ -</span>
+                        it.price * it.quantity /-
                       </td>
                     </tr>
-                  ))}
                 </tbody>
 
                 {/* shipping */}
@@ -428,10 +311,8 @@ export default function CheckoutPage() {
                           <input
                             type="radio"
                             name="Shipping"
-                            checked={shippingMethod === "home"}
-                            onChange={() => setShippingMethod("home")}
                           />
-                          Home Delivery: <span className="taka">৳ -</span>{" "}
+                          Home Delivery: <span className="taka">৳ -</span>
                           {getShippingCharge(selectedDistrict, "Home Delivery")}/-
                         </div>
 
@@ -454,7 +335,7 @@ export default function CheckoutPage() {
                       Total
                     </th>
                     <th className="p-2 border border-[#dddddd] rounded flex items-center justify-between gap-1.5">
-                      <span className="taka">৳ - {grandTotal}/-</span> <span className="flex items-center text-[#931905]">({earnedPoints}<IoMdStar />)</span>
+                      <span className="taka">৳ - grandTotal-</span> <span className="flex items-center text-[#931905]"> earnedPoints <IoMdStar /></span>
                     </th>
                   </tr>
                 </thead>
@@ -485,11 +366,6 @@ export default function CheckoutPage() {
                   />
                   <span>Online Payment</span>
                 </div>
-                {errors.paymentMethod && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.paymentMethod}
-                  </p>
-                )}
               </div>
 
               <h1 className="text-xl font-medium text-[#2B2A29] my-5 flex items-start gap-2">
@@ -502,11 +378,9 @@ export default function CheckoutPage() {
                 <input
                   type="checkbox"
                   name="place_order"
-                  checked={termsChecked}
-                  onChange={(e) => setTermsChecked(e.target.checked)}
                 />
-                <p className="i_agree">
-                  I have read and agree to the{" "}
+                <p className="i_agree flex items-center gap-1.5">
+                  I have read and agree to the
                   <a
                     href="/terms-condition"
                     target="_blank"
@@ -514,15 +388,14 @@ export default function CheckoutPage() {
                   >
                     Terms and Conditions
                   </a>
-                  ,{" "}
                   <a
                     href="/privecy-policy"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Privacy Policy
-                  </a>{" "}
-                  and{" "}
+                  </a>
+                  and
                   <a
                     href="/return-policy"
                     target="_blank"
