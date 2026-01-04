@@ -33,6 +33,7 @@ export default function Combo() {
             <Image
               src="/images/clock.gif"
               alt="Please wait"
+              unoptimized
               width={500}
               height={500}
               className="w-full h-full object-contain"
