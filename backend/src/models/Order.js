@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-     orderId: { type: String, required: true, unique: true },
+    orderId: { type: String, required: true, unique: true },
     billing: {
       fullName: String,
       address: String,
@@ -29,7 +29,16 @@ const orderSchema = new mongoose.Schema(
     paymentMethod: String,
     points: Number,
     grandTotal: Number,
-    status: { type: String, default: "pending" }, // pending, processing, shipped, delivered, cancelled
+    status: {
+      type: String,
+      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+      default: "pending",
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["notyet", "delivery_fee", "paid"],
+      default: "notyet",
+    },
   },
   { timestamps: true }
 );

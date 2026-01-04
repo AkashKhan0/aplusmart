@@ -41,6 +41,7 @@ import userOfferRoutes from "./routes/userOffers.js";
 import userRoutes from "./routes/users.js";
 import userAuthRoutes from "./routes/userauth.js";
 import cartRoutes from "./routes/cart.js";
+import orderRoutes from "./routes/orders.js";
 
 
 
@@ -56,6 +57,7 @@ app.use("/api/admin", adminAuthRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/userauth", userAuthRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 
 

@@ -63,9 +63,7 @@ export const AppProvider = ({ children }) => {
   // ---------------- Register ----------------
   const registerUser = async () => {
     // CUSTOMER
-    if (role === "customer") {
-      if (!fullName.trim()) return setMessage("Full name is required");
-    }
+    if (role === "customer" && !fullName.trim()) return setMessage("Full name is required");
 
     // RESELLER
     if (role === "reseller") {
@@ -165,7 +163,7 @@ export const AppProvider = ({ children }) => {
     }
 
     fetchCart();
-  }, []);
+  }, [user]);
 
   // 🔹 Save cart to COOKIE
   const syncCart = async (updatedCart) => {
@@ -225,7 +223,6 @@ export const AppProvider = ({ children }) => {
       credentials: "include",
     });
   };
-
   // ---------------- Greeting ----------------
   useEffect(() => {
     const updateGreeting = () => {
@@ -241,6 +238,22 @@ export const AppProvider = ({ children }) => {
     return () => clearInterval(timer);
   }, []);
 
+  /* ================= PLACE ORDER ================= */
+  const placeOrder = async (orderData) => {
+    const res = await fetch(`${API}/api/orders`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!res.ok) throw new Error("Order failed");
+
+    const data = await res.json();
+    await clearCart();
+    router.push(`/order-confirmation?orderId=${data._id}`);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -248,11 +261,9 @@ export const AppProvider = ({ children }) => {
         setSearch,
         handleSearch,
         greeting,
-
         message,
         setMessage,
         isSuccess,
-
         role,
         setRole,
         fullName,
@@ -278,8 +289,6 @@ export const AppProvider = ({ children }) => {
         showConfirm,
         setShowConfirm,
         registerUser,
-
-        // cart update
         cart,
         setCart,
         addToCart,
@@ -288,6 +297,7 @@ export const AppProvider = ({ children }) => {
         removeFromCart,
         user,
         setUser,
+        placeOrder,
       }}
     >
       {children}

@@ -2,19 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { HiClipboardDocumentList } from "react-icons/hi2";
 import { IoIosCard } from "react-icons/io";
-import { FaBoxOpen, FaUser } from "react-icons/fa";
-import { MdOutlinePayment } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { BsShop } from "react-icons/bs";
 import { useAppContext } from "@/src/context/AppContext";
+import Orders from "@/src/components/Orders";
+import Transactions from "@/src/components/Transactions";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, setCart, setUser } = useAppContext();
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState("orders");
 
   // ================= FETCH PROFILE =================
   useEffect(() => {
@@ -111,14 +112,24 @@ export default function ProfilePage() {
         <div className="w-full mt-5 flex flex-col sm:flex-row md:flex-row items-stretch gap-5">
           {/* ===== Sidebar ===== */}
           <div className="w-full sm:w-[300px] flex flex-row sm:flex-col md:flex-col gap-3 items-stretch justify-between h-full ">
-            <div className="py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full">
+            <div
+              onClick={() => setTab("orders")}
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg ${
+                tab === "orders" && "font-bold"
+              } rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full`}
+            >
               <div className="w-10 h-10 border rounded-full universal text-3xl text-[#931905] p-2">
                 <HiClipboardDocumentList />
               </div>
               <p className="text-[12px] sm:text-base capitalize">Orders</p>
             </div>
 
-            <div className="py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full">
+            <div
+              onClick={() => setTab("transactions")}
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full ${
+                tab === "transactions" && "font-bold"
+              }`}
+            >
               <div className="w-10 h-10 border rounded-full universal text-3xl text-[#931905] p-2">
                 <IoIosCard />
               </div>
@@ -129,8 +140,9 @@ export default function ProfilePage() {
           </div>
 
           {/* ===== Main Content ===== */}
-          <div className="w-full p-5 h-fit max-h-[500px] overflow-x-auto overflow-y-auto shadow-lg">
-            <h1>Content will be show here</h1>
+          <div className="w-full h-fit max-h-[500px] overflow-x-auto overflow-y-auto shadow-lg">
+            {tab === "orders" && <Orders />}
+            {tab === "transactions" && <Transactions />}
           </div>
         </div>
       </div>

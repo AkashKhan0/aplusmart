@@ -72,6 +72,7 @@ export default function Page() {
     } catch (error) {
       setIsSuccess(false);
       setMessage("Something went wrong");
+      console.error("Login error:", error);
     }
   };
 
@@ -141,7 +142,7 @@ export default function Page() {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg my-3"
+              className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg my-3 cursor-pointer"
             >
               Login
             </button>

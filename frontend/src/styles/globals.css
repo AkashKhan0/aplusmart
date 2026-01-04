@@ -112,19 +112,16 @@ input[type="number"]::-webkit-outer-spin-button {
 .taka {
   text-transform: uppercase;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 800;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .taka_1 {
   text-transform: uppercase;
   font-size: 16px;
-  font-weight: 800;
-}
-.taka_font {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 800;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .buy_btn {
-  padding: 5px 24px;
+  padding: 5px 20px;
   background-color: #2B2A29;
   color: #ffffff;
   font-weight: 600;

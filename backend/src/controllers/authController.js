@@ -6,7 +6,7 @@ import crypto from "crypto";
 // ------------------ SIGNUP ------------------
 export const signup = async (req, res) => {
   try {
-    const { role, fullName, email, phone, password, shopName, location, resellerName } = req.body;
+    const { role, fullName, shopName, location, resellerName, email, phone, password } = req.body;
 
     // Existing user check
     const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
@@ -36,9 +36,10 @@ export const loginUser = async (req, res) => {
   const { email, password, rememberMe } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ error: "Invalid credentials" });
+  if (!user){console.log("User not found"); return res.status(401).json({ error: "Invalid credentials" })};
 
   const isMatch = await bcrypt.compare(password, user.password);
+  console.log("Password match:", isMatch);
   if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
 
   const token = jwt.sign(
@@ -61,7 +62,7 @@ export const loginUser = async (req, res) => {
     user: {
       id: user._id,
       email: user.email,
-      fullName: user.fullName,
+      fullName: user.fullName || user.shopName || user.resellerName,
     },
   });
 };
@@ -117,7 +118,7 @@ export const resetPassword = async (req, res) => {
 
   if (!user) return res.status(400).json({ error: "Invalid or expired token" });
 
-  user.password = password;
+  user.password = await bcrypt.hash(password, 10);
   user.resetToken = null;
   user.resetTokenExpiry = null;
   await user.save();

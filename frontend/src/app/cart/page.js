@@ -19,8 +19,7 @@ export default function CartPage() {
   // const minQty = user?.role === "reseller" ? 50 : 1;
 
   const getStep = (item) => (item.role === "reseller" ? 50 : 1);
-const getMin = (item) => (item.role === "reseller" ? 50 : 1);
-
+  const getMin = (item) => (item.role === "reseller" ? 50 : 1);
 
   /* =====================
      EMPTY CART
@@ -55,13 +54,13 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
   ===================== */
   return (
     <div className="w-full h-full universal">
-      <div className="fixed_width px-5 min-h-screen py-5">
+      <div className="fixed_width p-3 min-h-screen">
         <div className="w-full overflow-x-auto py-5">
           <table className="w-full border-collapse">
             <thead>
               <tr className="text-left">
                 <th className="p-2 bg-[#dddddd]">Image</th>
-                <th className="p-2 bg-[#dddddd]">Product name</th>
+                <th className="p-2 bg-[#dddddd]">Product</th>
                 <th className="p-2 bg-[#dddddd]">Quantity</th>
                 <th className="p-2 bg-[#dddddd]">Price</th>
                 <th className="p-2 bg-[#dddddd] text-end">Cancel</th>
@@ -83,20 +82,23 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
                   {/* NAME */}
                   <td className="px-2">
                     <h3 className="font-medium capitalize">{item.name}</h3>
-                    <div className="flex gap-2 mt-1">
-                      {item.colors && item.colors.length > 0 ? (
-                        item.colors.map((c, i) => (
-                          <span
-                            key={i}
-                            className="w-4 h-4 rounded-full border"
-                            style={{ backgroundColor: c }}
-                          />
-                        ))
-                      ) : (
-                        <span className="text-gray-400 text-xs">
-                          No color selected {item.colors}
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="w-full flex items-center gap-1">
+                        {item.colors && item.colors.length > 0 ? (
+                          item.colors.map((c, i) => (
+                            <span
+                              key={i}
+                              className="w-4 h-4 rounded-full border"
+                              style={{ backgroundColor: c }}
+                            />
+                          ))
+                        ) : (
+                          <span className="text-gray-400 text-xs">
+                            No color selected {item.colors}
+                          </span>
+                        )}
+                      </div>
+                      
                     </div>
                   </td>
 
@@ -107,7 +109,10 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
                         onClick={() =>
                           updateQuantity(
                             item._id,
-                            Math.max(item.quantity - getStep(item), getMin(item))
+                            Math.max(
+                              item.quantity - getStep(item),
+                              getMin(item)
+                            )
                           )
                         }
                         className="px-2 bg-gray-200 rounded text-xl"
@@ -121,7 +126,10 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
 
                       <button
                         onClick={() =>
-                          updateQuantity(item._id, item.quantity + getStep(item))
+                          updateQuantity(
+                            item._id,
+                            item.quantity + getStep(item)
+                          )
                         }
                         className="px-2 bg-gray-200 rounded text-xl"
                       >
@@ -132,10 +140,10 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
 
                   {/* PRICE */}
                   <td className="px-2 font-semibold">
-                    <span className="taka">৳- </span>{" "}
+                    <span className="taka">৳-</span>
                     {Number(item.offerPrice * item.quantity).toLocaleString(
                       "en-IN"
-                    )}{" "}
+                    )}
                     /=
                   </td>
 
@@ -155,8 +163,8 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
 
           {/* TOTAL */}
           <div className="flex justify-end my-5">
-            <h2 className="text-xl font-semibold">
-              Cart Total : <span className="taka_1">৳- </span>{" "}
+            <h2 className="text-sm font-semibold">
+              Cart Total : <span className="taka">৳- </span>{" "}
               {Number(totalPrice).toLocaleString("en-IN")} /=
             </h2>
           </div>
@@ -164,7 +172,7 @@ const getMin = (item) => (item.role === "reseller" ? 50 : 1);
           {/* ACTIONS */}
           <div className="flex justify-between mt-10">
             <Link href="/">
-              <button className="buy_btn">Continue Shopping</button>
+              <button className="buy_btn">Continue</button>
             </Link>
             <Link href="/checkout">
               <button className="buy_btn">Checkout</button>

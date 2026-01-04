@@ -39,9 +39,9 @@ export default function SignupPage() {
           </div>
 
           <form
-            onSubmit={(e) => {
+            onSubmit={async(e) => {
               e.preventDefault();
-              context.registerUser();
+               await context.registerUser();
             }}
             className="flex flex-col gap-1"
           >
@@ -141,7 +141,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-1 rounded-sm font-semibold text-lg my-3
+              className={`w-full py-1 rounded-sm font-semibold text-lg my-3 cursor-pointer
                 ${
                   isLoading
                     ? "bg-green-600 text-white cursor-not-allowed"
@@ -149,9 +149,8 @@ export default function SignupPage() {
                 }
               `}
             >
-              {context.message
-                ? context.message
-                : "Register"}
+              {typeof context.message === "string" && context.message !== "" ? context.message : "Register"}
+
             </button>
 
             <div className="flex items-center justify-center gap-1.5">

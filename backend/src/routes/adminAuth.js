@@ -5,8 +5,6 @@ const router = express.Router();
 
 // ADMIN LOGIN
 router.post("/login", async (req, res) => {
-  console.log("BODY:", req.body);
-
   const { username, password } = req.body;
 
   const admin_user = process.env.ADMIN_USERNAME;
@@ -18,11 +16,23 @@ router.post("/login", async (req, res) => {
   }
 
   // Generate JWT
-  const token = jwt.sign({ role: "admin" }, jwt_secret, {
-    expiresIn: "7d",
+  const token = jwt.sign(
+    { id: "admin", role: "admin" },
+    jwt_secret,
+    { expiresIn: "7d" }
+  );
+
+  // ✅ SET COOKIE
+  res.cookie("adminToken", token, {
+    httpOnly: true,
+    secure: false,       // localhost
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  res.status(200).json({ token });
+  res.status(200).json({
+    message: "Admin login successful",
+  });
 });
 
 export default router;
