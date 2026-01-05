@@ -5,16 +5,16 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 export default function Maincategory() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-
+  
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   // Load list
   const fetchCategories = async () => {
     try {

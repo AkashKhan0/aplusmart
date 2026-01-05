@@ -171,9 +171,18 @@ export default function Offers() {
                         </h1>
 
                         <p className="text-[#931905] flex items-center gap-3">
-                          ৳ {product.offerPrice}
+                          <span className="taka">
+                            ৳-{" "}
+                            {Number(product.offerPrice).toLocaleString("en-IN")}
+                            /=
+                          </span>
                           <del className="text-sm text-[#2B2A29]">
-                            ৳ {product.regularPrice}
+                            <span className="taka">
+                              ৳-{" "}
+                              {Number(product.regularPrice).toLocaleString(
+                                "en-IN"
+                              )}
+                            </span>
                           </del>
                         </p>
                       </div>
