@@ -35,13 +35,13 @@ export default function Footer() {
               {/* desktop part */}
               <div className="w-full hidden sm:hidden md:flex gap-2.5">
                 <div className="w-full flex flex-col text-sm gap-1.5 ftr_span">
-                  <Link href="">
+                  <Link href="/online-delivery">
                     <p>Online Delivery</p>
                   </Link>
-                  <Link href="">
+                  <Link href="/contact-us">
                     <p>Contact Us</p>
                   </Link>
-                  <Link href="">
+                  <Link href="/star-point-policy">
                     <p>Star Point Policy</p>
                   </Link>
                 </div>
@@ -61,16 +61,16 @@ export default function Footer() {
               {/* mobile part */}
               <div className="w-full flex sm:flex md:hidden gap-2.5">
                 <div className="w-full flex flex-wrap justify-center ftr_span text-sm gap-5 gap-y-1">
-                  <Link href="/">
+                  <Link href="/online-delivery">
                     <p>Online Delivery</p>
                   </Link>
-                  <Link href="/">
+                  <Link href="/contact-us">
                     <p>Contact Us</p>
                   </Link>
                   <Link href="/terms-condition">
                     <p>Terms and Conditions</p>
                   </Link>
-                  <Link href="/">
+                  <Link href="/star-point-policy">
                     <p>Star Point Policy</p>
                   </Link>
                   <Link href="/privacy-policy">

@@ -144,7 +144,6 @@ export const AppProvider = ({ children }) => {
 
   // 🔹 Fetch cart from COOKIE (🔥 FIX)
   useEffect(() => {
-
     if (!user) {
     setCart([]);
     return;

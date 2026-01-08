@@ -16,21 +16,6 @@ export default function ProfilePage() {
   const { user, setCart, setUser } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("orders");
-  const [orders, setOrders] = useState([]);
-
-    useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/my`, {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // ensure it's array
-        if (Array.isArray(data)) setOrders(data);
-        else setOrders([]);
-      })
-      .catch(() => setOrders([]))
-      .finally(() => setLoading(false));
-  }, []);
 
   // ================= FETCH PROFILE =================
   useEffect(() => {
