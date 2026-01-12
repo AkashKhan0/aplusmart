@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import CopyText from "@/src/components/CopyText";
 import { FaHandPointRight } from "react-icons/fa";
-import { IoMdStar } from "react-icons/io";
 import Link from "next/link";
 
 export default function OrderConfirmation() {
