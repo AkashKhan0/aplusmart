@@ -1,19 +1,23 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import CopyText from "@/src/components/CopyText";
 import { FaHandPointRight } from "react-icons/fa";
 import Link from "next/link";
 
 export default function OrderConfirmation() {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
-
+  const [orderId, setOrderId] = useState(null);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Get orderId from URL (client-side only)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setOrderId(params.get("orderId"));
+  }, []);
+
+  // Fetch order from database via API
   useEffect(() => {
     if (!orderId) return;
 
@@ -23,7 +27,9 @@ export default function OrderConfirmation() {
           credentials: "include",
         });
         const data = await res.json();
+
         if (!res.ok) throw new Error(data.error || "Failed to fetch order");
+
         setOrder(data);
       } catch (err) {
         setError(err.message);
