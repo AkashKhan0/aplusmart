@@ -122,7 +122,7 @@ export default function Offers() {
                       )}
 
                       {status === "active" && timeLeft && (
-                        <div className="bg-[#3c3c3c] text-white text-xs px-3 w-fit h-6 flex items-center gap-2 rounded-br-full rounded-tr-full">
+                        <div className="bg-[#3c3c3c] text-white text-xs font-normal px-3 w-fit h-6 flex items-center gap-2 rounded-br-full rounded-tr-full">
                           <div>
                             {Math.round(
                               ((product.regularPrice - product.offerPrice) /
@@ -150,7 +150,7 @@ export default function Offers() {
                       )}
 
                       {status === "expired" && (
-                        <div className="bg-red-600 text-white w-fit text-xs px-3 h-6 flex items-center rounded-br-full rounded-tr-full">
+                        <div className="bg-red-600 text-white w-fit text-xs font-normal capitalize px-3 h-6 flex items-center rounded-br-full rounded-tr-full">
                           Offer Expired
                         </div>
                       )}

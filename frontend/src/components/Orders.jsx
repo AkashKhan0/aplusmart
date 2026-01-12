@@ -1,26 +1,45 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Orders() {
+export default function Orders({ onOrdersFetch }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/my`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        // ensure it's array
-        if (Array.isArray(data)) setOrders(data);
-        else setOrders([]);
+        if (Array.isArray(data)) {
+          setOrders(data);
+          if (onOrdersFetch) onOrdersFetch(data); // send to parent
+        } else {
+          setOrders([]);
+          if (onOrdersFetch) onOrdersFetch([]);
+        }
       })
-      .catch(() => setOrders([]))
+      .catch(() => {
+        setOrders([]);
+        if (onOrdersFetch) onOrdersFetch([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Loading orders...</p>;
-  if (orders.length === 0) return <p>No orders yet.</p>;
+  if (orders.length === 0) return (<div className="w-full h-full universal">
+          <div className="fixed_width px-5 h-full universal_column py-10">
+            <Image
+              src="/images/empty-cart.svg"
+              alt="A Plus Mart BD"
+              width={300}
+              height={300}
+              className="object-contain max-w-[300px]"
+            />
+            <p className="text-xl font-bold text-[#931905] capitalize">Empty!</p>
+          </div>
+        </div>);
 
   return (
     <div>

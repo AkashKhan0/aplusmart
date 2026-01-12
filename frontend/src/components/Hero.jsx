@@ -59,19 +59,13 @@ export default function Hero({ openMenu }) {
               <Link href="/offers">
                 <div className="hero_top">
                   <BsFire className="text-[#FFCE1B]" />
-                  offers
-                </div>
-              </Link>
-              <Link href="/deals">
-                <div className="hero_top">
-                  <BiSolidOffer className="text-[#FFCE1B]" />
-                  deals
+                  supper offers
                 </div>
               </Link>
               <Link href="/combo">
                 <div className="hero_top">
                   <LuPackagePlus className="text-[#FFCE1B]" />
-                  combo
+                  combo packages
                 </div>
               </Link>
             </div>

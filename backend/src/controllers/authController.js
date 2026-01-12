@@ -51,7 +51,7 @@ export const loginUser = async (req, res) => {
   res.cookie("userToken", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "none",
     maxAge: rememberMe
       ? 30 * 24 * 60 * 60 * 1000
       : 24 * 60 * 60 * 1000,
@@ -68,10 +68,48 @@ export const loginUser = async (req, res) => {
 };
 
 // ================= PROFILE =================
+// export const getProfile = async (req, res) => {
+//   const user = await User.findById(req.user.id).select("-password");
+//   res.json(user);
+// };
+
 export const getProfile = async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.json(user);
+  try {
+    // protectUser already verified token
+    const user = await User.findById(req.user._id).select(
+      "-password"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+     // 🔑 Calculate valid points (last 30 days)
+     let totalPoints = 0;
+     
+     if (user.pointsHistory) {
+      const now = new Date();
+      user.pointsHistory.forEach(p => {
+        const diffDays = (now - new Date(p.createdAt)) / (1000 * 60 * 60 * 24);
+        if (diffDays <= 90) {
+          totalPoints += p.points;
+        }
+      });
+    }
+
+    // ✅ send points from DB
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+       points: totalPoints,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Profile fetch failed" });
+  }
 };
+
 
 // ================= LOGOUT =================
 export const logoutUser = async (req, res) => {

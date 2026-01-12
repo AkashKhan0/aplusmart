@@ -38,7 +38,7 @@ export default function Footer() {
                   <Link href="/online-delivery">
                     <p>Online Delivery</p>
                   </Link>
-                  <Link href="/contact-us">
+                  <Link href="/contact">
                     <p>Contact Us</p>
                   </Link>
                   <Link href="/star-point-policy">
@@ -64,7 +64,7 @@ export default function Footer() {
                   <Link href="/online-delivery">
                     <p>Online Delivery</p>
                   </Link>
-                  <Link href="/contact-us">
+                  <Link href="/contact">
                     <p>Contact Us</p>
                   </Link>
                   <Link href="/terms-condition">

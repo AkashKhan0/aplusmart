@@ -23,6 +23,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
     fetchCategories();
   }, []);
 
+
   // Close sidebar when clicking outside
   useEffect(() => {
     function handleOutsideClick(e) {

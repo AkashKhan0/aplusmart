@@ -3,45 +3,48 @@
 import { useState } from "react";
 
 export default function Page() {
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [responseMsg, setResponseMsg] = useState("");
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setResponseMsg("");
 
-    const formData = new FormData(e.target);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, subject, message }),
+      });
 
-    const res = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      subject: formData.get("subject"),
-      message: formData.get("message"),
-    }),
-  }
-);
+      const data = await res.json();
 
-
-    const data = await res.json();
-    setLoading(false);
-
-    if (data.success) {
-      setMessage("✅ Your message has been sent successfully.");
-      e.target.reset();
-    } else {
-      console.error("Contact form error:", data);
-      setMessage("❌ Failed to send message. Please try again.");
+      if (data.success) {
+        setResponseMsg("Message sent successfully!");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setSubject("");
+        setMessage("");
+        setTimeout(() => setResponseMsg(""), 3000);
+      } else {
+        setResponseMsg("Failed to send message: " + data.message);
+        setTimeout(() => setResponseMsg(""), 3000);
+      }
+    } catch (err) {
+      console.error(err);
+      setResponseMsg("Error sending message. Try again later.");
+      setTimeout(() => setResponseMsg(""), 3000);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="text-gray-800">
@@ -61,7 +64,6 @@ export default function Page() {
             satisfying shopping experience.
           </p>
 
-          {/* Section 1 */}
           <Section title="1. Customer Support">
             <ul className="space-y-2">
               <li><strong>Phone:</strong> +8801850219432</li>
@@ -73,18 +75,14 @@ export default function Page() {
             </p>
           </Section>
 
-          {/* Section 2 */}
           <Section title="2. Email Support">
-            <p>
-              <strong>Email:</strong> support@aplusmartbd.com
-            </p>
+            <p><strong>Email:</strong> support@aplusmartbd.com</p>
             <p className="mt-2 text-sm text-gray-600">
               You can email us anytime. We usually respond within 24 working
               hours.
             </p>
           </Section>
 
-          {/* Section 3 */}
           <Section title="3. Live Chat">
             <p>Chat with us directly through our website for instant support.</p>
             <p className="mt-2 text-sm text-gray-600">
@@ -92,7 +90,6 @@ export default function Page() {
             </p>
           </Section>
 
-          {/* Section 4 */}
           <Section title="4. Order & Delivery Support">
             <p className="mb-3">
               For faster service, please keep the following information ready:
@@ -104,32 +101,25 @@ export default function Page() {
             </ul>
           </Section>
 
-          {/* Section 5 */}
           <Section title="5. Business & Partnership Inquiries">
             <p>
               For corporate sales, bulk orders, or partnership opportunities:
             </p>
-            <p className="mt-2">
-              <strong>Email:</strong> support@aplusmartbd.com
-            </p>
+            <p className="mt-2"><strong>Email:</strong> support@aplusmartbd.com</p>
           </Section>
 
-          {/* Section 6 */}
           <Section title="6. Feedback & Complaints">
             <p>
               Your feedback helps us improve. If you have any suggestions or
               complaints, please email us.
             </p>
-            <p className="mt-2">
-              <strong>Email:</strong> support@aplusmartbd.com
-            </p>
+            <p className="mt-2"><strong>Email:</strong> support@aplusmartbd.com</p>
             <p className="mt-2 text-sm text-gray-600">
               We take every concern seriously and aim to resolve issues as
               quickly as possible.
             </p>
           </Section>
 
-          {/* Section 7 */}
           <Section title="7. Response Time Policy">
             <ul className="list-disc pl-6 space-y-1">
               <li>Phone / Live Chat: Immediate during working hours</li>
@@ -145,6 +135,8 @@ export default function Page() {
             >
               <input
                 name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Your Name"
                 className="border rounded-lg px-4 py-2"
@@ -152,23 +144,31 @@ export default function Page() {
               <input
                 name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="Your Email"
                 className="border rounded-lg px-4 py-2"
               />
               <input
                 name="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone Number"
                 className="border rounded-lg px-4 py-2 md:col-span-2"
               />
               <input
                 name="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
                 required
                 placeholder="Subject"
                 className="border rounded-lg px-4 py-2 md:col-span-2"
               />
               <textarea
                 name="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 required
                 placeholder="Write your message..."
                 rows="4"
@@ -182,13 +182,12 @@ export default function Page() {
                 {loading ? "Sending..." : "Send Message"}
               </button>
 
-              {message && (
-                <p className="md:col-span-2 text-sm mt-2">{message}</p>
+              {responseMsg && (
+                <p className="md:col-span-2 text-sm mt-2">{responseMsg}</p>
               )}
             </form>
           </Section>
 
-          {/* Section 9 */}
           <Section title="9. Our Commitment">
             <p>
               We are committed to providing reliable support, clear

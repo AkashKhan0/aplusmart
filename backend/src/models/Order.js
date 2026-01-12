@@ -27,7 +27,10 @@ const orderSchema = new mongoose.Schema(
     shippingMethod: String,
     shippingCharge: Number,
     paymentMethod: String,
-    points: Number,
+    points: {
+      type: Number,
+      default: 0,
+    },
     grandTotal: Number,
     status: {
       type: String,

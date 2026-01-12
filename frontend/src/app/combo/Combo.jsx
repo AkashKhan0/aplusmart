@@ -69,7 +69,7 @@ export default function Combo() {
                     {product?.offerPrice > 0 &&
                     product?.regularPrice > 0 &&
                     product.offerPrice < product.regularPrice ? (
-                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium">
+                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-normal uppercase">
                         {Math.round(
                           ((product.regularPrice - product.offerPrice) /
                             product.regularPrice) *
@@ -80,7 +80,7 @@ export default function Combo() {
                     ) : (
                       /* Earn Points */
                       product?.offerPrice > 0 && (
-                        <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                        <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-normal capitalize">
                           Earn Points
                           <span className="text-[#c9c601]">
                             {Math.min(

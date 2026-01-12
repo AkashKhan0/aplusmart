@@ -10,21 +10,25 @@ router.post("/", async (req, res) => {
     if (!name || !email || !subject || !message) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields",
+        message: "Please fill all required fields",
       });
     }
 
+    // Gmail transporter
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // true for 465
       auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASS,
+        user: process.env.SMTP_EMAIL, // aplusadvertisinglimited@gmail.com
+        pass: process.env.SMTP_PASS,  // App Password
       },
     });
 
+    // Send email
     await transporter.sendMail({
       from: `"A Plus Mart BD" <${process.env.SMTP_EMAIL}>`,
-      to: "support@aplusmartbd.com",
+      to: "aplusadvertisinglimited@gmail.com", // where form data will be sent
       subject: `Contact Form: ${subject}`,
       html: `
         <h3>New Contact Message</h3>
@@ -36,10 +40,10 @@ router.post("/", async (req, res) => {
       `,
     });
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: "Message sent successfully" });
   } catch (err) {
     console.error("Mail error:", err);
-    res.status(500).json({ success: false });
+    res.status(500).json({ success: false, message: "Failed to send message" });
   }
 });
 

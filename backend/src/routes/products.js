@@ -1,5 +1,8 @@
 import express from "express";
 import Product from "../models/Product.js";
+import Review from "../models/Review.js";
+import { protectUser } from "../middleware/protectUser.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -103,6 +106,78 @@ router.get("/:id", async (req, res) => {
     });
   } catch (err) {
     console.log("PRODUCT ROUTE ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// ================= POST REVIEW =================
+// URL → POST /products/:id/review
+router.post("/:id/review", protectUser, async (req, res) => {
+  try {
+    const { id: productId } = req.params;
+    const { rating, message } = req.body;
+
+    if (!rating || rating < 1 || rating > 5 || !message)
+      return res.status(400).json({ error: "Invalid review data" });
+
+    // Check if user already reviewed this product
+    const existingReview = await Review.findOne({
+      user: req.user._id,
+      product: productId,
+    });
+
+    if (existingReview)
+      return res.status(400).json({ error: "You already reviewed this product" });
+
+    const review = await Review.create({
+      user: req.user._id,
+      product: productId,
+      rating,
+      message,
+    });
+
+    res.status(201).json({ message: "Review added", review });
+  } catch (err) {
+    console.error("Review POST ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ================= GET PRODUCT REVIEWS =================
+// URL → GET /products/:id/reviews
+router.get("/:id/reviews", async (req, res) => {
+  try {
+    const { id: productId } = req.params;
+
+    const reviews = await Review.find({ product: productId })
+      .populate("user", "fullName resellerName role")
+      .sort({ createdAt: -1 });
+
+    const totalReviews = reviews.length;
+    const avgRating =
+      totalReviews > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
+        : 0;
+
+    res.status(200).json({ totalReviews, avgRating, reviews });
+  } catch (err) {
+    console.error("Review GET ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ================= GET ALL REVIEWS (ADMIN PANEL) =================
+router.get("/reviews/all", async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .populate("product", "name")
+      .populate("user", "fullName resellerName role")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ reviews });
+  } catch (err) {
+    console.error("Failed to fetch all reviews:", err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -7,22 +7,81 @@ import { useRouter } from "next/navigation";
 import { useAppContext } from "@/src/context/AppContext";
 
 const districts = [
-  "Dhaka", "Gazipur", "Narayanganj", "Narsingdi", "Manikganj", "Munshiganj",
-  "Faridpur", "Rajbari", "Madaripur", "Shariatpur", "Tangail", "Kishoreganj",
-  "Gopalganj", "Chattogram", "Cox's Bazar", "Rangamati", "Bandarban",
-  "Khagrachari", "Feni", "Noakhali", "Lakshmipur", "Cumilla", "Brahmanbaria",
-  "Chandpur", "Rajshahi", "Natore", "Naogaon", "Pabna", "Sirajgonj", "Bogura",
-  "Joypurhat", "Chapainawabganj", "Khulna", "Jessore", "Satkhira", "Jhenaidah",
-  "Magura", "Narail", "Kushtia", "Chuadanga", "Meherpur", "Bagerhat", "Barishal",
-  "Bhola", "Patuakhali", "Pirojpur", "Jhalokathi", "Barguna", "Sylhet",
-  "Sunamganj", "Moulvibazar", "Habiganj", "Rangpur", "Dinajpur", "Gaibandha",
-  "Nilphamari", "Kurigram", "Lalmonirhat", "Thakurgaon", "Panchagarh",
-  "Mymensingh", "Jamalpur", "Sherpur", "Netrokona",
+  "Dhaka",
+  "Gazipur",
+  "Narayanganj",
+  "Narsingdi",
+  "Manikganj",
+  "Munshiganj",
+  "Faridpur",
+  "Rajbari",
+  "Madaripur",
+  "Shariatpur",
+  "Tangail",
+  "Kishoreganj",
+  "Gopalganj",
+  "Chattogram",
+  "Cox's Bazar",
+  "Rangamati",
+  "Bandarban",
+  "Khagrachari",
+  "Feni",
+  "Noakhali",
+  "Lakshmipur",
+  "Cumilla",
+  "Brahmanbaria",
+  "Chandpur",
+  "Rajshahi",
+  "Natore",
+  "Naogaon",
+  "Pabna",
+  "Sirajgonj",
+  "Bogura",
+  "Joypurhat",
+  "Chapainawabganj",
+  "Khulna",
+  "Jessore",
+  "Satkhira",
+  "Jhenaidah",
+  "Magura",
+  "Narail",
+  "Kushtia",
+  "Chuadanga",
+  "Meherpur",
+  "Bagerhat",
+  "Barishal",
+  "Bhola",
+  "Patuakhali",
+  "Pirojpur",
+  "Jhalokathi",
+  "Barguna",
+  "Sylhet",
+  "Sunamganj",
+  "Moulvibazar",
+  "Habiganj",
+  "Rangpur",
+  "Dinajpur",
+  "Gaibandha",
+  "Nilphamari",
+  "Kurigram",
+  "Lalmonirhat",
+  "Thakurgaon",
+  "Panchagarh",
+  "Mymensingh",
+  "Jamalpur",
+  "Sherpur",
+  "Netrokona",
 ];
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, clearCart } = useAppContext();
+  const { cart, clearCart, user } = useAppContext();
+
+  const availablePoints = user?.points || 0;
+  const POINT_VALUE = 5;
+
+  const [usePoints, setUsePoints] = useState(false);
+  const [pointsToUse, setPointsToUse] = useState(0);
 
   // Billing fields
   const [fullName, setFullName] = useState("");
@@ -53,12 +112,6 @@ export default function CheckoutPage() {
     return 0;
   };
 
-  // const productsTotal = cart?.reduce(
-  //   (sum, item) => sum + item.offerPrice * item.quantity,
-  //   0
-  // ) || 0;
-
-
   // District filter
   const filtered = districts.filter((d) =>
     d.toLowerCase().includes(search.toLowerCase())
@@ -84,81 +137,103 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   };
 
-  // Submit order
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!validateForm()) return;
-
-  const billing = {
-    fullName,
-    address,
-    city,
-    thana,
-    district: selectedDistrict,
-    phone,
-    email,
-    comment,
-  };
-
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        billing,
-        cart,
-        shippingMethod,
-        shippingCharge: getShippingCharge(selectedDistrict, shippingMethod),
-        paymentMethod,
-        points: totalEarnedPoints,
-        grandTotal: totalAmount,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setMessage(`Order failed: ${data.error || "Something went wrong"}`);
-      setTimeout(() => setMessage(""), 1500);
-      return;
-    }
-
-    // Success
-    setMessage(`Order placed successfully!`);
-    clearCart();
-    setTimeout(() => setMessage(""), 1500);
-
-    // Optional redirect
-    setTimeout(() => {
-      router.push(`/order-confirmation?orderId=${data.orderId}`);
-    }, 2000);
-    
-  } catch (err) {
-    console.error(err);
-    setMessage("Order failed: Try again");
-  }
-};
-
-  // Total product price (without shipping)
+  /* ---------------- TOTAL PRODUCT PRICE ---------------- */
   const totalProductPrice = cart.reduce(
-    (acc, item) => acc + item.offerPrice * item.quantity,
+    (sum, item) => sum + item.offerPrice * item.quantity,
     0
   );
 
+  /* ---------------- POINTS CALCULATION ---------------- */
+  const maxUsablePoints = Math.min(
+    availablePoints,
+    Math.floor(totalProductPrice / POINT_VALUE)
+  );
+
+  const appliedPoints = usePoints ? Math.min(pointsToUse, maxUsablePoints) : 0;
+
+  const pointsDiscount = appliedPoints * POINT_VALUE;
+
+  /* ---------------- FINAL TOTAL ---------------- */
+  const finalTotalAmount =
+    totalProductPrice +
+    getShippingCharge(selectedDistrict, shippingMethod) -
+    pointsDiscount;
 
   const totalEarnedPoints = cart.reduce((acc, item) => {
-  if (item.hasOffer) return acc;
-  const productPoint = Math.floor(item.offerPrice / 100 * item.quantity);
-  const earnedPoint = Math.min(productPoint, 500);
-  return acc + earnedPoint;
-}, 0);
+    if (item.hasOffer) return acc;
+    const productPoint = Math.floor((item.offerPrice / 100) * item.quantity);
+    const earnedPoint = Math.min(productPoint, 500);
+    return acc + earnedPoint;
+  }, 0);
 
+  const handlePointsChange = (e) => {
+    let value = Number(e.target.value);
 
+    if (isNaN(value)) value = 0;
 
+    if (value < 0) value = 0;
 
-  // Total amount including shipping
-  const totalAmount = totalProductPrice + getShippingCharge(selectedDistrict, shippingMethod);
+    if (value > maxUsablePoints) {
+      value = maxUsablePoints;
+    }
+    setPointsToUse(value);
+  };
+
+  // Submit order
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const billing = {
+      fullName,
+      address,
+      city,
+      thana,
+      district: selectedDistrict,
+      phone,
+      email,
+      comment,
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          billing,
+          cart,
+          shippingMethod,
+          shippingCharge: getShippingCharge(selectedDistrict, shippingMethod),
+          paymentMethod,
+          usedPoints: appliedPoints,
+          pointsDiscount,
+          grandTotal: finalTotalAmount,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(`Order failed: ${data.error || "Something went wrong"}`);
+        setTimeout(() => setMessage(""), 1500);
+        return;
+      }
+
+      // Success
+      setMessage(`Order placed successfully!`);
+      clearCart();
+      setTimeout(() => setMessage(""), 1500);
+
+      // Optional redirect
+      setTimeout(() => {
+        router.push(`/order-confirmation?orderId=${data.orderId}`);
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      setMessage("Order failed: Try again");
+    }
+  };
 
   return (
     <div className="w-full h-full universal">
@@ -167,10 +242,15 @@ const handleSubmit = async (e) => {
           Billing details
         </h1>
 
-        <form className="flex flex-col items-stretch gap-1" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col items-stretch gap-1"
+          onSubmit={handleSubmit}
+        >
           {/* Name */}
           <div className="w-full flex flex-col">
-            <label>Full Name <span className="req_hash">*</span></label>
+            <label>
+              Full Name <span className="req_hash">*</span>
+            </label>
             <input
               type="text"
               value={fullName}
@@ -178,12 +258,16 @@ const handleSubmit = async (e) => {
               placeholder="Your full name ..."
               className="checkout_inp"
             />
-            {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName}</p>
+            )}
           </div>
 
           {/* Address */}
           <div className="w-full flex flex-col">
-            <label>Address <span className="req_hash">*</span></label>
+            <label>
+              Address <span className="req_hash">*</span>
+            </label>
             <input
               type="text"
               value={address}
@@ -191,12 +275,16 @@ const handleSubmit = async (e) => {
               placeholder="House number and Street name"
               className="checkout_inp mb-2"
             />
-            {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+            {errors.address && (
+              <p className="text-red-500 text-sm">{errors.address}</p>
+            )}
           </div>
 
           {/* City */}
           <div className="w-full flex flex-col">
-            <label>Town / City <span className="req_hash">*</span></label>
+            <label>
+              Town / City <span className="req_hash">*</span>
+            </label>
             <input
               type="text"
               value={city}
@@ -204,12 +292,16 @@ const handleSubmit = async (e) => {
               placeholder="Town / City"
               className="checkout_inp mb-2"
             />
-            {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+            {errors.city && (
+              <p className="text-red-500 text-sm">{errors.city}</p>
+            )}
           </div>
 
           {/* Phone */}
           <div className="w-full flex flex-col">
-            <label>Phone Number <span className="req_hash">*</span></label>
+            <label>
+              Phone Number <span className="req_hash">*</span>
+            </label>
             <input
               type="tel"
               value={phone}
@@ -217,12 +309,16 @@ const handleSubmit = async (e) => {
               placeholder="Phone Number"
               className="checkout_inp mb-2"
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
           </div>
 
           {/* Email */}
           <div className="w-full flex flex-col">
-            <label>Email Address <span className="req_hash">*</span></label>
+            <label>
+              Email Address <span className="req_hash">*</span>
+            </label>
             <input
               type="email"
               value={email}
@@ -230,12 +326,16 @@ const handleSubmit = async (e) => {
               placeholder="example@gmail.com"
               className="checkout_inp mb-2"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
           {/* Thana */}
           <div className="w-full flex flex-col">
-            <label>Upazila/Thana <span className="req_hash">*</span></label>
+            <label>
+              Upazila/Thana <span className="req_hash">*</span>
+            </label>
             <input
               type="text"
               value={thana}
@@ -243,19 +343,25 @@ const handleSubmit = async (e) => {
               placeholder="Upazila/Thana"
               className="checkout_inp mb-2"
             />
-            {errors.thana && <p className="text-red-500 text-sm">{errors.thana}</p>}
+            {errors.thana && (
+              <p className="text-red-500 text-sm">{errors.thana}</p>
+            )}
           </div>
 
           {/* District */}
           <div className="w-full flex flex-col relative">
-            <label>District <span className="req_hash">*</span></label>
+            <label>
+              District <span className="req_hash">*</span>
+            </label>
             <div
               onClick={() => setOpen(!open)}
               className="checkout_inp cursor-pointer bg-transparent text-[#2B2A29]"
             >
               {selectedDistrict}
             </div>
-            {errors.district && <p className="text-red-500 text-sm">{errors.district}</p>}
+            {errors.district && (
+              <p className="text-red-500 text-sm">{errors.district}</p>
+            )}
 
             {open && (
               <div className="w-full bg-white border border-[#dddddd] shadow-lg z-50 absolute">
@@ -297,25 +403,41 @@ const handleSubmit = async (e) => {
 
           {/* Order summary */}
           <div className="w-full mt-5">
-            <h1 className="text-2xl font-medium text-[#931905] capitalize mb-2">Your Order</h1>
+            <h1 className="text-2xl font-medium text-[#931905] capitalize mb-2">
+              Your Order
+            </h1>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="text-left">
-                  <th className="p-2 border border-[#dddddd] uppercase">Product</th>
-                  <th className="p-2 border border-[#dddddd] uppercase">Amount</th>
+                  <th className="p-2 border border-[#dddddd] uppercase">
+                    Product
+                  </th>
+                  <th className="p-2 border border-[#dddddd] uppercase">
+                    Amount
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {cart?.map((item) => (
                   <tr key={item._id} className="text-left">
-                    <td className="p-2 border border-[#dddddd]">{item.name} x {item.quantity}</td>
-                    <td className="p-2 border border-[#dddddd]"><span className="taka">৳- </span>  {Number(item.offerPrice * item.quantity).toLocaleString("en-IN")}/=</td>
+                    <td className="p-2 border border-[#dddddd]">
+                      {item.name} x {item.quantity}
+                    </td>
+                    <td className="p-2 border border-[#dddddd]">
+                      <span className="taka">৳- </span>{" "}
+                      {Number(item.offerPrice * item.quantity).toLocaleString(
+                        "en-IN"
+                      )}
+                      /=
+                    </td>
                   </tr>
                 ))}
               </tbody>
               <thead>
                 <tr className="text-left">
-                  <td className="p-2 border border-[#dddddd] uppercase font-bold">Shipping</td>
+                  <td className="p-2 border border-[#dddddd] uppercase font-bold">
+                    Shipping
+                  </td>
                   <td className="p-2 border border-[#dddddd] rounded flex flex-col gap-1.5">
                     <div className="flex items-center gap-2">
                       <input
@@ -324,7 +446,8 @@ const handleSubmit = async (e) => {
                         checked={shippingMethod === "home"}
                         onChange={() => setShippingMethod("home")}
                       />
-                      Home Delivery: ৳- {getShippingCharge(selectedDistrict, "home")}/=
+                      Home Delivery: ৳-{" "}
+                      {getShippingCharge(selectedDistrict, "home")}/=
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -333,26 +456,83 @@ const handleSubmit = async (e) => {
                         checked={shippingMethod === "express"}
                         onChange={() => setShippingMethod("express")}
                       />
-                      Request Express: ৳- {getShippingCharge(selectedDistrict, "express")}/=
+                      Request Express: ৳-{" "}
+                      {getShippingCharge(selectedDistrict, "express")}/=
                     </div>
                   </td>
                 </tr>
                 <tr className="text-left">
-                  <th className="p-2 border border-[#dddddd] uppercase">Total</th>
+                  <th className="p-2 border border-[#dddddd] uppercase">
+                    Total
+                  </th>
                   <th className="p-2 border border-[#dddddd] rounded flex items-center justify-between gap-1.5">
-                    <p><span className="taka">৳- </span>{Number(totalAmount).toLocaleString(
-                      "en-IN"
-                    )}/=</p>
-                    <span className="flex items-center text-[#931905]">{totalEarnedPoints} <IoMdStar /></span>
+                    <p>
+                      <span className="taka">৳- </span>
+                      {Number(finalTotalAmount).toLocaleString("en-IN")}/=
+                    </p>
+                    <span className="flex items-center text-[#931905]">
+                      {totalEarnedPoints} <IoMdStar />
+                    </span>
                   </th>
                 </tr>
               </thead>
             </table>
           </div>
 
+          {/* use points */}
+          <div className="w-full p-3 bg-gray-200 mt-5 rounded">
+            <h2 className="text-lg font-medium mb-2 flex items-center gap-2">
+              Use Reward Points <IoMdStar className="text-[#931905]" />
+            </h2>
+
+            <p className="text-base mb-2">
+              Available Points:
+              <span className="font-semibold text-[#931905] ml-1">
+                {availablePoints}
+              </span>{" "}
+              (1 Point = {POINT_VALUE} tk)
+            </p>
+
+            <div className="flex items-center gap-2 mb-2">
+              <input
+                type="checkbox"
+                checked={usePoints}
+                onChange={(e) => {
+                  setUsePoints(e.target.checked);
+                  if (!e.target.checked) setPointsToUse(0);
+                }}
+              />
+              <span>Use points for this order</span>
+            </div>
+
+            {usePoints && (
+              <div className="flex flex-col gap-2">
+                <input
+                  type="number"
+                  min={0}
+                  max={maxUsablePoints}
+                  value={pointsToUse}
+                  onChange={handlePointsChange}
+                  className="checkout_inp w-full"
+                  placeholder="Enter points"
+                />
+
+                <p className="text-lg text-green-600">
+                  Discount: <span className="taka">৳ - </span> {pointsDiscount}
+                </p>
+
+                <p className="text-xs text-red-500">
+                  Max usable points: {maxUsablePoints}
+                </p>
+              </div>
+            )}
+          </div>
+
           {/* Payment */}
           <div className="w-full mt-5">
-            <h1 className="text-2xl font-medium text-[#931905] capitalize mb-2">Payment Method</h1>
+            <h1 className="text-2xl font-medium text-[#931905] capitalize mb-2">
+              Payment Method
+            </h1>
             <div className="w-full flex flex-col gap-3">
               <div className="flex items-center gap-2.5">
                 <input
@@ -372,14 +552,17 @@ const handleSubmit = async (e) => {
                 />
                 Online Payment
               </div>
-              {errors.paymentMethod && <p className="text-red-500 text-sm">{errors.paymentMethod}</p>}
+              {errors.paymentMethod && (
+                <p className="text-red-500 text-sm">{errors.paymentMethod}</p>
+              )}
             </div>
 
             <div className="p-3 border border-red-600 rounded-sm bg-amber-200 my-3">
               <h1 className="text-xl font-medium text-[#2B2A29] flex items-start gap-2">
-              <FaHandPointRight className="mt-1 text-red-600 w-5 min-w-5" />
-              Please pay delivery fee for confirm your order. Use order ID in your reference.
-            </h1>
+                <FaHandPointRight className="mt-1 text-red-600 w-5 min-w-5" />
+                Please pay delivery fee for confirm your order. Use order ID in
+                your reference.
+              </h1>
             </div>
 
             <div className="w-full flex items-start gap-1.5 mb-5">
@@ -391,21 +574,49 @@ const handleSubmit = async (e) => {
               />
               <p className="i_agree flex items-center flex-wrap gap-1.5">
                 I have read and agree to the
-                <a href="/terms-condition" target="_blank" rel="noopener noreferrer"> Terms and Conditions,</a>
-                <a href="/privecy-policy" target="_blank" rel="noopener noreferrer"> Privacy Policy </a> and
-                <a href="/return-policy" target="_blank" rel="noopener noreferrer"> Refund and Return Policy.</a>
+                <a
+                  href="/terms-condition"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Terms and Conditions,
+                </a>
+                <a
+                  href="/privecy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Privacy Policy{" "}
+                </a>{" "}
+                and
+                <a
+                  href="/return-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Refund and Return Policy.
+                </a>
               </p>
-              {errors.termsChecked && <p className="text-red-500 text-sm">{errors.termsChecked}</p>}
+              {errors.termsChecked && (
+                <p className="text-red-500 text-sm">{errors.termsChecked}</p>
+              )}
             </div>
 
             {/* Success / Error Message */}
-        {message && (
-          <div className={`p-3 rounded font-base ${
-            message.includes("successfully") ? "text-green-600" : "text-red-600"
-          }`}>
-            {message}
-          </div>
-        )}
+            {message && (
+              <div
+                className={`p-3 rounded font-base ${
+                  message.includes("successfully")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {message}
+              </div>
+            )}
 
             <div className="w-full flex items-center justify-end">
               <button

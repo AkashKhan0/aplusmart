@@ -19,7 +19,7 @@ export default function OrderList() {
         credentials: "include", // send adminToken cookie
       });
       const data = await res.json();
-       setOrders(Array.isArray(data) ? data : []);
+      setOrders(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -77,23 +77,22 @@ export default function OrderList() {
 
   // Filter orders by search
   const filteredOrders = Array.isArray(orders)
-  ? orders.filter((order) => {
-    const orderIdMatch = order.orderId
-      ?.toLowerCase()
-      .includes(search.toLowerCase());
-    const customerMatch =
-        order.user?.fullName
-          ?.toLowerCase()
-          .includes(search.toLowerCase()) ||
-        order.user?.resellerName
+    ? orders.filter((order) => {
+        const orderIdMatch = order.orderId
           ?.toLowerCase()
           .includes(search.toLowerCase());
-          
-    const productMatch = order.items.some((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
-    );
-    return orderIdMatch || customerMatch || productMatch;
-  }) : [];
+        const customerMatch =
+          order.user?.fullName?.toLowerCase().includes(search.toLowerCase()) ||
+          order.user?.resellerName
+            ?.toLowerCase()
+            .includes(search.toLowerCase());
+
+        const productMatch = order.items.some((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
+        );
+        return orderIdMatch || customerMatch || productMatch;
+      })
+    : [];
 
   return (
     <div className="w-full universal_column">
@@ -123,9 +122,9 @@ export default function OrderList() {
             <thead className="bg-gray-100">
               <tr>
                 <th className="p-2 border">Image</th>
-                <th className="p-2 border">Details</th>
+                <th className="p-2 border">Product Details</th>
                 <th className="p-2 border">Method</th>
-                <th className="p-2 border">Payment</th>
+                <th className="p-2 border">Billing Details</th>
                 <th className="p-2 border">Status</th>
                 <th className="p-2 border">Actions</th>
               </tr>
@@ -150,13 +149,13 @@ export default function OrderList() {
                     />
                   </td>
                   <td className="p-2 border">
-                    <p>Order ID: {order.orderId}</p>
                     <p className="capitalize">
                       Customer:{" "}
                       {order.user?.role === "customer"
                         ? order.user?.fullName
                         : order.user?.resellerName}
                     </p>
+                    <p>Order ID: {order.orderId}</p>
                     {order.items.map((item, idx) => (
                       <div key={idx}>
                         <p>Product ID: {item.productId}</p>
@@ -180,19 +179,30 @@ export default function OrderList() {
                     ))}
                   </td>
                   <td className="p-2 border">
-                    <p className="capitalize">Shipping: {order.shippingMethod}</p>
+                    <p className="capitalize">
+                      Shipping: {order.shippingMethod}
+                    </p>
                     <p>Payment: {order.paymentMethod}</p>
                     <p className="flex items-center gap-1.5">
                       Points <IoMdStar className="text-yellow-500" />:{" "}
                       {order.points}
                     </p>
-                    <p>Total: <span className="taka_font taka">৳- </span>{Number(order.grandTotal).toLocaleString(
-                      "en-IN"
-                    )}/= </p>
+                    <p>
+                      Total: <span className="taka_font taka">৳- </span>
+                      {Number(order.grandTotal).toLocaleString("en-IN")}/={" "}
+                    </p>
+                  </td>
+                  <td className="p-2 border text-start">
+                    <p>Name: {order.billing.fullName}</p>
+                    <p>Address: {order.billing.address}</p>
+                    <p>City: {order.billing.city}</p>
+                    <p>Thana: {order.billing.thana} , Dist: {order.billing.district}</p>
+                    <p>Phone: {order.billing.phone}</p>
+                    <p>Comment: {order.billing.comment}</p>
                   </td>
                   <td className="p-2 border text-center">
                     <select
-                      className="border outline-none rounded px-1 py-0.5"
+                      className="border outline-none rounded mb-2 px-1 py-0.5"
                       value={order.paymentStatus}
                       onChange={(e) =>
                         handleUpdate(order._id, "payment", e.target.value)
@@ -202,8 +212,7 @@ export default function OrderList() {
                       <option value="delivery_fee">Delivery Fee ⛟</option>
                       <option value="paid">Paid ✔</option>
                     </select>
-                  </td>
-                  <td className="p-2 border text-center">
+                    <br />
                     <select
                       className="border outline-none rounded px-1 py-0.5"
                       value={order.status}

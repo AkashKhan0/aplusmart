@@ -57,7 +57,9 @@ export default function Allproducts() {
             .filter(
               (product) =>
                 product.mainCategory?.toLowerCase() !== "offer" &&
-                product.mainCategory?.toLowerCase() !== "combo"
+                product.mainCategory?.toLowerCase() !== "combo" &&
+                product.mainCategory?.toLowerCase() !== "deals" &&
+                product.subCategory?.toLowerCase() !== "deals"
             )
             .slice(0, 40)
             .map((product) => (
@@ -67,7 +69,7 @@ export default function Allproducts() {
                   {product?.offerPrice > 0 &&
                   product?.regularPrice > 0 &&
                   product.offerPrice < product.regularPrice ? (
-                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-normal uppercase">
                       {Math.round(
                         ((product.regularPrice - product.offerPrice) /
                           product.regularPrice) *
@@ -78,7 +80,7 @@ export default function Allproducts() {
                   ) : (
                     /* Earn Points */
                     product?.offerPrice > 0 && (
-                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-normal capitalize">
                         Earn Points
                         <span className="text-[#c9c601] flex items-center">
                           {Math.min(Math.floor(product.offerPrice / 100), 500)}{" "}

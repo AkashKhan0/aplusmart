@@ -73,3 +73,7 @@ textarea{
 .taka_font {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+table td{
+  padding: 0px 5px;
+}

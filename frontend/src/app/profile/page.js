@@ -16,10 +16,13 @@ export default function ProfilePage() {
   const { user, setCart, setUser } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("orders");
+  const [orders, setOrders] = useState([]); // store orders from Orders component
+  const [totalPoints, setTotalPoints] = useState(0);
 
   // ================= FETCH PROFILE =================
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/userauth/profile`, {
+      method: "GET",
       credentials: "include",
     })
       .then((res) => {
@@ -37,6 +40,32 @@ export default function ProfilePage() {
         router.push("/login");
       });
   }, []);
+
+  // ================= CALCULATE POINTS =================
+  // useEffect(() => {
+  //   const calculatePoints = () => {
+  //     const now = new Date();
+  //     let points = 0;
+
+  //     orders.forEach((order) => {
+  //       if (!order.points || !order.createdAt) return;
+
+  //       const orderDate = new Date(order.createdAt);
+  //       const diffDays = Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
+
+  //       if (diffDays < 30) {
+  //         points += order.points;
+  //       }
+  //     });
+
+  //     setTotalPoints(points);
+  //   };
+
+  //   calculatePoints();
+
+  //   const interval = setInterval(calculatePoints, 60 * 1000); // auto update
+  //   return () => clearInterval(interval);
+  // }, [orders]);
 
   // ================= LOGOUT =================
   const handleLogout = async () => {
@@ -90,7 +119,7 @@ export default function ProfilePage() {
                 Points <span className="text-xs">⭐</span>
               </p>
               <p className="text-xl font-semibold text-[#931905]">
-                <strong>0</strong>
+                <strong>{user?.points}</strong>
               </p>
             </div>
 
@@ -141,7 +170,7 @@ export default function ProfilePage() {
 
           {/* ===== Main Content ===== */}
           <div className="w-full h-fit max-h-[500px] overflow-x-auto overflow-y-auto shadow-lg">
-            {tab === "orders" && <Orders />}
+            {tab === "orders" && <Orders onOrdersFetch={setOrders} />}
             {tab === "transactions" && <Transactions />}
           </div>
         </div>

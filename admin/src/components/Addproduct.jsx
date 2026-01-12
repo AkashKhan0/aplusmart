@@ -30,6 +30,7 @@ export default function Addproduct() {
     brand: "",
     regularPrice: "",
     offerPrice: "",
+    points: "",
     stockStatus: "inStock",
     colors: [],
     shortTitle: "",
@@ -39,6 +40,8 @@ export default function Addproduct() {
     mainCategory: "",
     subCategory: "",
   });
+
+
 
   const [shortListInput, setShortListInput] = useState({ name: "", value: "" });
   const [specInput, setSpecInput] = useState({
@@ -87,8 +90,7 @@ export default function Addproduct() {
         colors: alreadySelected
           ? prev.colors.filter((c) => c !== color)
           : [...prev.colors, color],
-          
-        };
+      };
     });
   };
 
@@ -129,75 +131,74 @@ export default function Addproduct() {
       });
     }
   };
-  
 
   // Submit product
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    // Upload images
-    const uploadedImageUrls = [];
+    try {
+      // Upload images
+      const uploadedImageUrls = [];
 
-    for (let i = 0; i < images.length; i++) {
-      const url = await uploadImage(images[i], "products");
-      uploadedImageUrls.push(url);
-    }
-
-    const flatImages = uploadedImageUrls.flat();
-
-    const payload = {
-      ...productData,
-
-      regularPrice: Number(productData.regularPrice || 0),
-      offerPrice: Number(productData.offerPrice || 0),
-      images: flatImages,
-    };
-
-    console.log("CREATE PRODUCT PAYLOAD:", payload);
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      for (let i = 0; i < images.length; i++) {
+        const url = await uploadImage(images[i], "products");
+        uploadedImageUrls.push(url);
       }
-    );
 
-    const data = await res.json();
+      const flatImages = uploadedImageUrls.flat();
 
-    if (res.ok) {
-      setMessage("Product added successfully!");
+      const payload = {
+        ...productData,
 
-      // Reset all fields
-      setImages([]);
-      setImagePreviews([]);
+        regularPrice: Number(productData.regularPrice || 0),
+        offerPrice: Number(productData.offerPrice || 0),
+        images: flatImages,
+      };
 
-      setProductData({
-        name: "",
-        brand: "",
-        regularPrice: "",
-        offerPrice: "",
-        stockStatus: "inStock",
-        colors: [],
-        shortTitle: "",
-        shortDescription: "",
-        shortList: [],
-        specifications: [],
-        mainCategory: "",
-        subCategory: "",
-      });
-    } else {
-      console.error("SERVER ERROR:", data);
-      setMessage(data.error || "Something went wrong");
+      console.log("CREATE PRODUCT PAYLOAD:", payload);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Product added successfully!");
+
+        // Reset all fields
+        setImages([]);
+        setImagePreviews([]);
+
+        setProductData({
+          name: "",
+          brand: "",
+          regularPrice: "",
+          offerPrice: "",
+          points: "",
+          stockStatus: "inStock",
+          colors: [],
+          shortTitle: "",
+          shortDescription: "",
+          shortList: [],
+          specifications: [],
+          mainCategory: "",
+          subCategory: "",
+        });
+      } else {
+        console.error("SERVER ERROR:", data);
+        setMessage(data.error || "Something went wrong");
+      }
+    } catch (error) {
+      console.error("CREATE ERROR:", error);
+      setMessage("Failed to add product");
     }
-  } catch (error) {
-    console.error("CREATE ERROR:", error);
-    setMessage("Failed to add product");
-  }
-};
-
+  };
 
   return (
     <div className="w-full">
@@ -267,31 +268,37 @@ export default function Addproduct() {
         {/* offer date setup */}
         <div className="w-full">
           {productData.mainCategory === "offer" && (
-  <div className="w-full flex items-center gap-2 my-2">
-    <div className="w-full">
-      <label className="block mb-1">Offer Start Date:</label>
-      <input
-        type="date"
-        value={productData.offerStartDate || ""}
-        onChange={(e) =>
-          setProductData((prev) => ({ ...prev, offerStartDate: e.target.value }))
-        }
-        className="w-full py-1 px-2 border rounded-md"
-      />
-    </div>
-    <div className="w-full">
-      <label className="block mb-1">Offer End Date:</label>
-      <input
-        type="date"
-        value={productData.offerEndDate || ""}
-        onChange={(e) =>
-          setProductData((prev) => ({ ...prev, offerEndDate: e.target.value }))
-        }
-        className="w-full py-1 px-2 border rounded-md"
-      />
-    </div>
-  </div>
-)}
+            <div className="w-full flex items-center gap-2 my-2">
+              <div className="w-full">
+                <label className="block mb-1">Offer Start Date:</label>
+                <input
+                  type="date"
+                  value={productData.offerStartDate || ""}
+                  onChange={(e) =>
+                    setProductData((prev) => ({
+                      ...prev,
+                      offerStartDate: e.target.value,
+                    }))
+                  }
+                  className="w-full py-1 px-2 border rounded-md"
+                />
+              </div>
+              <div className="w-full">
+                <label className="block mb-1">Offer End Date:</label>
+                <input
+                  type="date"
+                  value={productData.offerEndDate || ""}
+                  onChange={(e) =>
+                    setProductData((prev) => ({
+                      ...prev,
+                      offerEndDate: e.target.value,
+                    }))
+                  }
+                  className="w-full py-1 px-2 border rounded-md"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Product info */}
@@ -314,32 +321,33 @@ export default function Addproduct() {
             }
             className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
           />
-          <div className="flex gap-2">
-            <input
-              type="number"
-              placeholder="Regular Price"
-              value={productData.regularPrice}
-              onChange={(e) =>
-                setProductData((prev) => ({
-                  ...prev,
-                  regularPrice: e.target.value,
-                }))
-              }
-              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-            />
-            <input
-              type="number"
-              placeholder="Offer Price"
-              value={productData.offerPrice}
-              onChange={(e) =>
-                setProductData((prev) => ({
-                  ...prev,
-                  offerPrice: e.target.value,
-                }))
-              }
-              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-            />
-          </div>
+
+            <div className="flex gap-2">
+              <input
+                type="number"
+                placeholder="Regular Price"
+                value={productData.regularPrice}
+                onChange={(e) =>
+                  setProductData((prev) => ({
+                    ...prev,
+                    regularPrice: e.target.value,
+                  }))
+                }
+                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+              />
+              <input
+                type="number"
+                placeholder="Offer Price"
+                value={productData.offerPrice}
+                onChange={(e) =>
+                  setProductData((prev) => ({
+                    ...prev,
+                    offerPrice: e.target.value,
+                  }))
+                }
+                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+              />
+            </div>
 
           {/* Stock Status */}
           <div className="flex gap-2 mb-2">
@@ -391,7 +399,10 @@ export default function Addproduct() {
           <div className="flex flex-wrap gap-3 mt-3">
             {COLOR_LIST.map((color) => (
               <label key={color} className="flex items-center gap-2">
-                <div className="w-5 h-5 border" style={{ backgroundColor: color }}></div>
+                <div
+                  className="w-5 h-5 border"
+                  style={{ backgroundColor: color }}
+                ></div>
 
                 <input
                   type="checkbox"

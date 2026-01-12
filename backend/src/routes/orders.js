@@ -21,8 +21,9 @@ router.post("/", async (req, res) => {
       shippingMethod,
       shippingCharge,
       paymentMethod,
-      points,
       grandTotal,
+      usedPoints = 0,
+  pointsDiscount = 0,
     } = req.body;
 
     if (!cart || cart.length === 0) {
@@ -36,6 +37,27 @@ router.post("/", async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ error: "User not found" });
+
+  // 🔐 POINTS VALIDATION
+    if (usedPoints > user.points || usedPoints < 0) {
+      return res.status(400).json({ error: "Invalid points usage" });
+    }
+    if (grandTotal < 0) {
+      return res.status(400).json({ error: "Invalid total amount" });
+    }
+    // 🔻 DEDUCT USED POINTS
+    user.points -= usedPoints;
+
+    // 🧮 CALCULATE POINTS (Backend only)
+    let earnedPoints = 0;
+    cart.forEach((item) => {
+      if (!item.hasOffer) {
+        const productPoint = Math.floor(
+          (item.offerPrice * item.quantity) / 100
+        );
+        earnedPoints += Math.min(productPoint, 500);
+      }
+    });
 
     const items = cart.map((item) => ({
       productId: item._id,
@@ -54,11 +76,28 @@ router.post("/", async (req, res) => {
       shippingMethod,
       shippingCharge,
       paymentMethod,
-      points,
+      usedPoints,
+      pointsDiscount,
+      pointsEarned: earnedPoints,
       grandTotal,
     });
 
-    res.status(201).json(order);
+    user.points += earnedPoints;
+
+    // ⭐ ADD POINTS TO USER DATABASE
+    user.pointsHistory.push({
+      points: earnedPoints - usedPoints,
+      earned: earnedPoints,
+      used: usedPoints,
+      orderId: order.orderId,
+    });
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      orderId: order.orderId,
+      earnedPoints,
+    });
   } catch (err) {
     console.error("Order error:", err.message);
     res.status(500).json({ error: err.message });
@@ -66,9 +105,9 @@ router.post("/", async (req, res) => {
 });
 
 // GET → fetch all orders (admin)
-router.get("/",  async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find().populate("user").sort({ createdAt: -1 });  
+    const orders = await Order.find().populate("user").sort({ createdAt: -1 });
     // ensure array res.status(200).json(orders);
     res.json(Array.isArray(orders) ? orders : []);
   } catch (err) {
@@ -100,7 +139,6 @@ router.get("/:orderId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // UPDATE order status
 router.put("/:id/status", async (req, res) => {

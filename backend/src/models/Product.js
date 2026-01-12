@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema(
     name: { type: String, required: true },
     mainCategory: { type: String, required: true },
     subCategory: { type: String, required: true },
-    brand: { type: String },
+    brand: { type: String, default: "No Brand" },
     regularPrice: {
       type: Number,
     },
@@ -21,6 +21,10 @@ const ProductSchema = new mongoose.Schema(
     colors: {
       type: [String],
       default: [],
+    },
+    points: {
+      type: Number,
+      default: null,
     },
 
     images: [{ type: String }],

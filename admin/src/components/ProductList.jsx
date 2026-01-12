@@ -140,7 +140,7 @@ export default function ProductList() {
             <tbody>
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((p) => (
-                  <tr key={p._id} className="text-center">
+                  <tr key={p._id} className="text-start">
                     <td className="border">
                       {p.images?.[0] && (
                         <img
@@ -149,13 +149,13 @@ export default function ProductList() {
                         />
                       )}
                     </td>
-                    <td className="border">{p.name}</td>
+                    <td className="border pl-2">{p.name}</td>
                     <td className="border">
                       {p.mainCategory} / {p.subCategory}
                     </td>
                     <td className="border">{p.brand || "-"}</td>
                     <td className="border">
-                      ৳ {p.offerPrice || p.regularPrice}
+                      <span className="taka">৳-</span>{Number(p.offerPrice || p.regularPrice).toLocaleString("en-IN")}/=
                     </td>
                     <td className="border">
                       {p.stockStatus === "inStock" ? (
@@ -164,7 +164,19 @@ export default function ProductList() {
                         <MdCancel className="text-red-600 mx-auto" />
                       )}
                     </td>
-                    <td className="border">{p.colors?.join(", ")}</td>
+                    <td className="border">
+  <div className="flex items-center gap-1.5 flex-wrap">
+    {p.colors?.map((color, index) => (
+      <span
+        key={index}
+        title={color}
+        className="w-3 h-3 rounded-full border border-black"
+        style={{ backgroundColor: color }}
+      />
+    ))}
+  </div>
+</td>
+
                     <td className="border">
                       <div className="flex justify-center gap-2">
                         <FaEdit
