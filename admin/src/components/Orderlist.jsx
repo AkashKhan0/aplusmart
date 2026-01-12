@@ -183,10 +183,6 @@ export default function OrderList() {
                       Shipping: {order.shippingMethod}
                     </p>
                     <p>Payment: {order.paymentMethod}</p>
-                    <p className="flex items-center gap-1.5">
-                      Points <IoMdStar className="text-yellow-500" />:{" "}
-                      {order.points}
-                    </p>
                     <p>
                       Total: <span className="taka_font taka">৳- </span>
                       {Number(order.grandTotal).toLocaleString("en-IN")}/={" "}

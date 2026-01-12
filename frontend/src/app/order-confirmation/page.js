@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -16,6 +16,8 @@ export default function OrderConfirmation() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!orderId) return;
+
     async function fetchOrder() {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders/${orderId}`, {
@@ -31,9 +33,10 @@ export default function OrderConfirmation() {
       }
     }
 
-    if (orderId) fetchOrder();
+    fetchOrder();
   }, [orderId]);
 
+  if (!orderId) return <p className="text-center py-10">Invalid order ID</p>;
   if (loading) return <p className="text-center py-10">Loading order...</p>;
   if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
@@ -54,10 +57,7 @@ export default function OrderConfirmation() {
 
               <div className="border p-3 border-red-600 rounded-sm bg-amber-200 my-3">
                 <h1 className="text-lg font-semibold capitalize">
-                  We accept: <span>Bkash, </span>
-                  <span>Rocket, </span>
-                  <span>Nagad, </span>
-                  <span>Upay</span>
+                  We accept: <span>Bkash, Rocket, Nagad, Upay</span>
                 </h1>
                 <div className="flex items-center gap-1.5">
                   <h2 className="text-lg font-semibold capitalize">Send Money to:</h2>
@@ -65,71 +65,74 @@ export default function OrderConfirmation() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <h2 className="text-sm font-semibold">Use Order ID as reference:</h2>
-                  <CopyText text={order.orderId} />
+                  <CopyText text={order?.orderId || ""} />
                 </div>
               </div>
             </div>
 
-            <p className="text-lg font-semibold">Order ID: {order.orderId}</p>
-            <p className="text-sm text-gray-800">Placed at: {new Date(order.createdAt).toLocaleString()}</p>
-            <p className="flex items-center gap-1.5 text-sm text-gray-800 mb-2">
-              Points:{" "}
-              <span className="flex items-center text-[#931905] font-semibold">
-                {order.points} <IoMdStar />
-              </span>
+            <p className="text-lg font-semibold">Order ID: {order?.orderId}</p>
+            <p className="text-sm text-gray-800 mb-2">
+              Placed at: {order?.createdAt && new Date(order.createdAt).toLocaleString()}
             </p>
 
-            <div className="mb-3">
-              <h3 className="font-semibold">Billing Details</h3>
-              <p><strong>Customer:</strong> {order.billing.fullName}</p>
-              <p><strong>Address:</strong> {order.billing.address}</p>
-              <p><strong>Thana:</strong> {order.billing.thana}</p>
-              <p><strong>City:</strong> {order.billing.city}</p>
-              <p><strong>District:</strong> {order.billing.district}</p>
-              <p><strong>Phone:</strong> {order.billing.phone}</p>
-              <p><strong>Email:</strong> {order.billing.email}</p>
-              <p><strong>Comment:</strong> {order.billing.comment}</p>
-            </div>
+            {order?.billing && (
+              <div className="mb-3">
+                <h3 className="font-semibold">Billing Details</h3>
+                <p><strong>Customer:</strong> {order.billing.fullName}</p>
+                <p><strong>Address:</strong> {order.billing.address}</p>
+                <p><strong>Thana:</strong> {order.billing.thana}</p>
+                <p><strong>City:</strong> {order.billing.city}</p>
+                <p><strong>District:</strong> {order.billing.district}</p>
+                <p><strong>Phone:</strong> {order.billing.phone}</p>
+                <p><strong>Email:</strong> {order.billing.email}</p>
+                <p><strong>Comment:</strong> {order.billing.comment}</p>
+              </div>
+            )}
 
-            <div className="mb-3">
-              <h3 className="font-semibold">Items</h3>
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left border border-[#dddddd] p-2">Product</th>
-                    <th className="text-right border border-[#dddddd] p-2">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {order.items.map((it) => (
-                    <tr key={it.productId}>
-                      <td className="border border-[#dddddd] p-2">{it.name} x {it.quantity}</td>
-                      <td className="text-right border border-[#dddddd] p-2"> <span className="taka">৳- </span>{Number(it.price * it.quantity).toLocaleString("en-IN")}/=</td>
+            {order?.items && (
+              <div className="mb-3">
+                <h3 className="font-semibold">Items</h3>
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-left border border-[#dddddd] p-2">Product</th>
+                      <th className="text-right border border-[#dddddd] p-2">Amount</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {order.items.map((it) => (
+                      <tr key={it.productId}>
+                        <td className="border border-[#dddddd] p-2">{it.name} x {it.quantity}</td>
+                        <td className="text-right border border-[#dddddd] p-2">
+                          <span className="taka">৳- </span>
+                          {Number(it.price * it.quantity).toLocaleString("en-IN")}/=
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-            <div className="mb-3">
-              <p className="capitalize">Shipping Method: <strong>{order.shippingMethod}</strong></p>
-              <p>Shipping Charge: <strong> <span className="taka">৳- </span>{order.shippingCharge}/=</strong></p>
-              <p>Payment Method: <strong>{order.paymentMethod}</strong></p>
-            </div>
+            {order && (
+              <div className="mb-3">
+                <p className="capitalize">Shipping Method: <strong>{order.shippingMethod}</strong></p>
+                <p>Shipping Charge: <strong> <span className="taka">৳- </span>{order.shippingCharge}/=</strong></p>
+                <p>Payment Method: <strong>{order.paymentMethod}</strong></p>
+              </div>
+            )}
 
-            <div className="border-t pt-3 w-full flex items-center justify-between gap-1.5">
-              <h3 className="font-bold">Totals :</h3>
-              <p><span className="taka">৳- {Number(order.grandTotal).toLocaleString("en-IN")}/=</span></p>
-            </div>
+            {order && (
+              <div className="border-t pt-3 w-full flex items-center justify-between gap-1.5">
+                <h3 className="font-bold">Totals :</h3>
+                <p><span className="taka">৳- {Number(order.grandTotal).toLocaleString("en-IN")}/=</span></p>
+              </div>
+            )}
           </div>
 
           <div className="w-full py-5 flex items-center justify-between flex-wrap">
-            <Link href="/" className="buy_btn">
-              Continue
-            </Link>
-            <Link href="/profile" className="buy_btn">
-              View Orders
-            </Link>
+            <Link href="/" className="buy_btn">Continue</Link>
+            <Link href="/profile" className="buy_btn">View Orders</Link>
           </div>
         </div>
       </div>
