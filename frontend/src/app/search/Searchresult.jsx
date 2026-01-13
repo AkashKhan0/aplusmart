@@ -7,9 +7,6 @@ import { useSearchParams } from "next/navigation";
 
 export default function Searchresult() {
   const searchParams = useSearchParams();
-  // const [q, setQ] = useState(null);
-  // const [mainCategory, setMainCategory] = useState(null);
-  // const [subCategory, setSubCategory] = useState(null);
 
   const q = searchParams.get("q");
   const mainCategory = searchParams.get("mainCategory");
@@ -17,14 +14,6 @@ export default function Searchresult() {
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // ✅ Read query params safely (client-side only)
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   setQ(params.get("q"));
-  //   setMainCategory(params.get("mainCategory"));
-  //   setSubCategory(params.get("subCategory"));
-  // }, []);
 
   // ✅ Fetch products from API
   useEffect(() => {
