@@ -16,8 +16,7 @@ export default function ProfilePage() {
   const { user, setCart, setUser } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("orders");
-  const [orders, setOrders] = useState([]); // store orders from Orders component
-  const [totalPoints, setTotalPoints] = useState(0);
+  const [orders, setOrders] = useState([]);
 
   // ================= FETCH PROFILE =================
   useEffect(() => {
