@@ -63,8 +63,7 @@ export const AppProvider = ({ children }) => {
   // ---------------- Register ----------------
   const registerUser = async () => {
     // CUSTOMER
-    if (role === "customer" && !fullName.trim())
-      return setMessage("Full name is required");
+    if (role === "customer" && !fullName.trim()) return setMessage("Full name is required");
 
     // RESELLER
     if (role === "reseller") {
@@ -121,8 +120,7 @@ export const AppProvider = ({ children }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
-    // router.push(`/search?q=${encodeURIComponent(search.trim())}`);
-    window.location.href = `/search?q=${encodeURIComponent(search.trim())}`;
+    router.push(`/search?q=${encodeURIComponent(search.trim())}`);
     setSearch("");
   };
 
@@ -147,9 +145,9 @@ export const AppProvider = ({ children }) => {
   // 🔹 Fetch cart from COOKIE (🔥 FIX)
   useEffect(() => {
     if (!user) {
-      setCart([]);
-      return;
-    }
+    setCart([]);
+    return;
+  }
 
     async function fetchCart() {
       try {
@@ -179,9 +177,7 @@ export const AppProvider = ({ children }) => {
   };
 
   const addToCart = (newItem) => {
-    const existingIndex = cart.findIndex(
-      (item) => item._id === newItem._id && item.role === newItem.role
-    );
+    const existingIndex = cart.findIndex((item) => item._id === newItem._id && item.role === newItem.role);
 
     let updatedCart = [...cart];
 

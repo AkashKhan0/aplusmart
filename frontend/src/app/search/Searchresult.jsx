@@ -3,57 +3,54 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export default function Searchresult({ products, query }) {
-  // const searchParams = useSearchParams();
+export default function Searchresult() {
+  const searchParams = useSearchParams();
 
-  // const q = searchParams.get("q");
-  // const mainCategory = searchParams.get("mainCategory");
-  // const subCategory = searchParams.get("subCategory");
+  const q = searchParams.get("q");
+  const mainCategory = searchParams.get("mainCategory");
+  const subCategory = searchParams.get("subCategory");
 
-  // const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ✅ Fetch products from API
-  // useEffect(() => {
-  //   if (!q && !mainCategory && !subCategory) {
-  //     setProducts([]);
-  //     setLoading(false);
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!q && !mainCategory && !subCategory) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
 
-  //   setLoading(true);
+    setLoading(true);
 
-  //   const fetchProducts = async () => {
-  //     try {
-  //       let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
-  //       const query = [];
+    const fetchProducts = async () => {
+      try {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
+        const query = [];
 
-  //       if (q) query.push(`q=${encodeURIComponent(q)}`);
-  //       if (mainCategory)
-  //         query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
-  //       if (subCategory)
-  //         query.push(`subCategory=${encodeURIComponent(subCategory)}`);
+        if (q) query.push(`q=${encodeURIComponent(q)}`);
+        if (mainCategory)
+          query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
+        if (subCategory)
+          query.push(`subCategory=${encodeURIComponent(subCategory)}`);
 
-  //       url += query.join("&");
+        url += query.join("&");
 
-  //       // const res = await fetch(url);
-  //       const res = await fetch(url, {
-  //     cache: "no-store",
-  //   });
-  //       const data = await res.json();
-  //       setProducts(data.products || []);
-  //     } catch (err) {
-  //       console.log(err);
-  //       setProducts([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+        const res = await fetch(url);
+        const data = await res.json();
+        setProducts(data.products || []);
+      } catch (err) {
+        console.log(err);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchProducts();
-  // }, [q, mainCategory, subCategory]);
+    fetchProducts();
+  }, [q, mainCategory, subCategory]);
 
   if (loading)
     return (
