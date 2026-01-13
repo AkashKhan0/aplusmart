@@ -78,12 +78,18 @@ export default function ProfilePage() {
             <div>
               <h1 className="font-medium text-[12px] capitalize">welcome!</h1>
 
-              <h1 className="text-xl font-semibold capitalize block sm:hidden">
-                {user?.name}
+                {user?.role === "reseller" ? (
+                  <h1 className="text-xl font-semibold capitalize block sm:hidden">
+                  {user?.resellerName}
               </h1>
-              <h1 className="text-xl font-semibold capitalize hidden sm:block">
+                ) : (
+                  <h1 className="text-xl font-semibold capitalize block sm:hidden">
+                    {user?.fullName}
+                  </h1>
+                )}
+              {/* <h1 className="text-xl font-semibold capitalize hidden sm:block">
                 {user?.fullName || user?.resellerName}
-              </h1>
+              </h1> */}
             </div>
           </div>
 
