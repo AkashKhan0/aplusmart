@@ -3,29 +3,38 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function Searchresult() {
-  const [q, setQ] = useState(null);
-  const [mainCategory, setMainCategory] = useState(null);
-  const [subCategory, setSubCategory] = useState(null);
+  const searchParams = useSearchParams();
+  // const [q, setQ] = useState(null);
+  // const [mainCategory, setMainCategory] = useState(null);
+  // const [subCategory, setSubCategory] = useState(null);
+
+  const q = searchParams.get("q");
+  const mainCategory = searchParams.get("mainCategory");
+  const subCategory = searchParams.get("subCategory");
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ✅ Read query params safely (client-side only)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setQ(params.get("q"));
-    setMainCategory(params.get("mainCategory"));
-    setSubCategory(params.get("subCategory"));
-  }, []);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   setQ(params.get("q"));
+  //   setMainCategory(params.get("mainCategory"));
+  //   setSubCategory(params.get("subCategory"));
+  // }, []);
 
   // ✅ Fetch products from API
   useEffect(() => {
     if (!q && !mainCategory && !subCategory) {
+      setProducts([]);
       setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
     const query = [];
@@ -43,6 +52,7 @@ export default function Searchresult() {
         setProducts(data.products || []);
       } catch (err) {
         console.log(err);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
