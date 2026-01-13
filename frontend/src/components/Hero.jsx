@@ -6,7 +6,6 @@ import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
 import { IoCart } from "react-icons/io5";
 import { BsFire } from "react-icons/bs";
-import { BiSolidOffer } from "react-icons/bi";
 import { LuPackagePlus } from "react-icons/lu";
 import HeroCarousel from "./HeroCarousel";
 import { useAppContext } from "../context/AppContext";
@@ -14,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Hero({ openMenu }) {
-  const { user, search, setSearch, handleSearch, cart } = useAppContext();
+  const { search, setSearch, handleSearch, cart } = useAppContext();
 
   const dropdownRef = useRef(null);
 
