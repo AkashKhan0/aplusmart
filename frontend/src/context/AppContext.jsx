@@ -120,8 +120,7 @@ export const AppProvider = ({ children }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
-    // router.push(`/search?q=${encodeURIComponent(search.trim())}`);
-    window.location.href = `/search?q=${encodeURIComponent(search.trim())}`;
+    router.push(`/search?q=${encodeURIComponent(search.trim())}`);
     setSearch("");
   };
 
