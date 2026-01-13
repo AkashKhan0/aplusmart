@@ -93,15 +93,10 @@ export const getProfile = async (req, res) => {
       });
     }
 
-    const displayName =
-      user.role === "reseller"
-        ? user.resellerName
-        : user.fullName;
-
     // ✅ send points from DB
     res.status(200).json({
       _id: user._id,
-      name: displayName,
+      fullName: user.fullName || user.resellerName || user.shopName,
       email: user.email,
       role: user.role,
        points: totalPoints,
