@@ -25,17 +25,19 @@ export default function Searchresult() {
 
     setLoading(true);
 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
-    const query = [];
-
-    if (q) query.push(`q=${encodeURIComponent(q)}`);
-    if (mainCategory) query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
-    if (subCategory) query.push(`subCategory=${encodeURIComponent(subCategory)}`);
-
-    url += query.join("&");
-
     const fetchProducts = async () => {
       try {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
+        const query = [];
+
+        if (q) query.push(`q=${encodeURIComponent(q)}`);
+        if (mainCategory)
+          query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
+        if (subCategory)
+          query.push(`subCategory=${encodeURIComponent(subCategory)}`);
+
+        url += query.join("&");
+
         const res = await fetch(url);
         const data = await res.json();
         setProducts(data.products || []);
