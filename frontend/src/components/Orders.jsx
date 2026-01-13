@@ -27,7 +27,7 @@ useEffect(() => {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Loading orders...</p>;
+  if (loading) return <p className="py-6">Loading orders...</p>;
   if (orders.length === 0) return (<div className="w-full h-full universal">
           <div className="fixed_width px-5 h-full universal_column py-10">
             <Image

@@ -41,31 +41,6 @@ export default function ProfilePage() {
       });
   }, []);
 
-  // ================= CALCULATE POINTS =================
-  // useEffect(() => {
-  //   const calculatePoints = () => {
-  //     const now = new Date();
-  //     let points = 0;
-
-  //     orders.forEach((order) => {
-  //       if (!order.points || !order.createdAt) return;
-
-  //       const orderDate = new Date(order.createdAt);
-  //       const diffDays = Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
-
-  //       if (diffDays < 30) {
-  //         points += order.points;
-  //       }
-  //     });
-
-  //     setTotalPoints(points);
-  //   };
-
-  //   calculatePoints();
-
-  //   const interval = setInterval(calculatePoints, 60 * 1000); // auto update
-  //   return () => clearInterval(interval);
-  // }, [orders]);
 
   // ================= LOGOUT =================
   const handleLogout = async () => {
@@ -104,9 +79,8 @@ export default function ProfilePage() {
               <h1 className="font-medium text-[12px] capitalize">welcome!</h1>
 
               <h1 className="text-xl font-semibold capitalize block sm:hidden">
-                {user?.fullName || user?.resellerName}
+                {user?.name}
               </h1>
-
               <h1 className="text-xl font-semibold capitalize hidden sm:block">
                 {user?.fullName || user?.resellerName}
               </h1>

@@ -67,12 +67,8 @@ export const loginUser = async (req, res) => {
   });
 };
 
-// ================= PROFILE =================
-// export const getProfile = async (req, res) => {
-//   const user = await User.findById(req.user.id).select("-password");
-//   res.json(user);
-// };
 
+// ================= PROFILE FETCH =================
 export const getProfile = async (req, res) => {
   try {
     // protectUser already verified token
@@ -97,10 +93,15 @@ export const getProfile = async (req, res) => {
       });
     }
 
+    const displayName =
+      user.role === "reseller"
+        ? user.resellerName
+        : user.fullName;
+
     // ✅ send points from DB
     res.status(200).json({
       _id: user._id,
-      fullName: user.fullName,
+      name: displayName,
       email: user.email,
       role: user.role,
        points: totalPoints,
