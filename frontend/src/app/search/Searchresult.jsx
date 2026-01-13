@@ -38,7 +38,10 @@ export default function Searchresult() {
 
         url += query.join("&");
 
-        const res = await fetch(url);
+        // const res = await fetch(url);
+        const res = await fetch(url, {
+      cache: "no-store",
+    });
         const data = await res.json();
         setProducts(data.products || []);
       } catch (err) {
