@@ -3,50 +3,46 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 
 export default function Searchresult() {
-  const searchParams = useSearchParams();
-
-  const q = searchParams.get("q");
-  const mainCategory = searchParams.get("mainCategory");
-  const subCategory = searchParams.get("subCategory");
+  const [q, setQ] = useState(null);
+  const [mainCategory, setMainCategory] = useState(null);
+  const [subCategory, setSubCategory] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Read query params safely (client-side only)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setQ(params.get("q"));
+    setMainCategory(params.get("mainCategory"));
+    setSubCategory(params.get("subCategory"));
+  }, []);
+
   // ✅ Fetch products from API
   useEffect(() => {
     if (!q && !mainCategory && !subCategory) {
-      setProducts([]);
       setLoading(false);
       return;
     }
 
-    setLoading(true);
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
+    const query = [];
+
+    if (q) query.push(`q=${encodeURIComponent(q)}`);
+    if (mainCategory) query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
+    if (subCategory) query.push(`subCategory=${encodeURIComponent(subCategory)}`);
+
+    url += query.join("&");
 
     const fetchProducts = async () => {
       try {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/products/search?`;
-        const query = [];
-
-        if (q) query.push(`q=${encodeURIComponent(q)}`);
-        if (mainCategory)
-          query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
-        if (subCategory)
-          query.push(`subCategory=${encodeURIComponent(subCategory)}`);
-
-        url += query.join("&");
-
-        // const res = await fetch(url);
-        const res = await fetch(url, {
-      cache: "no-store",
-    });
+        const res = await fetch(url);
         const data = await res.json();
         setProducts(data.products || []);
       } catch (err) {
         console.log(err);
-        setProducts([]);
       } finally {
         setLoading(false);
       }
