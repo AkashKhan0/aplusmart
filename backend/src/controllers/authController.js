@@ -6,7 +6,16 @@ import crypto from "crypto";
 // ------------------ SIGNUP ------------------
 export const signup = async (req, res) => {
   try {
-    const { role, fullName, shopName, location, resellerName, email, phone, password } = req.body;
+    const {
+      role,
+      fullName,
+      shopName,
+      location,
+      resellerName,
+      email,
+      phone,
+      password,
+    } = req.body;
 
     // Existing user check
     const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
@@ -21,7 +30,15 @@ export const signup = async (req, res) => {
     const newUserData =
       role === "customer"
         ? { role, fullName, email, phone, password: hashedPassword }
-        : { role, shopName, location, resellerName, email, phone, password: hashedPassword };
+        : {
+            role,
+            shopName,
+            location,
+            resellerName,
+            email,
+            phone,
+            password: hashedPassword,
+          };
 
     const newUser = new User(newUserData);
     await newUser.save();
@@ -36,25 +53,24 @@ export const loginUser = async (req, res) => {
   const { email, password, rememberMe } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user){console.log("User not found"); return res.status(401).json({ error: "Invalid credentials" })};
+  if (!user) {
+    console.log("User not found");
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
 
   const isMatch = await bcrypt.compare(password, user.password);
   console.log("Password match:", isMatch);
   if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: rememberMe ? "30d" : "1d" }
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: rememberMe ? "30d" : "1d",
+  });
 
   res.cookie("userToken", token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    maxAge: rememberMe
-      ? 30 * 24 * 60 * 60 * 1000
-      : 24 * 60 * 60 * 1000,
+    maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
   });
 
   res.json({
@@ -67,25 +83,22 @@ export const loginUser = async (req, res) => {
   });
 };
 
-
 // ================= PROFILE FETCH =================
 export const getProfile = async (req, res) => {
   try {
     // protectUser already verified token
-    const user = await User.findById(req.user._id).select(
-      "-password"
-    );
+    const user = await User.findById(req.user._id).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-     // 🔑 Calculate valid points (last 30 days)
-     let totalPoints = 0;
-     
-     if (user.pointsHistory) {
+    // 🔑 Calculate valid points (last 30 days)
+    let totalPoints = 0;
+
+    if (user.pointsHistory) {
       const now = new Date();
-      user.pointsHistory.forEach(p => {
+      user.pointsHistory.forEach((p) => {
         const diffDays = (now - new Date(p.createdAt)) / (1000 * 60 * 60 * 24);
         if (diffDays <= 90) {
           totalPoints += p.points;
@@ -99,29 +112,28 @@ export const getProfile = async (req, res) => {
       fullName: user.fullName || user.resellerName || user.shopName,
       email: user.email,
       role: user.role,
-       points: totalPoints,
+      points: totalPoints,
     });
   } catch (error) {
     res.status(500).json({ message: "Profile fetch failed" });
   }
 };
 
-
 // ================= LOGOUT =================
 export const logoutUser = async (req, res) => {
   // clear auth cookie
   res.clearCookie("userToken", {
     httpOnly: true,
-  secure: true,
-  sameSite: "none",
+    secure: true,
+    sameSite: "none",
     path: "/",
   });
 
   // 🔥 clear cart cookie
   res.clearCookie("cart", {
     httpOnly: true,
-  secure: true,
-  sameSite: "none",
+    secure: true,
+    sameSite: "none",
     path: "/",
   });
 
