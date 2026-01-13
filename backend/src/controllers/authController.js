@@ -116,11 +116,17 @@ export const getProfile = async (req, res) => {
 export const logoutUser = async (req, res) => {
   // clear auth cookie
   res.clearCookie("userToken", {
+    httpOnly: true,
+  secure: true,
+  sameSite: "none",
     path: "/",
   });
 
   // 🔥 clear cart cookie
   res.clearCookie("cart", {
+    httpOnly: true,
+  secure: true,
+  sameSite: "none",
     path: "/",
   });
 
