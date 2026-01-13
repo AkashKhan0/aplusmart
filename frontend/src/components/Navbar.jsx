@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import Link from "next/link";
 
 export default function Navbar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
@@ -23,7 +22,6 @@ export default function Navbar({ isOpen, setIsOpen }) {
     fetchCategories();
   }, []);
 
-
   // Close sidebar when clicking outside
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -33,8 +31,10 @@ export default function Navbar({ isOpen, setIsOpen }) {
     }
 
     if (isOpen) document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    return () =>
+      document.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen, setIsOpen]);
+
   const sidebarClass = isOpen ? "translate-x-0" : "-translate-x-full";
 
   return (
@@ -60,19 +60,18 @@ export default function Navbar({ isOpen, setIsOpen }) {
         <div className="text-[#FFFFFF] font-semibold text-lg w-full mt-10">
           <ul className="w-full flex flex-col gap-2.5 text-base">
             {categories.map((cat) => (
-              <Link
-                key={cat._id}
-                href={`/search?subCategory=${encodeURIComponent(
-                  cat.subCategory
-                )}`}
-              >
-                <li
+              <li key={cat._id} className="capitalize">
+                {/* Full page reload link */}
+                <a
+                  href={`/search?subCategory=${encodeURIComponent(
+                    cat.subCategory
+                  )}`}
                   onClick={() => setIsOpen(false)}
-                  className="hover:text-red-500 transition-colors capitalize"
+                  className="hover:text-red-500 transition-colors cursor-pointer block py-1"
                 >
                   {cat.subCategory}
-                </li>
-              </Link>
+                </a>
+              </li>
             ))}
           </ul>
         </div>
