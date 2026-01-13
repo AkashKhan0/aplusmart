@@ -32,8 +32,8 @@ export default function ComboList() {
       offerPrice: data.offerPrice,
       stockStatus: data.stockStatus,
       colors: data.colors,
-      offerStartDate: data.offerStartDate?.slice(0,10),
-      offerEndDate: data.offerEndDate?.slice(0,10),
+      offerStartDate: data.offerStartDate?.slice(0, 10),
+      offerEndDate: data.offerEndDate?.slice(0, 10),
       images: data.images,
     });
   };
@@ -46,15 +46,15 @@ export default function ComboList() {
 
   // ================= INPUT HANDLE
   const updateField = (key, val) => {
-    setForm(prev => ({ ...prev, [key]: val }));
+    setForm((prev) => ({ ...prev, [key]: val }));
   };
 
   // ================= COLOR TOGGLE
   const toggleColor = (hex) => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       colors: prev.colors.includes(hex)
-        ? prev.colors.filter(c => c !== hex)
+        ? prev.colors.filter((c) => c !== hex)
         : [...prev.colors, hex],
     }));
   };
@@ -89,9 +89,7 @@ export default function ComboList() {
   // ================= RENDER
   return (
     <div className="">
-      <h1 className="text-2xl font-semibold mb-4">
-        Combo Product List
-      </h1>
+      <h1 className="text-2xl font-semibold mb-4">Combo Product List</h1>
 
       {/* ================= TABLE */}
       <table className="w-full border border-gray-300">
@@ -125,17 +123,17 @@ export default function ComboList() {
               <td className="border p-1">৳ {p.offerPrice}</td>
 
               <td className="border p-1 text-xs">
-                {new Date(p.offerStartDate).toLocaleDateString()} →  
+                {new Date(p.offerStartDate).toLocaleDateString()} →
                 {new Date(p.offerEndDate).toLocaleDateString()}
               </td>
 
               <td className="border p-1">
                 <div className="flex gap-1 justify-center flex-wrap">
-                  {p.colors.map((c,i)=>(
+                  {p.colors.map((c, i) => (
                     <span
                       key={i}
                       className="w-4 h-4 border"
-                      style={{background:c}}
+                      style={{ background: c }}
                     />
                   ))}
                 </div>
@@ -167,23 +165,20 @@ export default function ComboList() {
       {/* ================= MODAL */}
       {editing && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-
           <div className="bg-white w-[420px] p-4 rounded space-y-3">
-            <h2 className="text-lg font-semibold mb-2">
-              Edit Combo Product
-            </h2>
+            <h2 className="text-lg font-semibold mb-2">Edit Combo Product</h2>
 
             <input
               placeholder="Name"
               value={form.name}
-              onChange={e=>updateField("name",e.target.value)}
+              onChange={(e) => updateField("name", e.target.value)}
               className="w-full border px-2 py-1"
             />
 
             <input
               placeholder="Brand"
               value={form.brand}
-              onChange={e=>updateField("brand",e.target.value)}
+              onChange={(e) => updateField("brand", e.target.value)}
               className="w-full border px-2 py-1"
             />
 
@@ -193,7 +188,7 @@ export default function ComboList() {
                 placeholder="Regular Price"
                 className="w-full border px-2 py-1"
                 value={form.regularPrice}
-                onChange={e=>updateField("regularPrice", e.target.value)}
+                onChange={(e) => updateField("regularPrice", e.target.value)}
               />
 
               <input
@@ -201,13 +196,13 @@ export default function ComboList() {
                 placeholder="Offer Price"
                 className="w-full border px-2 py-1"
                 value={form.offerPrice}
-                onChange={e=>updateField("offerPrice", e.target.value)}
+                onChange={(e) => updateField("offerPrice", e.target.value)}
               />
             </div>
 
             <select
               value={form.stockStatus}
-              onChange={e=>updateField("stockStatus",e.target.value)}
+              onChange={(e) => updateField("stockStatus", e.target.value)}
               className="w-full border py-1"
             >
               <option value="inStock">In Stock</option>
@@ -220,29 +215,35 @@ export default function ComboList() {
                 type="date"
                 value={form.offerStartDate}
                 className="w-full border px-2 py-1"
-                onChange={e=>updateField("offerStartDate",e.target.value)}
+                onChange={(e) => updateField("offerStartDate", e.target.value)}
               />
 
               <input
                 type="date"
                 value={form.offerEndDate}
                 className="w-full border px-2 py-1"
-                onChange={e=>updateField("offerEndDate",e.target.value)}
+                onChange={(e) => updateField("offerEndDate", e.target.value)}
               />
             </div>
 
             {/* Colors */}
             <div className="flex flex-wrap gap-2">
               {[
-                "#000000","#FFFFFF","#FF0000","#1656AD","#401E12",
-                "#F0C807","#3C20A3","#00B496"
-              ].map((c)=>(
+                "#000000",
+                "#FFFFFF",
+                "#FF0000",
+                "#1656AD",
+                "#401E12",
+                "#F0C807",
+                "#3C20A3",
+                "#00B496",
+              ].map((c) => (
                 <div
                   key={c}
-                  onClick={()=>toggleColor(c)}
+                  onClick={() => toggleColor(c)}
                   className={`w-7 h-7 border cursor-pointer 
                   ${form.colors.includes(c) ? "ring-2 ring-black" : ""}`}
-                  style={{background:c}}
+                  style={{ background: c }}
                 />
               ))}
             </div>
@@ -263,7 +264,6 @@ export default function ComboList() {
                 {loading ? "Saving..." : "Update"}
               </button>
             </div>
-
           </div>
         </div>
       )}

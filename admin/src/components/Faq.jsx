@@ -65,7 +65,9 @@ export default function Faq() {
         setMessage(data.error || "Something went wrong.");
       } else {
         setIsSuccess(true);
-        setMessage(editId ? "FAQ updated successfully!" : "FAQ added successfully!");
+        setMessage(
+          editId ? "FAQ updated successfully!" : "FAQ added successfully!"
+        );
         setQuestion("");
         setAnswer("");
         setEditId(null);
@@ -146,11 +148,7 @@ export default function Faq() {
               className="w-full uppercase bg-[#941A06] py-1.5 text-white"
               disabled={loading}
             >
-              {loading
-                ? "Processing..."
-                : editId
-                ? "Update"
-                : "Add"}
+              {loading ? "Processing..." : editId ? "Update" : "Add"}
             </button>
           </div>
         </form>

@@ -63,14 +63,19 @@ export default function Combo() {
       const exists = prev.colors.includes(color);
       return {
         ...prev,
-        colors: exists ? prev.colors.filter((c) => c !== color) : [...prev.colors, color],
+        colors: exists
+          ? prev.colors.filter((c) => c !== color)
+          : [...prev.colors, color],
       };
     });
   };
 
   // ---------- Short list helpers ----------
   const addShortListItem = () => {
-    setForm((prev) => ({ ...prev, shortList: [...prev.shortList, { name: "", value: "" }] }));
+    setForm((prev) => ({
+      ...prev,
+      shortList: [...prev.shortList, { name: "", value: "" }],
+    }));
   };
 
   const updateShortListItem = (idx, key, val) => {
@@ -80,14 +85,20 @@ export default function Combo() {
   };
 
   const removeShortListItem = (idx) => {
-    setForm((prev) => ({ ...prev, shortList: prev.shortList.filter((_, i) => i !== idx) }));
+    setForm((prev) => ({
+      ...prev,
+      shortList: prev.shortList.filter((_, i) => i !== idx),
+    }));
   };
 
   // ---------- Specifications helpers ----------
   const addSpecification = () => {
     setForm((prev) => ({
       ...prev,
-      specifications: [...prev.specifications, { title: "", description: "", list: [] }],
+      specifications: [
+        ...prev.specifications,
+        { title: "", description: "", list: [] },
+      ],
     }));
   };
 
@@ -98,7 +109,10 @@ export default function Combo() {
   };
 
   const removeSpecification = (specIdx) => {
-    setForm((prev) => ({ ...prev, specifications: prev.specifications.filter((_, i) => i !== specIdx) }));
+    setForm((prev) => ({
+      ...prev,
+      specifications: prev.specifications.filter((_, i) => i !== specIdx),
+    }));
   };
 
   const addSpecListItem = (specIdx) => {
@@ -193,11 +207,19 @@ export default function Combo() {
         <div className="w-full">
           <p className="font-semibold mb-2">Selected Images</p>
           <div className="flex items-center gap-3">
-            {imagePreviews.length === 0 && <div className="w-16 h-16 border rounded text-4xl text-gray-500 flex items-center justify-center"><CiImageOn /></div>}
+            {imagePreviews.length === 0 && (
+              <div className="w-16 h-16 border rounded text-4xl text-gray-500 flex items-center justify-center">
+                <CiImageOn />
+              </div>
+            )}
 
             {imagePreviews.map((src, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <img src={src} alt={`preview-${idx}`} className="w-16 h-16 object-cover border rounded" />
+                <img
+                  src={src}
+                  alt={`preview-${idx}`}
+                  className="w-16 h-16 object-cover border rounded"
+                />
                 <button
                   type="button"
                   onClick={() => removeImage(idx)}
@@ -210,7 +232,13 @@ export default function Combo() {
 
             <label className="mt-2 inline-flex items-center gap-2 cursor-pointer border rounded px-3 py-2">
               <MdCloudUpload className="text-xl" />
-              <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageSelect} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleImageSelect}
+              />
             </label>
           </div>
         </div>
@@ -295,17 +323,29 @@ export default function Combo() {
                 return (
                   <label
                     key={c}
-                    className={`flex items-center gap-2 px-2 py-1 border rounded cursor-pointer ${checked ? "bg-gray-100" : ""}`}
+                    className={`flex items-center gap-2 px-2 py-1 border rounded cursor-pointer ${
+                      checked ? "bg-gray-100" : ""
+                    }`}
                   >
-                    <div className="w-5 h-5 border" style={{ backgroundColor: c }} />
-                    <input type="checkbox" checked={checked} onChange={() => toggleColor(c)} />
+                    <div
+                      className="w-5 h-5 border"
+                      style={{ backgroundColor: c }}
+                    />
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleColor(c)}
+                    />
                     <span className="text-xs">{c}</span>
                   </label>
                 );
               })}
             </div>
 
-            <p className="text-sm mt-2">Selected Colors: {form.colors.length ? form.colors.join(", ") : "None"}</p>
+            <p className="text-sm mt-2">
+              Selected Colors:{" "}
+              {form.colors.length ? form.colors.join(", ") : "None"}
+            </p>
           </div>
 
           {/* Short title & description */}
@@ -329,26 +369,44 @@ export default function Combo() {
           <div className="border p-3 rounded">
             <div className="flex items-center justify-between mb-2">
               <p className="font-semibold">Short List</p>
-              <button type="button" onClick={addShortListItem} className="text-sm py-1 px-2 border rounded">+ Add</button>
+              <button
+                type="button"
+                onClick={addShortListItem}
+                className="text-sm py-1 px-2 border rounded"
+              >
+                + Add
+              </button>
             </div>
 
             <div className="flex flex-col gap-2">
-              {form.shortList.length === 0 && <div className="text-sm text-gray-500">No items</div>}
+              {form.shortList.length === 0 && (
+                <div className="text-sm text-gray-500">No items</div>
+              )}
               {form.shortList.map((it, idx) => (
                 <div key={idx} className="flex gap-2 items-center">
                   <input
                     className="w-full py-1 px-2 border rounded"
                     placeholder="Name"
                     value={it.name}
-                    onChange={(e) => updateShortListItem(idx, "name", e.target.value)}
+                    onChange={(e) =>
+                      updateShortListItem(idx, "name", e.target.value)
+                    }
                   />
                   <input
                     className="w-full py-1 px-2 border rounded"
                     placeholder="Value"
                     value={it.value}
-                    onChange={(e) => updateShortListItem(idx, "value", e.target.value)}
+                    onChange={(e) =>
+                      updateShortListItem(idx, "value", e.target.value)
+                    }
                   />
-                  <button type="button" className="text-red-600 border px-2 py-1" onClick={() => removeShortListItem(idx)}>Remove</button>
+                  <button
+                    type="button"
+                    className="text-red-600 border px-2 py-1"
+                    onClick={() => removeShortListItem(idx)}
+                  >
+                    Remove
+                  </button>
                 </div>
               ))}
             </div>
@@ -358,11 +416,19 @@ export default function Combo() {
           <div className="border p-3 rounded">
             <div className="flex items-center justify-between mb-2">
               <p className="font-semibold">Specifications</p>
-              <button type="button" onClick={addSpecification} className="text-sm py-1 px-2 border rounded">+ Add Section</button>
+              <button
+                type="button"
+                onClick={addSpecification}
+                className="text-sm py-1 px-2 border rounded"
+              >
+                + Add Section
+              </button>
             </div>
 
             <div className="flex flex-col gap-3">
-              {form.specifications.length === 0 && <div className="text-sm text-gray-500">No specifications</div>}
+              {form.specifications.length === 0 && (
+                <div className="text-sm text-gray-500">No specifications</div>
+              )}
 
               {form.specifications.map((spec, sIdx) => (
                 <div key={sIdx} className="border p-3 rounded space-y-2">
@@ -372,25 +438,45 @@ export default function Combo() {
                         className="w-full py-1 px-2 border rounded mb-1"
                         placeholder="Specification Title"
                         value={spec.title}
-                        onChange={(e) => updateSpecification(sIdx, "title", e.target.value)}
+                        onChange={(e) =>
+                          updateSpecification(sIdx, "title", e.target.value)
+                        }
                       />
                       <textarea
                         className="w-full py-1 px-2 border rounded"
                         rows={2}
                         placeholder="Specification Description"
                         value={spec.description}
-                        onChange={(e) => updateSpecification(sIdx, "description", e.target.value)}
+                        onChange={(e) =>
+                          updateSpecification(
+                            sIdx,
+                            "description",
+                            e.target.value
+                          )
+                        }
                       />
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <button type="button" className="text-red-600 border py-1 px-2" onClick={() => removeSpecification(sIdx)}>Remove Section</button>
+                      <button
+                        type="button"
+                        className="text-red-600 border py-1 px-2"
+                        onClick={() => removeSpecification(sIdx)}
+                      >
+                        Remove Section
+                      </button>
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <button type="button" onClick={() => addSpecListItem(sIdx)} className="py-1 px-3 border rounded text-sm">+ Add Item</button>
+                      <button
+                        type="button"
+                        onClick={() => addSpecListItem(sIdx)}
+                        className="py-1 px-3 border rounded text-sm"
+                      >
+                        + Add Item
+                      </button>
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -400,18 +486,40 @@ export default function Combo() {
                             className="w-full py-1 px-2 border rounded"
                             placeholder="Name"
                             value={li.name}
-                            onChange={(e) => updateSpecListItem(sIdx, liIdx, "name", e.target.value)}
+                            onChange={(e) =>
+                              updateSpecListItem(
+                                sIdx,
+                                liIdx,
+                                "name",
+                                e.target.value
+                              )
+                            }
                           />
                           <input
                             className="w-full py-1 px-2 border rounded"
                             placeholder="Value"
                             value={li.value}
-                            onChange={(e) => updateSpecListItem(sIdx, liIdx, "value", e.target.value)}
+                            onChange={(e) =>
+                              updateSpecListItem(
+                                sIdx,
+                                liIdx,
+                                "value",
+                                e.target.value
+                              )
+                            }
                           />
-                          <button type="button" className="text-red-600 border py-1 px-2" onClick={() => removeSpecListItem(sIdx, liIdx)}>Remove</button>
+                          <button
+                            type="button"
+                            className="text-red-600 border py-1 px-2"
+                            onClick={() => removeSpecListItem(sIdx, liIdx)}
+                          >
+                            Remove
+                          </button>
                         </div>
                       ))}
-                      {spec.list.length === 0 && <div className="text-sm text-gray-500">No items</div>}
+                      {spec.list.length === 0 && (
+                        <div className="text-sm text-gray-500">No items</div>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -41,8 +41,6 @@ export default function Addproduct() {
     subCategory: "",
   });
 
-
-
   const [shortListInput, setShortListInput] = useState({ name: "", value: "" });
   const [specInput, setSpecInput] = useState({
     title: "",
@@ -322,32 +320,32 @@ export default function Addproduct() {
             className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
           />
 
-            <div className="flex gap-2">
-              <input
-                type="number"
-                placeholder="Regular Price"
-                value={productData.regularPrice}
-                onChange={(e) =>
-                  setProductData((prev) => ({
-                    ...prev,
-                    regularPrice: e.target.value,
-                  }))
-                }
-                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-              />
-              <input
-                type="number"
-                placeholder="Offer Price"
-                value={productData.offerPrice}
-                onChange={(e) =>
-                  setProductData((prev) => ({
-                    ...prev,
-                    offerPrice: e.target.value,
-                  }))
-                }
-                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
-              />
-            </div>
+          <div className="flex gap-2">
+            <input
+              type="number"
+              placeholder="Regular Price"
+              value={productData.regularPrice}
+              onChange={(e) =>
+                setProductData((prev) => ({
+                  ...prev,
+                  regularPrice: e.target.value,
+                }))
+              }
+              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+            />
+            <input
+              type="number"
+              placeholder="Offer Price"
+              value={productData.offerPrice}
+              onChange={(e) =>
+                setProductData((prev) => ({
+                  ...prev,
+                  offerPrice: e.target.value,
+                }))
+              }
+              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+            />
+          </div>
 
           {/* Stock Status */}
           <div className="flex gap-2 mb-2">

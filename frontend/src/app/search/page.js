@@ -1,13 +1,9 @@
 import Searchresult from "./Searchresult";
 
-export default function Page({ searchParams }) {
+export default function Page() {
   return (
     <>
-      <Searchresult
-      q={searchParams.q || ""}
-      mainCategory={searchParams.mainCategory || ""}
-      subCategory={searchParams.subCategory || ""}
-    />
+      <Searchresult />
     </>
   );
 }

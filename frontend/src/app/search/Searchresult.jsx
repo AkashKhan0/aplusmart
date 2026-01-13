@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export default function Searchresult({ q, mainCategory, subCategory }) {
-  // const searchParams = useSearchParams();
+export default function Searchresult() {
+  const searchParams = useSearchParams();
 
   const q = searchParams.get("q");
   const mainCategory = searchParams.get("mainCategory");
