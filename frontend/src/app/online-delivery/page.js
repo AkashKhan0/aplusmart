@@ -12,11 +12,11 @@ export default function Page() {
 
           {/* Intro */}
           <p className="mb-6 leading-relaxed">
-            At <span className="font-semibold">A Plus Mart BD</span>, our delivery
-            system is designed based on an in-depth study of leading Bangladeshi
-            e-commerce platforms and customer expectations. We are committed to
-            providing a fast, secure, transparent, and reliable delivery
-            experience across Bangladesh.
+            At <span className="font-semibold">A Plus Mart BD</span>, our
+            delivery system is designed based on an in-depth study of leading
+            Bangladeshi e-commerce platforms and customer expectations. We are
+            committed to providing a fast, secure, transparent, and reliable
+            delivery experience across Bangladesh.
           </p>
 
           {/* Section 1 */}
@@ -25,7 +25,9 @@ export default function Page() {
               <li>Dhaka Metro & surrounding areas</li>
               <li>All divisional cities</li>
               <li>District headquarters and selected upazilas</li>
-              <li>Remote or rural areas may require additional delivery time</li>
+              <li>
+                Remote or rural areas may require additional delivery time
+              </li>
             </ul>
             <p className="mt-4 text-sm text-gray-600">
               Note: Delivery availability and time may vary depending on product
@@ -39,7 +41,9 @@ export default function Page() {
               <li>Inside Dhaka: 24–72 working hours</li>
               <li>Outside Dhaka: 3–7 working days</li>
               <li>Remote areas: 5–10 working days</li>
-              <li>Pre-order or customized items: As mentioned on the product page</li>
+              <li>
+                Pre-order or customized items: As mentioned on the product page
+              </li>
             </ul>
             <p className="mt-4 text-sm text-gray-600">
               Delivery timelines exclude public holidays and force majeure
@@ -49,9 +53,7 @@ export default function Page() {
 
           {/* Section 3 */}
           <Section title="3. Delivery Charges">
-            <p className="mb-4">
-              Delivery charges are calculated based on:
-            </p>
+            <p className="mb-4">Delivery charges are calculated based on:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li>Delivery location</li>
               <li>Product weight and size</li>
@@ -78,9 +80,7 @@ export default function Page() {
               <li>Applicable for most regular products</li>
               <li>Depends on delivery location and order value</li>
               <li>Additional COD service charge may apply</li>
-              <li>
-                Not available for customized, digital, or pre-order items
-              </li>
+              <li>Not available for customized, digital, or pre-order items</li>
             </ul>
           </Section>
 
@@ -151,8 +151,25 @@ export default function Page() {
               For any delivery-related queries, please contact our support team:
             </p>
             <ul className="mt-3 space-y-1">
-              <li><strong>Email:</strong> support@aplusmartbd.com</li>
-              <li><strong>Phone:</strong> +8801850219432</li>
+               <li>
+                <strong>Email:</strong>{" "}
+                <a
+                  href="mailto:support@aplusmartbd.com"
+                  className="text-blue-600 hover:underline"
+                >
+                  support@aplusmartbd.com
+                </a>
+              </li>
+
+              <li>
+                <strong>Phone:</strong>{" "}
+                <a
+                  href="tel:+8801635347489"
+                  className="text-blue-600 hover:underline"
+                >
+                  +8801635347489
+                </a>
+              </li>
             </ul>
           </Section>
 

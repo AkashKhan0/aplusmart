@@ -164,9 +164,25 @@ export default function Page() {
               If you have any questions about this Privacy Policy, please contact us:
             </p>
             <ul className="mt-3 space-y-1">
-              <li><strong>Email:</strong> info@aplusmartbd.com </li>
-              <li><strong>WhatsApp:</strong> +8801850219432 </li>
-              <li><strong>Business Name:</strong> A Plus Mart BD</li>
+               <li>
+                <strong>Email:</strong>{" "}
+                <a
+                  href="mailto:support@aplusmartbd.com"
+                  className="text-blue-600 hover:underline"
+                >
+                  support@aplusmartbd.com
+                </a>
+              </li>
+
+              <li>
+                <strong>Phone:</strong>{" "}
+                <a
+                  href="tel:+8801635347489"
+                  className="text-blue-600 hover:underline"
+                >
+                  +8801635347489
+                </a>
+              </li>
             </ul>
           </Section>
         </div>

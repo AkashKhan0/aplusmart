@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const defaultSlide = {
-  image: "/images/Best_Deals.png",
+  // image: "/images/Best_Deals.png",
   title: "Best Deals of The Season",
   subtitle: "Up to 20% Off on Electronics",
   buttonUrl: "/offers"
@@ -55,12 +55,12 @@ export default function HeroCarousel() {
     <div className="relative w-full h-fit overflow-hidden">
       {/* Background */}
       <div
-        className="w-full h-full bg-cover sm:bg-contain bg-no-repeat bg-position-[center_bottom] transition-all duration-300 py-14 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+        className="w-full h-full bg-cover sm:bg-contain bg-no-repeat bg-position-[center_bottom] transition-all duration-300 py-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
         <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 py-16">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
+          <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
             {current.title}
           </h2>
 

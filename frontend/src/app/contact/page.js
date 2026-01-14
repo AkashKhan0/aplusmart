@@ -17,11 +17,14 @@ export default function Page() {
     setResponseMsg("");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, subject, message }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, phone, subject, message }),
+        }
+      );
 
       const data = await res.json();
 
@@ -66,17 +69,35 @@ export default function Page() {
 
           <Section title="1. Customer Support">
             <ul className="space-y-2">
-              <li><strong>Phone:</strong> +8801850219432</li>
-              <li><strong>Support Hours:</strong> 10:00 AM – 8:00 PM (Everyday)</li>
+              <li>
+                <strong>Phone:</strong>{" "}
+                <a
+                  href="tel:+8801635347489"
+                  className="text-blue-600 hover:underline"
+                >
+                  +8801635347489
+                </a>
+              </li>
+              <li>
+                <strong>Support Hours:</strong> 10:00 AM – 8:00 PM (Everyday)
+              </li>
             </ul>
             <p className="mt-3">
-              Call us for urgent issues related to orders, delivery, payments, or
-              general inquiries.
+              Call us for urgent issues related to orders, delivery, payments,
+              or general inquiries.
             </p>
           </Section>
 
           <Section title="2. Email Support">
-            <p><strong>Email:</strong> support@aplusmartbd.com</p>
+            <p>
+              <strong>Email:</strong>{" "}
+              <a
+                href="mailto:support@aplusmartbd.com"
+                className="text-blue-600 hover:underline"
+              >
+                support@aplusmartbd.com
+              </a>
+            </p>
             <p className="mt-2 text-sm text-gray-600">
               You can email us anytime. We usually respond within 24 working
               hours.
@@ -84,7 +105,9 @@ export default function Page() {
           </Section>
 
           <Section title="3. Live Chat">
-            <p>Chat with us directly through our website for instant support.</p>
+            <p>
+              Chat with us directly through our website for instant support.
+            </p>
             <p className="mt-2 text-sm text-gray-600">
               Live Chat Availability: 10:00 AM – 8:00 PM
             </p>
@@ -105,7 +128,9 @@ export default function Page() {
             <p>
               For corporate sales, bulk orders, or partnership opportunities:
             </p>
-            <p className="mt-2"><strong>Email:</strong> support@aplusmartbd.com</p>
+            <p className="mt-2">
+              <strong>Email:</strong> support@aplusmartbd.com
+            </p>
           </Section>
 
           <Section title="6. Feedback & Complaints">
@@ -113,7 +138,9 @@ export default function Page() {
               Your feedback helps us improve. If you have any suggestions or
               complaints, please email us.
             </p>
-            <p className="mt-2"><strong>Email:</strong> support@aplusmartbd.com</p>
+            <p className="mt-2">
+              <strong>Email:</strong> support@aplusmartbd.com
+            </p>
             <p className="mt-2 text-sm text-gray-600">
               We take every concern seriously and aim to resolve issues as
               quickly as possible.
@@ -177,7 +204,7 @@ export default function Page() {
 
               <button
                 disabled={loading}
-                className="bg-gray-900 text-white rounded-lg px-6 py-2 w-fit"
+                className="buy_btn w-fit"
               >
                 {loading ? "Sending..." : "Send Message"}
               </button>

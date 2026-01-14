@@ -113,7 +113,7 @@ export default function Useroffer() {
 
       <form onSubmit={handleSubmit} className="w-full mb-2">
         <input
-          type="file" required
+          type="file"
           onChange={(e) => handleImageUpload(e.target.files[0])}
           className="mb-2"
         />

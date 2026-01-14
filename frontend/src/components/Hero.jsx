@@ -12,6 +12,13 @@ import { useAppContext } from "../context/AppContext";
 import { useEffect, useRef, useState } from "react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+import { Reggae_One } from "next/font/google";
+
+const reggaeOne = Reggae_One({
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export default function Hero({ openMenu }) {
   const { search, setSearch, handleSearch, cart } = useAppContext();
 
@@ -74,14 +81,12 @@ export default function Hero({ openMenu }) {
         {/* Logo + Menu/Search/Account/Cart */}
         <div className="flex flex-col items-center justify-center gap-2.5 w-full">
           {/* logo */}
-          <div className="w-[20%] universal mt-6 mb-3">
-            <Image
-              src="/logo.png"
-              alt="A Plus Mart BD"
-              width={100}
-              height={50}
-              className="object-contain min-w-20"
-            />
+          <div className="w-full max-w-fit universal mt-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
+             <h1
+                  className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold mb-1.5`}
+                >
+                  A Plus Mart BD
+                </h1>
           </div>
 
           {/* menu search bar account cart */}
@@ -94,12 +99,12 @@ export default function Hero({ openMenu }) {
                 <IoMdMenu />
               </div>
 
-              <div className="py-1 font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn">
+              <div className="font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn">
                 <div className="relative" ref={dropdownRef}>
                   {/* Button */}
                   <div
                     onClick={() => setOpen(!open)}
-                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn flex items-center justify-between min-w-[100px]"
+                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] hover:bg-[#ffffff] hover:text-[#2B2A29] duration-300 rounded-sm universal gap-2.5 text-[#ffffff] category_btn flex items-center justify-between min-w-[100px] py-1"
                   >
                     <p className="capitalize">{selected || "Category"}</p>
                     <FaCaretDown />
@@ -107,7 +112,7 @@ export default function Hero({ openMenu }) {
 
                   {/* Dropdown */}
                   {open && (
-                    <div className="absolute left-0 mt-1 w-full bg-[#2B2A29] shadow-lg z-50">
+                    <div className="absolute left-0 w-full bg-[#2B2A29] shadow-lg z-50">
                       {categories.map((cat) => (
                         <Link
                           key={cat._id}
@@ -134,7 +139,7 @@ export default function Hero({ openMenu }) {
               {/* Search form */}
               <form
                 onSubmit={handleSearch}
-                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm"
+                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
               >
                 <input
                   type="search"
@@ -156,7 +161,7 @@ export default function Hero({ openMenu }) {
               <Link href="/profile">
                 <div
                   // onClick={handleAccountClick}
-                  className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] rounded-sm universal gap-2.5 text-[#2B2A29] text-base cursor-pointer"
+                  className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
                 >
                   <p className="capitalize">account</p> <FaUser />
                 </div>
@@ -176,7 +181,7 @@ export default function Hero({ openMenu }) {
                     </span>
                   )}
 
-                  <p className="uppercase font-medium flex items-center gap-1">
+                  <p className="uppercase font-medium flex items-center gap-1 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
                     cart
                   </p>
                 </div>

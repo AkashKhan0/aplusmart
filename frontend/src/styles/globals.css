@@ -3,10 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   background-color: aliceblue;
-  color: #2B2A29;
+  color: #2b2a29;
 }
 .universal {
   display: flex;
@@ -28,7 +27,7 @@ body {
   --p: 30px;
   height: 50px;
   aspect-ratio: 3/2;
-  clip-path: polygon(var(--p) 100%,calc(100% - var(--p)) 100%,100% 0,0 0);
+  clip-path: polygon(var(--p) 100%, calc(100% - var(--p)) 100%, 100% 0, 0 0);
 }
 @media (max-width: 768px) {
   .category_btn {
@@ -45,13 +44,13 @@ body {
   width: 5px !important;
   background-color: #ffce1b7d;
   border-radius: 8px;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #2B2A29;
+  background-color: #2b2a29;
   border-radius: 8px;
-  border: 1px solid #FFCE1B;
-  box-shadow: inset 0 0 2px rgba(255,255,255,0.2);
+  border: 1px solid #ffce1b;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -73,6 +72,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 12px;
   font-weight: 400;
   color: #a6a6a6;
+  text-align: center;
 }
 
 .ftr_span span {
@@ -97,11 +97,11 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #a6a6a6;
 }
 
-.pro_p_b_s_B{
+.pro_p_b_s_B {
   padding: 2px 6px;
   border-radius: 4px;
   background-color: #e7e7e7;
-  color: #2B2A29;
+  color: #2b2a29;
   font-size: 13px;
   text-transform: capitalize;
   font-weight: 500;
@@ -112,17 +112,19 @@ input[type="number"]::-webkit-outer-spin-button {
 .taka {
   text-transform: uppercase;
   font-size: 14px;
-  font-weight: 800;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 800;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .taka_1 {
   text-transform: uppercase;
   font-size: 16px;
-  font-weight: 800;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 800;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .buy_btn {
   padding: 5px 20px;
-  background-color: #2B2A29;
+  background-color: #2b2a29;
   color: #ffffff;
   font-weight: 600;
   border-radius: 4px;
@@ -131,7 +133,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 16px;
 }
 .buy_btn:hover {
-  background-color: #201f1f;
+  background-color: #590000;
 }
 
 label {
@@ -153,7 +155,7 @@ label {
 }
 
 .i_agree {
-  color: #2B2A29;
+  color: #2b2a29;
   font-size: 14px;
   font-weight: 400;
 }
@@ -166,7 +168,7 @@ label {
   text-decoration: underline;
 }
 
-.offer_count{
+.offer_count {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,4 +180,87 @@ label {
   color: white;
   font-weight: 500;
   border-radius: 3px;
+}
+
+.universal_nav_logo {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #971900;
+  font-size: 22px;
+  letter-spacing: 0px;
+}
+.cart_btn{
+  z-index: 999;
+  color: #000000;
+  background-color: #971900;
+  transition: all 0.3s ease;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(8px);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0.4;
+  }
+}
+
+.scroll-float {
+  animation: floatUp 2s ease-in-out infinite;
+}
+
+.points{
+  border: #a6a6a63f 1px solid;
+  padding: 4px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: start;
+  width: 100%;
+  background-color: #f1f1f1;
+
+  /* Air state */
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.08);
+  transition: 
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    filter 0.3s ease;
+}
+
+.points:hover{
+  background-color: #e6e6e6;
+
+  /* Floating illusion */
+  box-shadow: 
+    0 14px 30px rgba(0,0,0,0.18),
+    0 4px 10px rgba(0,0,0,0.12);
+
+  /* Soft air feel */
+  filter: brightness(1.02);
+}
+
+
+
+.point_icon{
+  font-size: 30px;
+  color: #971900;
+  border: 1px solid #971900;
+  border-radius: 100%;
+  padding: 3px;
+}
+.point_h1{
+  font-size: 14px;
+  font-weight: 600;
+}
+.point_p{
+  font-size: 13px;
+  font-weight: 400;
 }
