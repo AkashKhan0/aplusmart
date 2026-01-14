@@ -14,10 +14,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "https://aplusmartfrontend.vercel.app",
       "https://aplusmartadmin.vercel.app"
-      // "https://aplusmartfrontend.vercel.app",
-      // "https://aplusmartadmin.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, 
