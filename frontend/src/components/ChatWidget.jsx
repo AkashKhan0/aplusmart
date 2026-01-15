@@ -100,21 +100,31 @@ export default function ChatWidget() {
 
             <div className="w-full flex items-center justify-center gap-2.5">
               <button
-                onClick={() =>
-                  window.open("https://wa.me/8801853838891", "_blank")
-                }
-                className="w-full border cursor-pointer border-[#9719006f] text-[#2b2a29] py-1 rounded-lg hover:bg-green-50 flex items-center justify-center gap-2"
-              >
-                <FaWhatsapp size={16} />
-                WhatsApp
-              </button>
-              <button
-                onClick={openMessenger}
-                className="w-full border cursor-pointer border-[#9719006f] text-[#2b2a29] py-1 rounded-lg hover:bg-green-50 flex items-center justify-center gap-2"
-              >
-                <RiMessengerLine size={17} />
-                Messenger
-              </button>
+  onClick={() => window.open("https://wa.me/8801853838891", "_blank")}
+  className="w-full flex items-center gap-3 px-4 py-2 rounded-xl
+             bg-gradient-to-r from-[#25D366] to-[#1ebe5d]
+             text-white font-medium shadow-md
+             hover:scale-[1.02] hover:shadow-lg transition"
+>
+  <span className="bg-white/20 p-2 rounded-full">
+    <FaWhatsapp size={18} />
+  </span>
+  <span className="text-sm">WhatsApp</span>
+</button>
+
+<button
+  onClick={openMessenger}
+  className="w-full flex items-center gap-3 px-4 py-2 rounded-xl
+             bg-gradient-to-r from-[#0084FF] to-[#006eff]
+             text-white font-medium shadow-md
+             hover:scale-[1.02] hover:shadow-lg transition"
+>
+  <span className="bg-white/20 p-2 rounded-full">
+    <RiMessengerLine size={18} />
+  </span>
+  <span className="text-sm">Messenger</span>
+</button>
+
             </div>
           </div>
         </div>
