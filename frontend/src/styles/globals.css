@@ -247,8 +247,6 @@ label {
   filter: brightness(1.02);
 }
 
-
-
 .point_icon{
   font-size: 30px;
   color: #971900;
@@ -263,4 +261,15 @@ label {
 .point_p{
   font-size: 13px;
   font-weight: 400;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
