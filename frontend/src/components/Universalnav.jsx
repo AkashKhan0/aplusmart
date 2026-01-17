@@ -118,41 +118,44 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
         </div>
 
         {/* Category menu items */}
-        <div className="w-full universal bg-[#ffffff] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
-          <div className="fixed_width px-5">
-            <ul className="flex flex-wrap items-center justify-center gap-1">
-        {Object.entries(menuData).map(([mainCategory, subCategories]) => (
-          <li
-            key={mainCategory}
-            className="relative group cursor-pointer py-1 px-2"
-          >
-            {/* Main Category */}
-            <a
-              href={`/search?mainCategory=${encodeURIComponent(mainCategory)}`}
-              className="font-medium text-gray-800 capitalize"
-            >
-              {mainCategory}
-            </a>
+        <div className="w-full hidden sm:block">
+          <div className="w-full universal bg-[#ffffff] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
+            <div className="fixed_width px-5">
+              <ul className="flex flex-wrap items-center justify-center gap-1">
+                {Object.entries(menuData).map(
+                  ([mainCategory, subCategories]) => (
+                    <li
+                      key={mainCategory}
+                      className="relative group cursor-pointer py-1 px-2"
+                    >
+                      {/* Main Category */}
+                      <a
+                        href={`/search?mainCategory=${encodeURIComponent(mainCategory)}`}
+                        className="font-medium text-gray-800 capitalize"
+                      >
+                        {mainCategory}
+                      </a>
 
-            {/* Dropdown */}
-            <ul className="absolute left-0 top-full mt-px hidden min-w-[180px] w-fit bg-white shadow-lg group-hover:block z-50">
-              {subCategories.map((sub, index) => (
-                <li key={index}>
-                  <a
-                    href={`/search?subCategory=${encodeURIComponent(sub)}`}
-                    className="block px-4 py-2 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300"
-                  >
-                    {sub}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+                      {/* Dropdown */}
+                      <ul className="absolute left-0 top-full mt-px hidden min-w-[180px] w-fit bg-white shadow-lg group-hover:block z-50">
+                        {subCategories.map((sub, index) => (
+                          <li key={index}>
+                            <a
+                              href={`/search?subCategory=${encodeURIComponent(sub)}`}
+                              className="block px-4 py-1 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300"
+                            >
+                              {sub}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
           </div>
         </div>
-
       </div>
     </>
   );

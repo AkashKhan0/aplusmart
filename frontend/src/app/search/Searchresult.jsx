@@ -81,7 +81,7 @@ export default function Searchresult() {
         {products.length === 0 ? (
           <p>No products found!</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
             {products.map((item) => (
               <Link key={item._id} href={`/products/${item._id}`}>
                 <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
@@ -108,7 +108,7 @@ export default function Searchresult() {
                     )
                   )}
 
-                  <div className="w-full h-[250px] p-2">
+                  <div className="w-full h-[250px]">
                     <Image
                       src={item.images?.[0]}
                       alt={item.name}

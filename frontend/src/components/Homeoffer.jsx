@@ -45,14 +45,14 @@ export default function Homeoffer() {
       {/* offer products */}
       <div className="fixed_width px-5 mt-10">
         <div className="w-full flex flex-col items-center justify-center mb-5">
-          <h1 className="text-lg sm:text-xl md:text-xl uppercase font-medium tracking-[3px]">
+          <h1 className="text-lg text-center sm:text-xl md:text-xl uppercase font-medium tracking-[3px]">
             Offer Products
           </h1>
-          <p className="text-base">Limited Stock – Order Now</p>
+          <p className="text-base text-center">Limited Stock – Order Now</p>
         </div>
 
         {/* offer products list */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {products
             .filter(
               (product) =>
@@ -86,7 +86,7 @@ export default function Homeoffer() {
                     )
                   )}
 
-                  <div className="w-full h-[250px] p-2">
+                  <div className="w-full h-[250px]">
                     <Image
                       src={product.images[0] || "/images/placeholder.png"}
                       alt={product.name}

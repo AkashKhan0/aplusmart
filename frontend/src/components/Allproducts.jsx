@@ -52,7 +52,7 @@ export default function Allproducts() {
         </div>
 
         {/* all products list */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {products
             .filter(
               (product) =>
@@ -89,7 +89,7 @@ export default function Allproducts() {
                       </div>
                     )
                   )}
-                  <div className="w-full h-[250px] p-2">
+                  <div className="w-full h-[250px]">
                     <Image
                       src={product.images[0] || "/images/placeholder.png"}
                       alt={product.name}
