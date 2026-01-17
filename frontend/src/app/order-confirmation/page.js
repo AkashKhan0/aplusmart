@@ -47,7 +47,7 @@ export default function OrderConfirmation() {
 
   return (
     <div className="w-full h-full universal">
-      <div className="w-full sm:w-full md:w-[60%] px-5 h-full min-h-screen universal_column">
+      <div className="w-full sm:w-full md:w-[60%] px-5 h-full min-h-screen universal_column mt-16">
         <div className="w-full h-full min-h-screen py-10">
           <h1 className="text-2xl font-bold text-center text-[#931905] mb-3">
             Your order has been placed!

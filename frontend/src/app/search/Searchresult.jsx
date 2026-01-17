@@ -70,7 +70,7 @@ export default function Searchresult() {
 
   return (
     <div className="w-full h-fit universal">
-      <div className="fixed_width h-full min-h-screen px-5 py-10">
+      <div className="fixed_width h-full min-h-screen p-5 mt-20">
         <h2 className="text-xl font-bold mb-5">
           Results for:{" "}
           <span className="text-red-500">

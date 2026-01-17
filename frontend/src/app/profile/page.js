@@ -54,14 +54,14 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-5">
+      <div className="min-h-screen flex items-center justify-center p-5 mt-10">
         Loading profile...
       </div>
     );
   }
 
   return (
-    <div className="w-full h-fit min-h-screen flex justify-center">
+    <div className="w-full h-fit min-h-screen flex justify-center mt-18">
       <div className="fixed_width h-full p-3 universal_column">
         {/* ================= HEADER ================= */}
         <div className="w-full max-w-[1000px] flex flex-col sm:flex-row md:flex-row items-center justify-between gap-2 my-5">

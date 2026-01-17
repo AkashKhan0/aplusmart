@@ -237,7 +237,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="w-full h-full universal">
-      <div className="w-full sm:w-full md:w-[60%] px-5 h-full min-h-screen py-10">
+      <div className="w-full sm:w-full md:w-[60%] px-5 h-full min-h-screen py-10 mt-14">
         <h1 className="text-2xl font-medium text-[#931905] capitalize">
           Billing details
         </h1>

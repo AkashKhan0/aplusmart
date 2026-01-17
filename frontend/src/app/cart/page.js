@@ -27,7 +27,7 @@ export default function CartPage() {
   if (isEmpty) {
     return (
       <div className="w-full h-full universal">
-        <div className="fixed_width px-5 h-full min-h-screen universal_column py-10">
+        <div className="fixed_width px-5 h-full min-h-screen universal_column py-10 mt-10">
           <Image
             src="/images/empty-cart.svg"
             alt="A Plus Mart BD"
@@ -54,7 +54,7 @@ export default function CartPage() {
   ===================== */
   return (
     <div className="w-full h-full universal">
-      <div className="fixed_width p-3 min-h-screen">
+      <div className="fixed_width p-3 min-h-screen mt-14">
         <div className="w-full overflow-x-auto py-5">
           <table className="w-full border-collapse">
             <thead>

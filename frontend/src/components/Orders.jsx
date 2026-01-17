@@ -43,7 +43,7 @@ useEffect(() => {
 
   return (
     <div>
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto mt-10">
         <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden hidden md:table">
           <thead className="bg-gray-100 text-gray-700 text-sm">
             <tr>

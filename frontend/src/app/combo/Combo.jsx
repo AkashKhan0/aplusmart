@@ -28,7 +28,7 @@ export default function Combo() {
   if (products.length === 0)
     return (
       <div className="w-full universal py-10">
-        <div className="fixed_width px-5 universal_column h-full min-h-screen">
+        <div className="fixed_width px-5 universal_column h-full min-h-screen mt-16">
           <div className="w-full max-w-[200px]">
             <Image
               src="/images/clock.gif"
@@ -47,7 +47,7 @@ export default function Combo() {
     <>
       <div className="w-full universal_column py-10">
         {/* offer products */}
-        <div className="fixed_width px-5 h-full min-h-screen">
+        <div className="fixed_width px-5 h-full min-h-screen mt-16">
           <div className="w-full flex flex-col items-center justify-center mb-5">
             <h1 className="text-lg sm:text-xl md:text-xl uppercase font-medium tracking-[3px]">
               Combo Products

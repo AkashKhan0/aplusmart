@@ -26,11 +26,10 @@ export default function Singleproduct() {
   const [messageType, setMessageType] = useState("");
 
   // Review states
-const [reviews, setReviews] = useState(null);
-const [reviewModalOpen, setReviewModalOpen] = useState(false);
-const [reviewRating, setReviewRating] = useState(0);
-const [reviewMessage, setReviewMessage] = useState("");
-
+  const [reviews, setReviews] = useState(null);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewMessage, setReviewMessage] = useState("");
 
   useEffect(() => {
     async function loadProduct() {
@@ -98,84 +97,81 @@ const [reviewMessage, setReviewMessage] = useState("");
   };
 
   const hasOffer =
-  product?.offerPrice > 0 &&
-  product?.regularPrice > 0 &&
-  product.offerPrice < product.regularPrice;
+    product?.offerPrice > 0 &&
+    product?.regularPrice > 0 &&
+    product.offerPrice < product.regularPrice;
 
-const discountPercent = hasOffer
-  ? Math.round(
-      ((product.regularPrice - product.offerPrice) / product.regularPrice) * 100
-    )
-  : 0;
-
-// ✅ UPDATED POINTS LOGIC
-const earnedPoints =
-  !hasOffer && product?.offerPrice > 0
-    ? Math.min(
-        Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
-        500
+  const discountPercent = hasOffer
+    ? Math.round(
+        ((product.regularPrice - product.offerPrice) / product.regularPrice) *
+          100
       )
     : 0;
 
+  // ✅ UPDATED POINTS LOGIC
+  const earnedPoints =
+    !hasOffer && product?.offerPrice > 0
+      ? Math.min(
+          Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
+          500
+        )
+      : 0;
 
- // Fetch reviews
-async function loadReviews() {
-  if (!id) return;
+  // Fetch reviews
+  async function loadReviews() {
+    if (!id) return;
 
-  try {
-    const res = await fetch(`${API}/api/products/${id}/reviews`);
-    if (!res.ok) return;
+    try {
+      const res = await fetch(`${API}/api/products/${id}/reviews`);
+      if (!res.ok) return;
 
-    const data = await res.json();
-    setReviews(data || []);
-  } catch (err) {
-    console.error("Failed to load reviews:", err);
-  }
-}
-
-useEffect(() => {
-  if (!id) return;
-  loadReviews();
-}, [id]);
-
-const handleSubmitReview = async () => {
-  if (!reviewRating || !reviewMessage) {
-    alert("Please select rating and write a message!");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/api/products/${id}/review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        rating: reviewRating,
-        message: reviewMessage,
-      }),
-      credentials: "include",
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("Review submitted!");
-      setReviewModalOpen(false);
-      setReviewRating(0);
-      setReviewMessage("");
-
-      // Refresh reviews
-      loadReviews();
-    } else {
-      alert(data.error || "Failed to submit review");
+      const data = await res.json();
+      setReviews(data || []);
+    } catch (err) {
+      console.error("Failed to load reviews:", err);
     }
-  } catch (err) {
-    console.error(err);
-    alert("Failed to submit review");
   }
-};
 
+  useEffect(() => {
+    if (!id) return;
+    loadReviews();
+  }, [id]);
 
+  const handleSubmitReview = async () => {
+    if (!reviewRating || !reviewMessage) {
+      alert("Please select rating and write a message!");
+      return;
+    }
 
+    try {
+      const res = await fetch(`${API}/api/products/${id}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating: reviewRating,
+          message: reviewMessage,
+        }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Review submitted!");
+        setReviewModalOpen(false);
+        setReviewRating(0);
+        setReviewMessage("");
+
+        // Refresh reviews
+        loadReviews();
+      } else {
+        alert(data.error || "Failed to submit review");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit review");
+    }
+  };
 
   if (loading)
     return (
@@ -199,7 +195,7 @@ const handleSubmitReview = async () => {
   return (
     <>
       <div className="w-full universal_column">
-        <div className="w-full fixed_width px-5 py-10 h-full min-h-screen">
+        <div className="w-full fixed_width px-5 py-10 h-full min-h-screen mt-18">
           <div className="w-full flex flex-col sm:flex-col md:flex-row items-stretch gap-10">
             {/* Images */}
             <div className="w-full sm:w-full md:w-[30%] flex flex-col-reverse gap-1">
@@ -375,7 +371,7 @@ const handleSubmitReview = async () => {
           </div>
 
           {/* Specifications + Related */}
-          <div className="w-full mt-5 flex gap-2.5">
+          <div className="w-full mt-5 flex gap-2.5 pt-5 border-t border-t-gray-300">
             {/* Specifications */}
             <div className="w-full sm:w-[70%] md:w-[70%] p-3 rounded-md">
               <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
@@ -409,113 +405,112 @@ const handleSubmitReview = async () => {
               )}
 
               {/* ================= REVIEW SECTION ================= */}
-<div className="w-full mt-10">
+              <div className="w-full mt-10">
+                <div className="w-full flex items-center justify-between gap-1.5">
+                  <h2 className="text-xl font-bold text-[#931905]">
+                    Reviews ({reviews?.totalReviews || 0})
+                    {reviews?.avgRating > 0 && (
+                      <span className="ml-3 text-sm text-gray-700">
+                        Avg Rating: {reviews.avgRating.toFixed(1)} ⭐
+                      </span>
+                    )}
+                  </h2>
 
-  <div className="w-full flex items-center justify-between gap-1.5">
+                  {/* Write a Review Button */}
+                  {user && (
+                    <div className="">
+                      <button
+                        className="buy_btn"
+                        onClick={() => setReviewModalOpen(true)}
+                      >
+                        Write a Review
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-      <h2 className="text-xl font-bold text-[#931905]">
-    Reviews ({reviews?.totalReviews || 0})
-    {reviews?.avgRating > 0 && (
-      <span className="ml-3 text-sm text-gray-700">
-        Avg Rating: {reviews.avgRating.toFixed(1)} ⭐
-      </span>
-    )}
-  </h2>
+                {/* Review List */}
+                <div className="flex flex-col gap-4 mt-5">
+                  {reviews?.reviews?.length > 0 ? (
+                    reviews.reviews.map((rev) => (
+                      <div
+                        key={rev._id}
+                        className="p-3 rounded-md bg-white flex flex-col"
+                      >
+                        <p className="font-medium text-lg capitalize">
+                          {rev.user?.fullName ||
+                            rev.user?.resellerName ||
+                            "User"}
+                        </p>
+                        <p className="font-normal text-[10px]">
+                          {rev.rating}⭐out of 5
+                        </p>
+                        <p className="text-gray-700 mt-2">{rev.message}</p>
+                        <p className="text-gray-700 text-[10px]">
+                          {new Date(rev.createdAt).toLocaleDateString("en-IN", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No reviews yet.</p>
+                  )}
+                </div>
+              </div>
 
-    {/* Write a Review Button */}
-  {user && (
-    <div className="">
-      <button
-        className="buy_btn"
-        onClick={() => setReviewModalOpen(true)}
-      >
-        Write a Review
-      </button>
-    </div>
-  )}
-  </div>
-
-
-  {/* Review List */}
-  <div className="flex flex-col gap-4 mt-5">
-    {reviews?.reviews?.length > 0 ? (
-      reviews.reviews.map((rev) => (
-        <div
-          key={rev._id}
-          className="p-3 rounded-md bg-white flex flex-col"
-        >
-            <p className="font-medium text-lg capitalize">
-              {rev.user?.fullName || rev.user?.resellerName || "User"}
-            </p>
-            <p className="font-normal text-[10px]">{rev.rating}⭐out of 5</p>
-          <p className="text-gray-700 mt-2">{rev.message}</p>
-          <p className="text-gray-700 text-[10px]">
-  {new Date(rev.createdAt).toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  })}
-</p>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-500">No reviews yet.</p>
-    )}
-  </div>
-</div>
-
-{/* ================= REVIEW MODAL ================= */}
-{reviewModalOpen && (
-  <div
-    onClick={() => setReviewModalOpen(false)}
-    className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="bg-white p-5 rounded-md w-full max-w-md flex flex-col gap-3 relative"
-    >
-      <h3 className="text-lg font-bold mb-2">Write a Review</h3>
-      <div className="flex items-center gap-2">
-        <span>Rating:</span>
-        {[1, 2, 3, 4, 5].map((star) => (
-          <span
-            key={star}
-            className={`text-2xl cursor-pointer hover:text-yellow-500 duration-300 ${
-              reviewRating >= star ? "text-yellow-400" : "text-gray-300"
-            }`}
-            onClick={() => setReviewRating(star)}
-          >
-            ★
-          </span>
-        ))}
-      </div>
-      <textarea
-        className="border p-2 rounded-md w-full"
-        placeholder="Write your review..."
-        value={reviewMessage}
-        onChange={(e) => setReviewMessage(e.target.value)}
-      />
-      <button
-        onClick={handleSubmitReview}
-        className="buy_btn"
-      >
-        Submit
-      </button>
-      <button
-        onClick={() => setReviewModalOpen(false)}
-        className="underline absolute top-2 right-2 text-red-600 cursor-pointer"
-      >
-        <GiCrossMark />
-      </button>
-    </div>
-  </div>
-)}
-
+              {/* ================= REVIEW MODAL ================= */}
+              {reviewModalOpen && (
+                <div
+                  onClick={() => setReviewModalOpen(false)}
+                  className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white p-5 rounded-md w-full max-w-md flex flex-col gap-3 relative"
+                  >
+                    <h3 className="text-lg font-bold mb-2">Write a Review</h3>
+                    <div className="flex items-center gap-2">
+                      <span>Rating:</span>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          className={`text-2xl cursor-pointer hover:text-yellow-500 duration-300 ${
+                            reviewRating >= star
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                          onClick={() => setReviewRating(star)}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                    <textarea
+                      className="border p-2 rounded-md w-full"
+                      placeholder="Write your review..."
+                      value={reviewMessage}
+                      onChange={(e) => setReviewMessage(e.target.value)}
+                    />
+                    <button onClick={handleSubmitReview} className="buy_btn">
+                      Submit
+                    </button>
+                    <button
+                      onClick={() => setReviewModalOpen(false)}
+                      className="underline absolute top-2 right-2 text-red-600 cursor-pointer"
+                    >
+                      <GiCrossMark />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Related products */}
-            <div className="w-full sm:w-[30%] md:w-[30%] bg-white p-3 rounded-md min-h-[200px]">
-              <h1 className="text-center text-lg font-bold capitalize text-[#931905] mb-3">
+            <div className="w-full sm:w-[30%] md:w-[30%] transform bg-[#2B2A29]/3 backdrop-blur-md p-3 rounded-md min-h-[200px] border-l border-l-gray-300">
+              <h1 className="text-center text-lg font-bold capitalize text-[#931905] mb-3 border-b border-b-[#93180531]">
                 Related Product
               </h1>
               {relatedProducts.length > 0 ? (
@@ -523,7 +518,7 @@ const handleSubmitReview = async () => {
                   <Link
                     key={item._id}
                     href={`/products/${item._id}`}
-                    className="w-full flex gap-2.5 items-start shadow-lg transition duration-200 p-2 rounded-sm"
+                    className="w-full flex gap-2.5 items-start shadow-lg hover:shadow-xs transition duration-200 p-2 rounded-sm"
                   >
                     <div className="w-20 h-[60px]">
                       <img
@@ -537,8 +532,8 @@ const handleSubmitReview = async () => {
                         {item.name}
                       </p>
                       <p className="text-sm font-normal flex items-center gap-2.5">
-                        <strong>৳ {item.offerPrice}</strong>
-                        <del>৳ {item.regularPrice}</del>
+                        <strong> <span className="taka">৳- </span>{Number(item.offerPrice).toLocaleString("en-IN")}</strong>                        
+                        <del><span className="taka">৳- </span>{Number(item.regularPrice).toLocaleString("en-IN")}</del>
                       </p>
                     </div>
                   </Link>

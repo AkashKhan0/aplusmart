@@ -34,7 +34,7 @@ body {
     display: none;
   }
 }
-@media (max-width: 620) {
+@media (max-width: 200) {
   .top_nav_bar {
     display: none;
   }
@@ -189,7 +189,7 @@ label {
   font-size: 22px;
   letter-spacing: 0px;
 }
-.cart_btn{
+.cart_btn {
   z-index: 999;
   color: #000000;
   background-color: #971900;
@@ -215,7 +215,7 @@ label {
   animation: floatUp 2s ease-in-out infinite;
 }
 
-.points{
+.points {
   border: #a6a6a63f 1px solid;
   padding: 4px 10px;
   border-radius: 5px;
@@ -227,38 +227,37 @@ label {
   background-color: #f1f1f1;
 
   /* Air state */
-  box-shadow: 
-    0 2px 4px rgba(0,0,0,0.08);
-  transition: 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition:
     box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.3s ease,
     filter 0.3s ease;
 }
 
-.points:hover{
+.points:hover {
   background-color: #e6e6e6;
 
   /* Floating illusion */
-  box-shadow: 
-    0 14px 30px rgba(0,0,0,0.18),
-    0 4px 10px rgba(0,0,0,0.12);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.18),
+    0 4px 10px rgba(0, 0, 0, 0.12);
 
   /* Soft air feel */
   filter: brightness(1.02);
 }
 
-.point_icon{
+.point_icon {
   font-size: 30px;
   color: #971900;
   border: 1px solid #971900;
   border-radius: 100%;
   padding: 3px;
 }
-.point_h1{
+.point_h1 {
   font-size: 14px;
   font-weight: 600;
 }
-.point_p{
+.point_p {
   font-size: 13px;
   font-weight: 400;
 }
@@ -271,5 +270,43 @@ label {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Shine text effect */
+.shine-text {
+  position: relative;
+  color: #971900;
+  display: inline-block;
+}
+
+/* moving white shine INSIDE text only */
+.shine-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.9) 45%,
+    rgba(0, 0, 0, 0.9) 50%,
+    rgba(0, 0, 0, 0.9) 55%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textShine 3.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes textShine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
   }
 }

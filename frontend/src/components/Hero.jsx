@@ -65,13 +65,13 @@ export default function Hero({ openMenu }) {
               <Link href="/offers">
                 <div className="hero_top">
                   <BsFire className="text-[#FFCE1B]" />
-                  supper offers
+                  <span className="hidden sm:block">supper</span> offers
                 </div>
               </Link>
               <Link href="/combo">
                 <div className="hero_top">
                   <LuPackagePlus className="text-[#FFCE1B]" />
-                  combo packages
+                  combo <span className="hidden sm:block">packages</span>
                 </div>
               </Link>
             </div>
@@ -82,15 +82,15 @@ export default function Hero({ openMenu }) {
         <div className="flex flex-col items-center justify-center gap-2.5 w-full">
           {/* logo */}
           <div className="w-full max-w-fit universal mt-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
-             <h1
-                  className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold mb-1.5`}
-                >
-                  A Plus Mart BD
-                </h1>
+            <h1
+              className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold mb-1.5`}
+            >
+              A Plus Mart BD
+            </h1>
           </div>
 
           {/* menu search bar account cart */}
-          <div className="w-full max-w-[900px] flex flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-center gap-5 px-5 sm:px-16 md:px-0">
+          <div className="w-full max-w-[900px] flex flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-center gap-5 px-5 sm:px-16 md:px-5">
             <div className="w-full flex items-center justify-between gap-5">
               <div
                 className="font-semibold text-4xl cursor-pointer"
@@ -112,9 +112,10 @@ export default function Hero({ openMenu }) {
 
                   {/* Dropdown */}
                   {open && (
-                    <div className="absolute left-0 w-full bg-[#2B2A29] shadow-lg z-50">
+                    <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50">
                       {categories.map((cat) => (
                         <Link
+                        className="w-full"
                           key={cat._id}
                           href={`/search?mainCategory=${encodeURIComponent(
                             cat.mainCategory
@@ -125,7 +126,7 @@ export default function Hero({ openMenu }) {
                               setSelected(cat.mainCategory);
                               setOpen(false);
                             }}
-                            className="px-4 w-full py-1 border-b border-b-[#333333] text-white hover:bg-[#3a3938] cursor-pointer capitalize"
+                            className="px-2 text-sm w-full py-1 border-b border-b-[#333333] text-white hover:bg-[#3a3938] cursor-pointer capitalize"
                           >
                             {cat.mainCategory}
                           </div>
@@ -180,7 +181,6 @@ export default function Hero({ openMenu }) {
                       0
                     </span>
                   )}
-
                   <p className="uppercase font-medium flex items-center gap-1 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
                     cart
                   </p>
@@ -188,7 +188,7 @@ export default function Hero({ openMenu }) {
               </Link>
             </div>
           </div>
-
+          
           {/* slider images and text */}
           <HeroCarousel />
         </div>
