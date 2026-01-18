@@ -3,10 +3,59 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAppContext } from "../context/AppContext";
 
 export default function Allproducts() {
   const [products, setProducts] = useState([]);
+  const { user, addToCart } = useAppContext();
+  const [successProductId, setSuccessProductId] = useState(null);
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
+
+  // add to cart handler
+  const handleAddToCart = (product) => {
+    if (!user) {
+      alert("Please login first");
+      return;
+    }
+
+    const hasOffer =
+      product?.offerPrice > 0 &&
+      product?.regularPrice > 0 &&
+      product.offerPrice < product.regularPrice;
+
+    const discountPercent = hasOffer
+      ? Math.round(
+          ((product.regularPrice - product.offerPrice) / product.regularPrice) *
+            100,
+        )
+      : 0;
+
+    const earnedPoints =
+      !hasOffer && product?.offerPrice > 0
+        ? Math.min(Math.floor(product.offerPrice / 100), 500)
+        : 0;
+
+    const cartItem = {
+      _id: product._id,
+      name: product.name,
+      images: product.images,
+      offerPrice: product.offerPrice,
+      regularPrice: product.regularPrice,
+      quantity: 1, // default
+      colors: [], // no color selection here
+      role: user.role,
+
+      hasOffer,
+      discountPercent,
+      earnedPoints,
+    };
+
+    addToCart(cartItem);
+    setSuccessProductId(product._id);
+    setTimeout(() => {
+      setSuccessProductId(null);
+    }, 2000);
+  };
 
   // Fetch all products
   const fetchProducts = async () => {
@@ -59,7 +108,7 @@ export default function Allproducts() {
                 product.mainCategory?.toLowerCase() !== "offer" &&
                 product.mainCategory?.toLowerCase() !== "combo" &&
                 product.mainCategory?.toLowerCase() !== "deals" &&
-                product.subCategory?.toLowerCase() !== "deals"
+                product.subCategory?.toLowerCase() !== "deals",
             )
             .slice(0, 40)
             .map((product) => (
@@ -73,7 +122,7 @@ export default function Allproducts() {
                       {Math.round(
                         ((product.regularPrice - product.offerPrice) /
                           product.regularPrice) *
-                          100
+                          100,
                       )}
                       % off
                     </div>
@@ -114,6 +163,25 @@ export default function Allproducts() {
                         </del>
                       )}
                     </p>
+                    
+                    {/* add to cart button */}
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                        }}
+                        className="text-sm py-1 px-3 border border-gray-300 rounded-sm cursor-pointer font-medium capitalize bg-gray-100 hover:bg-gray-300 transition-colors duration-300"
+                      >
+                        add to cart
+                      </button>
+                      {successProductId === product._id && (
+                        <p className="text-green-600 text-xs mt-1">
+                          Added to cart successfully!
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>

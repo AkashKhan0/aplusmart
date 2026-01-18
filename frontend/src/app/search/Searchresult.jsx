@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAppContext } from "@/src/context/AppContext";
 
 export default function Searchresult() {
   const [q, setQ] = useState(null);
   const [mainCategory, setMainCategory] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
-
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);  
+      const { user, addToCart } = useAppContext();
+      const [successProductId, setSuccessProductId] = useState(null);
 
   // ✅ Read query params safely (client-side only)
   useEffect(() => {
@@ -50,6 +52,54 @@ export default function Searchresult() {
 
     fetchProducts();
   }, [q, mainCategory, subCategory]);
+
+  
+  
+   // add to cart handler
+  const handleAddToCart = (product) => {
+    if (!user) {
+      alert("Please login first");
+      return;
+    }
+
+    const hasOffer =
+      product?.offerPrice > 0 &&
+      product?.regularPrice > 0 &&
+      product.offerPrice < product.regularPrice;
+
+    const discountPercent = hasOffer
+      ? Math.round(
+          ((product.regularPrice - product.offerPrice) / product.regularPrice) *
+            100,
+        )
+      : 0;
+
+    const earnedPoints =
+      !hasOffer && product?.offerPrice > 0
+        ? Math.min(Math.floor(product.offerPrice / 100), 500)
+        : 0;
+
+    const cartItem = {
+      _id: product._id,
+      name: product.name,
+      images: product.images,
+      offerPrice: product.offerPrice,
+      regularPrice: product.regularPrice,
+      quantity: 1, // default
+      colors: [], // no color selection here
+      role: user.role,
+
+      hasOffer,
+      discountPercent,
+      earnedPoints,
+    };
+
+    addToCart(cartItem);
+    setSuccessProductId(product._id);
+    setTimeout(() => {
+      setSuccessProductId(null);
+    }, 2000);
+  };
 
   if (loading)
     return (
@@ -132,6 +182,25 @@ export default function Searchresult() {
                         </del>
                       )}
                     </p>
+
+                    {/* add to cart button */}
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(item);
+                        }}
+                        className="text-sm py-1 px-3 border border-gray-300 rounded-sm cursor-pointer font-medium capitalize bg-gray-100 hover:bg-gray-300 transition-colors duration-300"
+                      >
+                        add to cart
+                      </button>
+                      {successProductId === item._id && (
+                        <p className="text-green-600 text-xs mt-1">
+                          Added to cart successfully!
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>
