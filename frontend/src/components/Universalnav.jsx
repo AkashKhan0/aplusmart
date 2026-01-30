@@ -50,7 +50,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
           fixedOnTop ? "fixed top-0 left-0 opacity-100" : "relative"
         }`}
       >
-        <div className="fixed_width flex justify-center h-full px-5 py-2">
+        <div className="fixed_width flex justify-center h-13 px-5 py-2">
           <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
             <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
               <div className="w-full max-w-fit md:universal">
@@ -100,15 +100,14 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                   <FaUser />
                 </div>
               </Link>
-              <div className="md:fixed md:top-[48%] md:right-0 md:cart_btn md:w-full md:max-w-fit md:px-2 md:py-1 md:rounded-l-md md:cursor-pointer hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300">
+              <div className="md:fixed md:top-[48%] md:right-0 md:cart_btn md:w-full md:max-w-fit md:px-2 md:py-2 md:rounded-l-md md:cursor-pointer hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300 cart_fix_tab_hover">
                 <Link href="/cart">
-                  <div className="flex items-center gap-1 text-lg relative text-[#FFFFFF]">
+                  <div className="flex w-fit items-center gap-2 text-base relative text-[#FFFFFF]">
                     <IoCart />
-                    <span className="text-[#FFFFFF] rounded-full universal absolute -top-3 md:-top-2 left-3 font-normal text-sm">
+                    <span className="text-[#FFFFFF] rounded-full universal absolute -top-3 md:-top-2 left-3 font-normal text-xs">
                       {cart.length}
                     </span>
-                    <p className="uppercase hidden md:block font-medium items-center gap-1.5">
-                      cart
+                    <p className="capitalize hidden md:block font-medium items-center gap-1.5 text-sm cart_fix_tab">view cart
                     </p>
                   </div>
                 </Link>

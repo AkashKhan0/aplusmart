@@ -4,15 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Homecombo() {
   const [products, setProducts] = useState([]);
-    const { user, addToCart } = useAppContext();
-    const [successProductId, setSuccessProductId] = useState(null);
+  const { user, addToCart } = useAppContext();
+  const [successProductId, setSuccessProductId] = useState(null);
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
 
-  
-   // add to cart handler
+  // add to cart handler
   const handleAddToCart = (product) => {
     if (!user) {
       alert("Please login first");
@@ -107,7 +107,7 @@ export default function Homecombo() {
             .filter(
               (product) =>
                 product.mainCategory?.toLowerCase() === "combo" ||
-                product.subCategory?.toLowerCase() === "combo"
+                product.subCategory?.toLowerCase() === "combo",
             )
             .slice(0, 10)
             .map((product) => (
@@ -120,7 +120,7 @@ export default function Homecombo() {
                       {Math.round(
                         ((product.regularPrice - product.offerPrice) /
                           product.regularPrice) *
-                          100
+                          100,
                       )}
                       % off
                     </div>
@@ -161,18 +161,21 @@ export default function Homecombo() {
                         </del>
                       )}
                     </p>
-                    
+
                     {/* add to cart button */}
-                    <div className="w-full flex flex-col items-center justify-center">
+                    <div className="w-full flex flex-col items-center justify-center mb-2">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           handleAddToCart(product);
                         }}
-                        className="text-sm py-1 px-3 border border-gray-300 rounded-sm cursor-pointer font-medium capitalize bg-gray-100 hover:bg-gray-300 transition-colors duration-300"
+                        className="add_to_cart_btn"
                       >
-                        add to cart
+                        <span>add to cart</span>
+                        <span className="shop_btn_icon">
+                          <FaShoppingCart />
+                        </span>
                       </button>
                       {successProductId === product._id && (
                         <p className="text-green-600 text-xs mt-1">

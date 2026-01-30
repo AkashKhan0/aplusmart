@@ -32,6 +32,18 @@ export default function Page() {
     });
   }, []);
 
+  useEffect(() => {
+  if (message || passwordError) {
+    const timer = setTimeout(() => {
+      setMessage("");
+      setPasswordError("");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }
+}, [message, passwordError]);
+
+
   // ---------------- Login Handler ----------------
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,7 +84,6 @@ export default function Page() {
     } catch (error) {
       setIsSuccess(false);
       setMessage("Something went wrong");
-      console.error("Login error:", error);
     }
   };
 
@@ -87,7 +98,7 @@ export default function Page() {
 
   // ---------------- UI ----------------
   return (
-    <div className="w-full universal min-h-screen p-5">
+    <div className="w-full universal min-h-screen p-5 mt-10">
       <div className="fixed_width p-5 universal">
         <div className="w-full max-w-[500px] p-5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] rounded-sm flex flex-col gap-5">
           <h1 className="text-2xl font-semibold">Account Login</h1>
@@ -95,7 +106,7 @@ export default function Page() {
           <form onSubmit={handleLogin} className="flex flex-col gap-1.5">
             {/* Email */}
             <p className="font-semibold">Email</p>
-            <div className="border rounded-sm mb-1">
+            <div className="border border-gray-300 rounded-sm mb-1">
               <input
                 type="text"
                 className="w-full outline-none py-1 px-3"
@@ -107,7 +118,7 @@ export default function Page() {
 
             {/* Password */}
             <p className="font-semibold">Password</p>
-            <div className="border rounded-sm mb-1 relative">
+            <div className="border border-gray-300 rounded-sm mb-1 relative">
               <input
                 type={showPass ? "text" : "password"}
                 className="w-full outline-none py-1 px-3 pr-10"
@@ -122,14 +133,9 @@ export default function Page() {
                 {showPass ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            {passwordError && (
-              <p className="text-red-600 text-sm mb-2">
-                {passwordError}
-              </p>
-            )}
 
             {/* Remember Me */}
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-1">
               <input
                 type="checkbox"
                 checked={rememberMe}
@@ -142,21 +148,26 @@ export default function Page() {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg my-3 cursor-pointer"
+              className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg cursor-pointer"
             >
               Login
             </button>
 
             {/* Message */}
-            {message && (
+            <div className="w-full flex items-center h-5">
+              {message && (
               <p
-                className={`text-sm font-semibold mb-2 ${
+                className={`text-sm font-semibold ${
                   isSuccess ? "text-green-600" : "text-red-600"
                 }`}
               >
                 {message}
               </p>
             )}
+            <p className="text-red-600 text-sm">
+                {passwordError}
+              </p>
+            </div>
 
             {/* Register */}
             <div className="flex items-center justify-center gap-1.5">

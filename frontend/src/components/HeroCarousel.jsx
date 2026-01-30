@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { GiShoppingBag } from "react-icons/gi";
 
 const defaultSlide = {
   // image: "/images/Best_Deals.png",
   title: "Best Deals of The Season",
   subtitle: "Up to 20% Off on Electronics",
-  buttonUrl: "/offers"
+  buttonUrl: "/offers",
 };
 
 export default function HeroCarousel() {
@@ -38,13 +39,13 @@ export default function HeroCarousel() {
 
   const nextSlide = () => {
     setCurrentIndex((prev) =>
-      offers.length > 0 ? (prev === offers.length - 1 ? 0 : prev + 1) : 0
+      offers.length > 0 ? (prev === offers.length - 1 ? 0 : prev + 1) : 0,
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
-      offers.length > 0 ? (prev === 0 ? offers.length - 1 : prev - 1) : 0
+      offers.length > 0 ? (prev === 0 ? offers.length - 1 : prev - 1) : 0,
     );
   };
 
@@ -59,17 +60,20 @@ export default function HeroCarousel() {
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
-        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 py-16">
+        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 py-5">
           <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
             {current.title}
           </h2>
 
-          <p className="text-lg font-semibold text-[#2B2A29] mb-10">
+          <p className="text-lg font-semibold text-[#2B2A29] mb-5">
             {current.subtitle}
           </p>
 
           <Link href={current.buttonUrl}>
-            <button className="buy_btn">Buy Now</button>
+            <button className="buy_btn">
+              <span>Buy Now</span>
+              <span className="text-sm shop_btn_icon"><GiShoppingBag /></span>
+            </button>
           </Link>
         </div>
       </div>

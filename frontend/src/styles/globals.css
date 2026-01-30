@@ -58,6 +58,9 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+input {
+  outline: none;
+}
 
 .ftr_h1 {
   text-transform: uppercase;
@@ -122,18 +125,125 @@ input[type="number"]::-webkit-outer-spin-button {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
+/* buy now button */
 .buy_btn {
   padding: 5px 20px;
   background-color: #2b2a29;
+  width: fit-content;
   color: #ffffff;
   font-weight: 600;
   border-radius: 4px;
   transition: 0.3s all ease;
   cursor: pointer;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  gap: 5px;
 }
 .buy_btn:hover {
   background-color: #590000;
+}
+.buy_btn .shop_btn_icon {
+  transform: translateX(50px);
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  transition: 0.3s all ease;
+}
+.buy_btn:hover .shop_btn_icon {
+  transform: translateX(0);
+  opacity: 1;
+  width: 15px;
+  height: 15px;
+}
+/* add to cart button */
+.add_to_cart_btn {
+  font-size: 14px;
+  padding: 4px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 2px;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: capitalize;
+  background-color: #f3f4f6;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  gap: 5px;
+}
+
+.add_to_cart_btn:hover {
+  background-color: #d1d5db;
+}
+
+.add_to_cart_btn .shop_btn_icon {
+  transform: translateX(50px);
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  transition: 0.3s all ease;
+}
+.add_to_cart_btn:hover .shop_btn_icon {
+  transform: translateX(0);
+  opacity: 1;
+  width: 15px;
+  height: 15px;
+}
+.cart_fix_tab {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(50px);
+  transition: 
+    max-width 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.8s ease;
+  white-space: nowrap;
+}
+
+.cart_fix_tab_hover:hover .cart_fix_tab {
+  max-width: 120px;
+  opacity: 1;
+  transform: translateX(0);
+}
+.features_category {
+  border: 1px solid #c3c3c36f;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  min-height: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    filter 0.3s ease;
+}
+.features_category:hover {
+  background-color: #e1e1e1;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.18),
+    0 4px 10px rgba(0, 0, 0, 0.12);
+  filter: brightness(1.02);
+}
+.features_icon {
+  font-size: 28px;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+}
+.features_category:hover .features_icon {
+  transform: scale(1.2);
+}
+.features_p {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: capitalize;
+  line-height: 15px;
 }
 
 label {
@@ -241,8 +351,6 @@ label {
   box-shadow:
     0 14px 30px rgba(0, 0, 0, 0.18),
     0 4px 10px rgba(0, 0, 0, 0.12);
-
-  /* Soft air feel */
   filter: brightness(1.02);
 }
 

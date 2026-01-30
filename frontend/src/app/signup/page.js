@@ -10,7 +10,7 @@ export default function SignupPage() {
   const isLoading = context.isSuccess && context.message === "Registration successful";
 
   return (
-    <div className="w-full universal min-h-screen p-5">
+    <div className="w-full universal min-h-screen p-5 mt-16">
       <div className="fixed_width p-5 universal">
         <div className="max-w-[500px] w-full p-5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] rounded-sm flex flex-col gap-2">
           <h1 className="capitalize text-2xl font-semibold">
@@ -51,7 +51,7 @@ export default function SignupPage() {
                 <p className="font-semibold">Full Name</p>
                 <input
                   type="text"
-                  className="w-full border rounded-sm py-1 px-3"
+                  className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.fullName}
                   onChange={(e) => context.setFullName(e.target.value)}
                 />
@@ -64,7 +64,7 @@ export default function SignupPage() {
                 <p className="font-semibold">Shop Name</p>
                 <input
                   type="text"
-                  className="w-full border rounded-sm py-1 px-3"
+                  className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.shopName}
                   onChange={(e) => context.setShopName(e.target.value)}
                 />
@@ -72,7 +72,7 @@ export default function SignupPage() {
                 <p className="font-semibold">Shop Location</p>
                 <input
                   type="text"
-                  className="w-full border rounded-sm py-1 px-3"
+                  className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.location}
                   onChange={(e) => context.setLocation(e.target.value)}
                 />
@@ -80,7 +80,7 @@ export default function SignupPage() {
                 <p className="font-semibold">Reseller Full Name</p>
                 <input
                   type="text"
-                  className="w-full border rounded-sm py-1 px-3"
+                  className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.resellerName}
                   onChange={(e) => context.setResellerName(e.target.value)}
                 />
@@ -91,7 +91,7 @@ export default function SignupPage() {
             <p className="font-semibold">Email</p>
             <input
               type="email"
-              className="w-full border rounded-sm py-1 px-3"
+              className="w-full border border-gray-300 rounded-sm py-1 px-3"
               value={context.email}
               onChange={(e) => context.setEmail(e.target.value)}
             />
@@ -99,7 +99,7 @@ export default function SignupPage() {
             <p className="font-semibold">Phone</p>
             <input
               type="text"
-              className="w-full border rounded-sm py-1 px-3"
+              className="w-full border border-gray-300 rounded-sm py-1 px-3"
               value={context.phone}
               onChange={(e) => context.setPhone(e.target.value)}
             />
@@ -109,7 +109,7 @@ export default function SignupPage() {
             <div className="relative">
               <input
                 type={context.showPass ? "text" : "password"}
-                className="w-full border rounded-sm py-1 px-3 pr-10"
+                className="w-full border border-gray-300 rounded-sm py-1 px-3 pr-10"
                 value={context.password}
                 onChange={(e) => context.setPassword(e.target.value)}
               />
@@ -125,7 +125,7 @@ export default function SignupPage() {
             <div className="relative">
               <input
                 type={context.showConfirm ? "text" : "password"}
-                className="w-full border rounded-sm py-1 px-3 pr-10"
+                className="w-full border border-gray-300 rounded-sm py-1 px-3 pr-10"
                 value={context.confirm}
                 onChange={(e) => context.setConfirm(e.target.value)}
               />

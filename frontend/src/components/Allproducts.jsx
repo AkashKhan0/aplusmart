@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Allproducts() {
   const [products, setProducts] = useState([]);
@@ -97,7 +98,7 @@ export default function Allproducts() {
           <h1 className="text-lg sm:text-xl md:text-xl uppercase font-medium tracking-[3px]">
             All Products
           </h1>
-          <p className="text-base">Check & Get Your Desired Product!</p>
+          <p className="text-base text-center">Check & Get Your Desired Product!</p>
         </div>
 
         {/* all products list */}
@@ -129,10 +130,10 @@ export default function Allproducts() {
                   ) : (
                     /* Earn Points */
                     product?.offerPrice > 0 && (
-                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-normal capitalize">
+                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-0.5 justify-center text-sm font-normal capitalize">
                         Earn Points
                         <span className="text-[#c9c601] flex items-center">
-                          {Math.min(Math.floor(product.offerPrice / 100), 500)}{" "}
+                          {Math.min(Math.floor(product.offerPrice / 100), 500)}
                           ⭐
                         </span>
                       </div>
@@ -165,16 +166,17 @@ export default function Allproducts() {
                     </p>
                     
                     {/* add to cart button */}
-                    <div className="w-full flex flex-col items-center justify-center">
+                    <div className="w-full flex flex-col items-center justify-center mb-2">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           handleAddToCart(product);
                         }}
-                        className="text-sm py-1 px-3 border border-gray-300 rounded-sm cursor-pointer font-medium capitalize bg-gray-100 hover:bg-gray-300 transition-colors duration-300"
+                        className="add_to_cart_btn"
                       >
-                        add to cart
+                        <span>add to cart</span>
+                        <span className="shop_btn_icon"><FaShoppingCart /></span>
                       </button>
                       {successProductId === product._id && (
                         <p className="text-green-600 text-xs mt-1">

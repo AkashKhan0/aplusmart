@@ -45,6 +45,17 @@ export const AppProvider = ({ children }) => {
     const re = /^(01[3-9]\d{8})$/;
     return re.test(phone);
   };
+  useEffect(() => {
+  if (message) {
+    const timer = setTimeout(() => {
+      setMessage("");
+      setIsSuccess(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }
+}, [message]);
+
 
   // reset form input box
   const resetForm = () => {
@@ -63,27 +74,54 @@ export const AppProvider = ({ children }) => {
   // ---------------- Register ----------------
   const registerUser = async () => {
     // CUSTOMER
-    if (role === "customer" && !fullName.trim())
-      return setMessage("Full name is required");
+    if (role === "customer" && !fullName.trim()){
+    setIsSuccess(false);
+    return setMessage("Full name is required");
+  }
 
     // RESELLER
     if (role === "reseller") {
-      if (!shopName.trim()) return setMessage("Shop name is required");
-      if (!location.trim()) return setMessage("Location is required");
-      if (!resellerName.trim())
-        return setMessage("Reseller full name is required");
+      if (!shopName.trim()) {
+      setIsSuccess(false);
+      return setMessage("Shop name is required");
+    }
+    if (!location.trim()) {
+      setIsSuccess(false);
+      return setMessage("Location is required");
+    }
+    if (!resellerName.trim()) {
+      setIsSuccess(false);
+      return setMessage("Reseller full name is required");
+    }
     }
 
     // COMMON
-    if (!email.trim()) return setMessage("Email is required");
-    if (!validateEmail(email)) return setMessage("Invalid email");
+    if (!email.trim()) {
+    setIsSuccess(false);
+    return setMessage("Email is required");
+  }
+    if (!validateEmail(email)) {
+    setIsSuccess(false);
+    return setMessage("Invalid email");
+  }
 
-    if (!phone.trim()) return setMessage("Phone is required");
-    if (!validatePhone(phone)) return setMessage("Phone must be 11 digits");
+    if (!phone.trim()) {
+    setIsSuccess(false);
+    return setMessage("Phone is required");
+  }
+    if (!validatePhone(phone)) {
+    setIsSuccess(false);
+    return setMessage("Please enter a valid phone number");
+  }
 
-    if (password.length < 6)
-      return setMessage("Password must be at least 6 characters");
-    if (password !== confirm) return setMessage("Passwords do not match");
+    if (password.length < 6) {
+    setIsSuccess(false);
+    return setMessage("Password must be at least 6 characters");
+  }
+    if (password !== confirm) {
+    setIsSuccess(false);
+    return setMessage("Passwords do not match");
+  }
 
     const payload =
       role === "customer"

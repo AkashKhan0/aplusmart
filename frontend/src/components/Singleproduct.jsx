@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPenNib, FaPlus } from "react-icons/fa";
 import { useAppContext } from "../context/AppContext";
-import { GiCrossMark } from "react-icons/gi";
+import { GiCrossMark, GiShoppingBag } from "react-icons/gi";
 
 export default function Singleproduct() {
   const { id } = useParams();
@@ -38,7 +38,6 @@ export default function Singleproduct() {
         const data = await res.json();
         const productData = data.product || {};
         const related = data.relatedProducts || [];
-
         setProduct(productData);
         setRelatedProducts(related);
 
@@ -55,26 +54,55 @@ export default function Singleproduct() {
   }, [id, user]);
 
   const handleQuantityChange = (type) => {
+    let newQuantity = quantity;
+
     if (!user) {
-      if (type === "inc") setQuantity((prev) => prev + 1);
-      if (type === "dec") setQuantity((prev) => Math.max(1, prev - 1));
+      if (type === "inc") newQuantity = quantity + 1;
+      if (type === "dec") newQuantity = Math.max(1, quantity - 1);
     } else if (user.role === "customer") {
-      if (type === "inc") setQuantity((prev) => prev + 1);
-      if (type === "dec") setQuantity((prev) => Math.max(1, prev - 1));
+      if (type === "inc") newQuantity = quantity + 1;
+      if (type === "dec") newQuantity = Math.max(1, quantity - 1);
     } else if (user.role === "reseller") {
-      if (type === "inc") setQuantity((prev) => prev + 50);
-      if (type === "dec") setQuantity((prev) => Math.max(50, prev - 50));
+      if (type === "inc") newQuantity = quantity + 50;
+      if (type === "dec") newQuantity = Math.max(50, quantity - 50);
     }
+    setQuantity(newQuantity);
+    setSelectedColor((prev) => prev.slice(0, newQuantity));
   };
 
-  const handleBuyNow = () => {
-    if (!user) return;
-    if (!selectedColor || selectedColor.length === 0) {
-      setMessage("Please select a color!");
+  /* ================= COLOR HANDLER ================= */
+  const handleColorSelect = (color) => {
+    if (selectedColor.includes(color)) {
+      setSelectedColor(selectedColor.filter((c) => c !== color));
+      return;
+    }
+
+    if (selectedColor.length >= quantity) {
+      setMessage(`You can select maximum ${quantity} colors`);
       setMessageType("error");
       setTimeout(() => setMessage(""), 2000);
       return;
     }
+    setSelectedColor([...selectedColor, color]);
+  };
+
+  const handleBuyNow = () => {
+    if (!user) return;
+
+    if (selectedColor.length === 0) {
+      setMessage("Please select at least one color!");
+      setMessageType("error");
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
+
+    if (selectedColor.length > quantity) {
+      setMessage(`You can select maximum ${quantity} color(s)!`);
+      setMessageType("error");
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
+
     const cartItem = {
       _id: product._id,
       name: product.name,
@@ -84,8 +112,6 @@ export default function Singleproduct() {
       quantity,
       colors: selectedColor,
       role: user.role,
-
-      // 🔥 NEW (IMPORTANT)
       hasOffer,
       discountPercent,
       earnedPoints,
@@ -104,7 +130,7 @@ export default function Singleproduct() {
   const discountPercent = hasOffer
     ? Math.round(
         ((product.regularPrice - product.offerPrice) / product.regularPrice) *
-          100
+          100,
       )
     : 0;
 
@@ -113,7 +139,7 @@ export default function Singleproduct() {
     !hasOffer && product?.offerPrice > 0
       ? Math.min(
           Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
-          500
+          500,
         )
       : 0;
 
@@ -183,6 +209,7 @@ export default function Singleproduct() {
               alt="Please wait"
               width={500}
               height={500}
+              unoptimized
               className="w-full h-full object-contain"
             />
           </div>
@@ -294,23 +321,12 @@ export default function Singleproduct() {
                   <div
                     key={index}
                     style={{ backgroundColor: color }}
-                    className={`w-6 h-6 rounded-full border cursor-pointer ${
+                    className={`cursor-pointer duration-300 border ${
                       selectedColor.includes(color)
-                        ? "border-black border-2"
-                        : "border-gray-300"
+                        ? "w-5 h-5 rounded-sm"
+                        : "w-4 h-4 rounded-full"
                     }`}
-                    // onClick={() => setSelectedColor(color)}
-                    onClick={() => {
-                      if (selectedColor.includes(color)) {
-                        // deselect color
-                        setSelectedColor(
-                          selectedColor.filter((c) => c !== color)
-                        );
-                      } else {
-                        // select color
-                        setSelectedColor([...selectedColor, color]);
-                      }
-                    }}
+                    onClick={() => handleColorSelect(color)}
                     title={color}
                   ></div>
                 ))}
@@ -329,19 +345,19 @@ export default function Singleproduct() {
               ) : null}
 
               {/* Quantity */}
-              <div className="w-full flex items-center gap-3 my-5">
+              <div className="w-full max-w-fit flex flex-col sm:flex-row md:flex-row items-center justify-start gap-3 my-5">
                 <div className="flex items-stretch gap-1.5">
                   <div
-                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center"
+                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center text-sm"
                     onClick={() => handleQuantityChange("dec")}
                   >
                     <FaMinus />
                   </div>
-                  <div className="universal w-fit h-8 px-3 border border-[#ddd] font-bold text-lg flex items-center justify-center">
+                  <div className="universal w-fit h-8 px-3 border border-[#ddd] font-bold text-sm flex items-center justify-center">
                     {quantity}
                   </div>
                   <div
-                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center"
+                    className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center text-sm"
                     onClick={() => handleQuantityChange("inc")}
                   >
                     <FaPlus />
@@ -352,10 +368,13 @@ export default function Singleproduct() {
                   onClick={handleBuyNow}
                   disabled={!user}
                   className={`buy_btn uppercase ${
-                    !user ? "opacity-50 cursor-not-allowed" : ""
+                    !user ? "opacity-20 cursor-not-allowed" : ""
                   }`}
                 >
-                  buy now
+                  <span className="text-sm">Buy Now</span>
+                  <span className="text-sm shop_btn_icon">
+                    <GiShoppingBag />
+                  </span>
                 </button>
               </div>
               {message && (
@@ -371,7 +390,7 @@ export default function Singleproduct() {
           </div>
 
           {/* Specifications + Related */}
-          <div className="w-full mt-5 flex gap-2.5 pt-5 border-t border-t-gray-300">
+          <div className="w-full mt-5 flex flex-col sm:flex-row md:flex-row gap-2.5 pt-5 border-t border-t-gray-300">
             {/* Specifications */}
             <div className="w-full sm:w-[70%] md:w-[70%] p-3 rounded-md">
               <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
@@ -423,7 +442,8 @@ export default function Singleproduct() {
                         className="buy_btn"
                         onClick={() => setReviewModalOpen(true)}
                       >
-                        Write a Review
+                        <span>Review Us</span>
+              <span className="text-sm shop_btn_icon"><FaPenNib /></span>
                       </button>
                     </div>
                   )}
@@ -532,8 +552,15 @@ export default function Singleproduct() {
                         {item.name}
                       </p>
                       <p className="text-sm font-normal flex items-center gap-2.5">
-                        <strong> <span className="taka">৳- </span>{Number(item.offerPrice).toLocaleString("en-IN")}</strong>                        
-                        <del><span className="taka">৳- </span>{Number(item.regularPrice).toLocaleString("en-IN")}</del>
+                        <strong>
+                          {" "}
+                          <span className="taka">৳- </span>
+                          {Number(item.offerPrice).toLocaleString("en-IN")}
+                        </strong>
+                        <del>
+                          <span className="taka">৳- </span>
+                          {Number(item.regularPrice).toLocaleString("en-IN")}
+                        </del>
                       </p>
                     </div>
                   </Link>

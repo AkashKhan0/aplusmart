@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppContext } from "@/src/context/AppContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Searchresult() {
   const [q, setQ] = useState(null);
   const [mainCategory, setMainCategory] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);  
-      const { user, addToCart } = useAppContext();
-      const [successProductId, setSuccessProductId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { user, addToCart } = useAppContext();
+  const [successProductId, setSuccessProductId] = useState(null);
 
   // ✅ Read query params safely (client-side only)
   useEffect(() => {
@@ -33,8 +34,10 @@ export default function Searchresult() {
     const query = [];
 
     if (q) query.push(`q=${encodeURIComponent(q)}`);
-    if (mainCategory) query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
-    if (subCategory) query.push(`subCategory=${encodeURIComponent(subCategory)}`);
+    if (mainCategory)
+      query.push(`mainCategory=${encodeURIComponent(mainCategory)}`);
+    if (subCategory)
+      query.push(`subCategory=${encodeURIComponent(subCategory)}`);
 
     url += query.join("&");
 
@@ -53,9 +56,7 @@ export default function Searchresult() {
     fetchProducts();
   }, [q, mainCategory, subCategory]);
 
-  
-  
-   // add to cart handler
+  // add to cart handler
   const handleAddToCart = (product) => {
     if (!user) {
       alert("Please login first");
@@ -143,7 +144,7 @@ export default function Searchresult() {
                       {Math.round(
                         ((item.regularPrice - item.offerPrice) /
                           item.regularPrice) *
-                          100
+                          100,
                       )}
                       % off
                     </div>
@@ -184,16 +185,19 @@ export default function Searchresult() {
                     </p>
 
                     {/* add to cart button */}
-                    <div className="w-full flex flex-col items-center justify-center">
+                    <div className="w-full flex flex-col items-center justify-center mb-2">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           handleAddToCart(item);
                         }}
-                        className="text-sm py-1 px-3 border border-gray-300 rounded-sm cursor-pointer font-medium capitalize bg-gray-100 hover:bg-gray-300 transition-colors duration-300"
+                        className="add_to_cart_btn"
                       >
-                        add to cart
+                        <span>add to cart</span>
+                        <span className="shop_btn_icon">
+                          <FaShoppingCart />
+                        </span>
                       </button>
                       {successProductId === item._id && (
                         <p className="text-green-600 text-xs mt-1">
