@@ -5,7 +5,7 @@ import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
 import { IoCart } from "react-icons/io5";
-import { BsFire } from "react-icons/bs";
+import { BsCartFill, BsFire } from "react-icons/bs";
 import { LuPackagePlus } from "react-icons/lu";
 import HeroCarousel from "./HeroCarousel";
 import { useAppContext } from "../context/AppContext";
@@ -20,7 +20,7 @@ const reggaeOne = Reggae_One({
 });
 
 export default function Hero({ openMenu }) {
-  const { search, setSearch, handleSearch, cart } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart } = useAppContext();
 
   const dropdownRef = useRef(null);
 
@@ -54,6 +54,12 @@ export default function Hero({ openMenu }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const uniqueCategories = [
+  ...new Map(
+    categories.map((cat) => [cat.mainCategory, cat])
+  ).values(),
+];
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B]">
@@ -90,8 +96,8 @@ export default function Hero({ openMenu }) {
           </div>
 
           {/* menu search bar account cart */}
-          <div className="w-full max-w-[900px] flex flex-col-reverse sm:flex-col-reverse md:flex-row items-center justify-center gap-5 px-5 sm:px-16 md:px-5">
-            <div className="w-full flex items-center justify-between gap-5">
+          <div className="w-full max-w-[900px] flex items-center justify-between gap-5 px-5 sm:px-16 md:px-5">
+            <div className="w-fit sm:w-full md:w-full flex items-center justify-between gap-2.5">
               <div
                 className="font-semibold text-4xl cursor-pointer"
                 onClick={openMenu}
@@ -113,7 +119,7 @@ export default function Hero({ openMenu }) {
                   {/* Dropdown */}
                   {open && (
                     <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50">
-                      {categories.map((cat) => (
+                      {uniqueCategories.map((cat) => (
                         <Link
                         className="w-full"
                           key={cat._id}
@@ -140,7 +146,7 @@ export default function Hero({ openMenu }) {
               {/* Search form */}
               <form
                 onSubmit={handleSearch}
-                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+                className="w-full overflow-hidden items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] hidden sm:flex md:flex"
               >
                 <input
                   type="search"
@@ -158,35 +164,57 @@ export default function Hero({ openMenu }) {
             </div>
 
             {/* Account + Cart */}
-            <div className="w-full sm:w-full md:w-fit flex items-center justify-between gap-5">
-              <Link href="/profile">
+            <div className="w-fit flex items-center justify-end gap-2.5">
+
+              {/* profile */}
+              <Link href={user ? "/profile" : "/login"}>
                 <div
                   // onClick={handleAccountClick}
-                  className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
+                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
                 >
-                  <p className="capitalize">account</p> <FaUser />
+                  <p className="capitalize hidden sm:block">{user ? "profile" : "login"}</p> <span className="relative"> <FaUser size={28} /></span>
                 </div>
               </Link>
 
+              {/* cart */}
               <Link href="/cart">
                 <div className="flex items-center gap-1 text-base relative">
-                  <IoCart />
+                  <BsCartFill size={32} />
 
                   {cart.length > 0 ? (
-                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
+                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-3 font-medium">
                       {cart.length}
                     </span>
                   ) : (
-                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-2 font-bold">
+                    <span className="text-[#FFFFFF] rounded-full universal absolute top-0.5 left-3 font-medium">
                       0
                     </span>
                   )}
-                  <p className="uppercase font-medium flex items-center gap-1 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
-                    cart
-                  </p>
                 </div>
               </Link>
+
             </div>
+          </div>
+
+          {/* mobile search bar */}
+          <div className="block sm:hidden md:hidden w-full px-5 mt-3">
+            <form
+                onSubmit={handleSearch}
+                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+              >
+                <input
+                  type="search"
+                  placeholder="Search products..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full py-[3px] px-2 outline-0"
+                />
+                <div className="px-2 bg-[#2B2A29] py-1 text-[#ffffff]">
+                  <button type="submit">
+                    <FaSearch />
+                  </button>
+                </div>
+              </form>
           </div>
           
           {/* slider images and text */}

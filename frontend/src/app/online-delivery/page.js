@@ -1,12 +1,12 @@
 export default function Page() {
   return (
-    <main className="text-gray-800 mt-18">
+    <main className="text-gray-800 mt-20">
       <section className="max-w-5xl mx-auto px-4 py-4 mb-5">
         <div className="bg-white rounded-2xl shadow-sm p-5 md:p-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Online Delivery Policy
           </h1>
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="text-sm text-gray-500 mb-5">
             Last Updated: {new Date().toLocaleDateString()}
           </p>
 

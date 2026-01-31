@@ -3,7 +3,8 @@
 import { useAppContext } from "@/src/context/AppContext";
 import Image from "next/image";
 import Link from "next/link";
-import { FaTrash } from "react-icons/fa";
+import { FaCartArrowDown, FaMinus, FaPlus, FaTrash } from "react-icons/fa";
+import { GiShoppingBag } from "react-icons/gi";
 
 export default function CartPage() {
   const { cart, user, updateQuantity, removeFromCart } = useAppContext();
@@ -12,7 +13,7 @@ export default function CartPage() {
 
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.offerPrice * item.quantity,
-    0
+    0,
   );
 
   // const step = user?.role === "reseller" ? 50 : 1;
@@ -35,13 +36,16 @@ export default function CartPage() {
             height={500}
             className="object-contain max-w-[300px]"
           />
-          <p className="text-xl font-bold text-[#931905] capitalize">Opps!</p>
+          <p className="text-xl font-bold text-[#931905] capitalize">Oops!</p>
           <p className="text-center text-gray-500 my-5">
             Your shopping cart is empty!
           </p>
           <Link href="/">
-            <button className="bg-[#931905] py-1 px-5 rounded text-white">
-              Shop now
+            <button className="buy_btn">
+              <span>Shop now</span>
+              <span className="text-sm shop_btn_icon">
+                <GiShoppingBag />
+              </span>
             </button>
           </Link>
         </div>
@@ -54,16 +58,16 @@ export default function CartPage() {
   ===================== */
   return (
     <div className="w-full h-full universal">
-      <div className="fixed_width p-3 min-h-screen mt-14">
+      <div className="fixed_width p-3 min-h-screen mt-16">
         <div className="w-full overflow-x-auto py-5">
           <table className="w-full border-collapse">
             <thead>
               <tr className="text-left">
-                <th className="p-2 bg-[#dddddd]">Image</th>
-                <th className="p-2 bg-[#dddddd]">Product</th>
-                <th className="p-2 bg-[#dddddd]">Quantity</th>
-                <th className="p-2 bg-[#dddddd]">Price</th>
-                <th className="p-2 bg-[#dddddd] text-end">Cancel</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">Image</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">Product</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">Quantity</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">Price</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300 text-end">Cancel</th>
               </tr>
             </thead>
 
@@ -82,7 +86,7 @@ export default function CartPage() {
                   {/* NAME */}
                   <td className="px-2">
                     <h3 className="font-medium capitalize">{item.name}</h3>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-2">
                       <div className="w-full flex items-center gap-1">
                         {item.colors && item.colors.length > 0 ? (
                           item.colors.map((c, i) => (
@@ -98,7 +102,6 @@ export default function CartPage() {
                           </span>
                         )}
                       </div>
-                      
                     </div>
                   </td>
 
@@ -111,13 +114,13 @@ export default function CartPage() {
                             item._id,
                             Math.max(
                               item.quantity - getStep(item),
-                              getMin(item)
-                            )
+                              getMin(item),
+                            ),
                           )
                         }
-                        className="px-2 bg-gray-200 rounded text-xl"
+                        className="px-2 bg-gray-200 rounded text-xs py-1.5"
                       >
-                        -
+                        <FaMinus />
                       </button>
 
                       <span className="font-semibold px-3">
@@ -128,12 +131,12 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(
                             item._id,
-                            item.quantity + getStep(item)
+                            item.quantity + getStep(item),
                           )
                         }
-                        className="px-2 bg-gray-200 rounded text-xl"
+                        className="px-2 bg-gray-200 rounded text-xs py-1.5"
                       >
-                        +
+                        <FaPlus />
                       </button>
                     </div>
                   </td>
@@ -142,7 +145,7 @@ export default function CartPage() {
                   <td className="px-2 font-semibold">
                     <span className="taka">৳-</span>
                     {Number(item.offerPrice * item.quantity).toLocaleString(
-                      "en-IN"
+                      "en-IN",
                     )}
                     /=
                   </td>
@@ -170,12 +173,19 @@ export default function CartPage() {
           </div>
 
           {/* ACTIONS */}
-          <div className="flex justify-between mt-10">
+          <div className="flex justify-between mt-7">
             <Link href="/">
-              <button className="buy_btn">Continue</button>
+              <button className="buy_btn">
+                
+                              <span>Shop More</span>
+                              <span className="text-sm shop_btn_icon"><FaCartArrowDown /></span>
+              </button>
             </Link>
             <Link href="/checkout">
-              <button className="buy_btn">Checkout</button>
+              <button className="buy_btn">                
+              <span>Purchase</span>
+              <span className="text-sm shop_btn_icon"><GiShoppingBag /></span>
+              </button>
             </Link>
           </div>
         </div>

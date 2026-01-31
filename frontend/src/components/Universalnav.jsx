@@ -16,7 +16,7 @@ const reggaeOne = Reggae_One({
 });
 
 export default function Universalnav({ openMenu, fixedOnTop }) {
-  const { search, setSearch, handleSearch, cart } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart } = useAppContext();
   const [menuData, setMenuData] = useState({});
 
   useEffect(() => {
@@ -94,9 +94,9 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
             </div>
 
             <div className="w-full max-w-fit md:w-fit flex items-center justify-between gap-2.5 md:gap-5">
-              <Link href="/profile">
+              <Link href={user ? "/profile" : "/login"}>
                 <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] text-base cursor-pointer">
-                  <p className="capitalize hidden md:block">account</p>{" "}
+                  <p className="capitalize hidden md:block">{user ? "profile" : "login"}</p>{" "}
                   <FaUser />
                 </div>
               </Link>

@@ -75,10 +75,15 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <h1 className="font-medium text-[12px] capitalize">welcome!</h1>
-              <h1 className="text-xl font-semibold capitalize hidden sm:block">
+              <h1 className="text-xl font-semibold capitalize">
                 {user?.fullName || user?.resellerName}
               </h1>
+              <p className="text-xs text-gray-500">
+                {user?.email}
+              </p>
+              <p className="text-xs text-gray-500">
+                {user?.phone}
+              </p>
             </div>
           </div>
 

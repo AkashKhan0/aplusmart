@@ -25,15 +25,11 @@ body {
 
 .top_bg_nav {
   --p: 30px;
-  height: 50px;
+  height: 40px;
   aspect-ratio: 3/2;
   clip-path: polygon(var(--p) 100%, calc(100% - var(--p)) 100%, 100% 0, 0 0);
 }
-@media (max-width: 768px) {
-  .category_btn {
-    display: none;
-  }
-}
+
 @media (max-width: 200) {
   .top_nav_bar {
     display: none;
@@ -215,7 +211,7 @@ input {
   cursor: pointer;
   transition: all 0.3s ease;
   background-color: #ffffff;
-  min-height: 120px;
+  min-height: 80px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   transition:
     box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
@@ -240,7 +236,7 @@ input {
 .features_p {
   text-align: center;
   margin-top: 5px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   text-transform: capitalize;
   line-height: 15px;
@@ -327,12 +323,8 @@ label {
 
 .points {
   border: #a6a6a63f 1px solid;
-  padding: 4px 10px;
+  padding: 5px;
   border-radius: 5px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  justify-content: start;
   width: 100%;
   background-color: #f1f1f1;
 
@@ -355,19 +347,23 @@ label {
 }
 
 .point_icon {
-  font-size: 30px;
+  font-size: 32px;
   color: #971900;
-  border: 1px solid #971900;
+  border: 1px solid #9719002f;
   border-radius: 100%;
-  padding: 3px;
+  padding: 4px;
 }
 .point_h1 {
   font-size: 14px;
   font-weight: 600;
+  text-align: center;
+  width: fit-content;
 }
 .point_p {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
+  text-align: center;
+  width: fit-content;
 }
 
 @keyframes fadeIn {
@@ -417,4 +413,27 @@ label {
   100% {
     background-position: 100% 0;
   }
+}
+
+@keyframes supportHint {
+  0% {
+    opacity: 0;
+    transform: translateX(10px) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10px) scale(0.6);
+  }
+}
+
+.animate-supportHint {
+  animation: supportHint 2s ease-in-out forwards;
 }

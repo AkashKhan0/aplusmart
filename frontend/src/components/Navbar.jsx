@@ -44,7 +44,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
   const sidebarClass = isOpen ? "translate-x-0" : "-translate-x-full";
 
   const uniqueCategories = [
-  ...new Map(categories.map(cat => [cat.mainCategory, cat])).values(),
+  ...new Map(categories.map(cat => [cat.subCategory, cat])).values(),
 ];
 
   return (
@@ -87,13 +87,13 @@ export default function Navbar({ isOpen, setIsOpen }) {
               >
                 {/* Full page reload link */}
                 <a
-                  href={`/search?mainCategory=${encodeURIComponent(
-                    cat.mainCategory
+                  href={`/search?subCategory=${encodeURIComponent(
+                    cat.subCategory
                   )}`}
                   onClick={() => setIsOpen(false)}
-                  className="hover:text-[#8d8d8d] transition-colors cursor-pointer block py-1"
+                  className="hover:text-[#8d8d8d] transition-colors cursor-pointer block py-0.5"
                 >
-                  {cat.mainCategory}
+                  {cat.subCategory}
                 </a>
               </li>
             ))}

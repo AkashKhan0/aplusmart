@@ -9,6 +9,7 @@ import { FaUser, FaWhatsapp } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
 import { BiSupport } from "react-icons/bi";
 
+
 const reggaeOne = Reggae_One({
   subsets: ["latin"],
   weight: "400",
@@ -27,6 +28,7 @@ export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [showButtons, setShowButtons] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
   const router = useRouter();
   const fullText = "How can I assist you?";
@@ -39,34 +41,69 @@ export default function ChatWidget() {
   /* Typing effect */
   useEffect(() => {
     if (!open) return;
-
-    setTypedText("");
     setShowButtons(false);
 
     let i = 0;
     const typingInterval = setInterval(() => {
-      setTypedText((prev) => prev + fullText.charAt(i));
-      i++;
-      if (i === fullText.length) {
-        clearInterval(typingInterval);
-        setTimeout(() => setShowButtons(true), 400);
-      }
-    }, 45);
+    i++;
+    setTypedText(fullText.slice(0, i));
+
+    if (i === fullText.length) {
+      clearInterval(typingInterval);
+      setTimeout(() => setShowButtons(true), 400);
+    }
+  }, 45);
 
     return () => clearInterval(typingInterval);
   }, [open]);
 
+  useEffect(() => {
+    if (open) {
+      setShowHint(false);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setShowHint(true);
+      setTimeout(() => {
+        setShowHint(false);
+      }, 5000); // visible time
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [open]);
+
   return (
     <>
-      {/* Floating Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-3 right-3 z-50 bg-[#971900] hover:bg-[#590000]
-        transition-all duration-300 text-white w-10 h-10 flex items-center
-        justify-center rounded-full shadow-lg cursor-pointer"
-      >
-        <BiSupport size={26} />
-      </button>
+
+    <div className="fixed bottom-3 right-3 z-50">
+      {showHint && !open && (
+          <div
+            className="absolute right-12 top-1/2 -translate-y-1/2
+            bg-[#2b2a29] text-white text-base px-3 pb-0.5
+            rounded-sm shadow-lg whitespace-nowrap
+            origin-right animate-supportHint capitalize"
+          >
+            Message us!
+            {/* bubble arrow */}
+            <span
+              className="absolute -right-2 top-1/2 -translate-y-1/2
+              w-0 h-0 border-t-6 border-t-transparent
+              border-b-6 border-b-transparent
+              border-l-8 border-l-[#2b2a29]"
+            />
+          </div>
+        )}
+
+        <button
+          onClick={() => setOpen(true)}
+          className="bg-[#971900] hover:bg-[#590000]
+          transition-all duration-300 text-white
+          w-10 h-10 flex items-center justify-center
+          rounded-full shadow-lg cursor-pointer relative"
+        >
+          <BiSupport size={26} />
+        </button>
+    </div>
 
       {/* Chat Box */}
       <div
@@ -86,7 +123,7 @@ export default function ChatWidget() {
           </h1>
           <button
             onClick={() => setOpen(false)}
-            className="hover:text-[#971900] transition"
+            className="hover:text-[#971900] transition cursor-pointer"
           >
             <GiCrossMark />
           </button>
@@ -101,7 +138,7 @@ export default function ChatWidget() {
             </span>
 
             <div className="relative bg-gray-600 text-white py-1 px-3
-            rounded-r-lg rounded-t-lg w-fit max-w-[80%]">
+            rounded-r-lg rounded-t-lg w-fit max-w-[80%] text-base">
               {typedText}
               <span className="absolute -left-1.5 bottom-1 w-0 h-0
               border-t-6 border-t-transparent border-b-6 border-b-transparent

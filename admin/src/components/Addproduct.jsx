@@ -225,9 +225,9 @@ export default function Addproduct() {
         </div>
 
         {/* Category */}
-        <div className="flex gap-2.5 mb-2">
+        <div className="flex flex-col sm:flex-row md:flex-row items-center gap-2.5 mb-2">
           <select
-            className="py-1 px-3"
+            className="w-full sm:w-[50%] py-1 px-3"
             value={productData.mainCategory}
             onChange={(e) =>
               setProductData((prev) => ({
@@ -236,7 +236,7 @@ export default function Addproduct() {
               }))
             }
           >
-            <option value="">Select Main Category</option>
+            <option value="" className="w-full">Select Main Category</option>
             {mainCategories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -245,7 +245,7 @@ export default function Addproduct() {
           </select>
 
           <select
-            className="py-1 px-3"
+            className="w-full sm:w-[50%] py-1 px-3"
             value={productData.subCategory}
             onChange={(e) =>
               setProductData((prev) => ({
@@ -254,7 +254,7 @@ export default function Addproduct() {
               }))
             }
           >
-            <option value="">Select Sub Category</option>
+            <option value="" className="w-full">Select Sub Category</option>
             {subCategories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -266,8 +266,8 @@ export default function Addproduct() {
         {/* offer date setup */}
         <div className="w-full">
           {productData.mainCategory === "offer" && (
-            <div className="w-full flex items-center gap-2 my-2">
-              <div className="w-full">
+            <div className="w-full flex  flex-col sm:flex-row md:flex-row items-center gap-2 my-2">
+              <div className="w-full sm:w-[50%]">
                 <label className="block mb-1">Offer Start Date:</label>
                 <input
                   type="date"
@@ -281,7 +281,7 @@ export default function Addproduct() {
                   className="w-full py-1 px-2 border rounded-md"
                 />
               </div>
-              <div className="w-full">
+              <div className="w-full sm:w-[50%]">
                 <label className="block mb-1">Offer End Date:</label>
                 <input
                   type="date"
@@ -455,7 +455,7 @@ export default function Addproduct() {
               onChange={(e) =>
                 setShortListInput((prev) => ({ ...prev, name: e.target.value }))
               }
-              className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
             />
             <input
               type="text"
@@ -467,7 +467,7 @@ export default function Addproduct() {
                   value: e.target.value,
                 }))
               }
-              className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
             />
             <button
               type="button"
@@ -521,7 +521,7 @@ export default function Addproduct() {
                     listInput: { ...prev.listInput, name: e.target.value },
                   }))
                 }
-                className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
               />
               <input
                 type="text"
@@ -533,7 +533,7 @@ export default function Addproduct() {
                     listInput: { ...prev.listInput, value: e.target.value },
                   }))
                 }
-                className="py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+                className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
               />
               <button
                 type="button"

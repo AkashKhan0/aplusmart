@@ -48,16 +48,18 @@ export default function UserList() {
   }, []);
 
   return (
-    <div className="px-2">
+    <div className="">
       <h1 className="text-2xl font-semibold mb-4">Users List</h1>
 
-      <table className="w-full border">
+      <table className="w-full border text-sm">
         <thead>
           <tr className="border text-start">
             <th className="user_th_td">Name</th>
             <th className="user_th_td">Email</th>
             <th className="user_th_td">Phone</th>
             <th className="user_th_td">Role</th>
+            <th className="user_th_td">Shop Name</th>
+            <th className="user_th_td">Shop Location</th>
             <th className="user_th_td">Action</th>
           </tr>
         </thead>
@@ -69,6 +71,8 @@ export default function UserList() {
               <td className="user_th_td">{u.email}</td>
               <td className="user_th_td">{u.phone}</td>
               <td className="user_th_td capitalize">{u.role}</td>
+              <td className="user_th_td capitalize">{u.shopName}</td>
+              <td className="user_th_td capitalize">{u.location}</td>
               <td className="text-center border border-[#c2c2c2] text-lg">
                 <button
                   onClick={() => deleteUser(u._id)}

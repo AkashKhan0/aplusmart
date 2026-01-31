@@ -365,11 +365,16 @@ export default function Singleproduct() {
                 </div>
 
                 <button
-                  onClick={handleBuyNow}
-                  disabled={!user}
-                  className={`buy_btn uppercase ${
-                    !user ? "opacity-20 cursor-not-allowed" : ""
-                  }`}
+                  onClick={() => {
+                    if (!user) {
+                      setMessage("Please login first!");
+                      setMessageType("error");
+                      setTimeout(() => setMessage(""), 2000);
+                      return;
+                    }
+                    handleBuyNow();
+                  }}
+                  className="buy_btn uppercase"
                 >
                   <span className="text-sm">Buy Now</span>
                   <span className="text-sm shop_btn_icon">
@@ -443,7 +448,9 @@ export default function Singleproduct() {
                         onClick={() => setReviewModalOpen(true)}
                       >
                         <span>Review Us</span>
-              <span className="text-sm shop_btn_icon"><FaPenNib /></span>
+                        <span className="text-sm shop_btn_icon">
+                          <FaPenNib />
+                        </span>
                       </button>
                     </div>
                   )}
