@@ -81,7 +81,7 @@ export default function HeroCarousel() {
       {/* Prev Button */}
       <button
         onClick={prevSlide}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronLeft />
       </button>
@@ -89,7 +89,7 @@ export default function HeroCarousel() {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronRight />
       </button>

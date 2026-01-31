@@ -99,7 +99,7 @@ export default function Page() {
   // ---------------- UI ----------------
   return (
     <div className="w-full universal min-h-screen p-5 mt-10">
-      <div className="fixed_width p-5 universal">
+      <div className="fixed_width universal">
         <div className="w-full max-w-[500px] p-5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] rounded-sm flex flex-col gap-5">
           <h1 className="text-2xl font-semibold">Account Login</h1>
 
@@ -170,7 +170,7 @@ export default function Page() {
             </div>
 
             {/* Register */}
-            <div className="flex items-center justify-center gap-1.5">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
               <p>Don't have an account?</p>
               <Link
                 href="/signup"

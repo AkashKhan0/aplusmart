@@ -11,7 +11,7 @@ export default function SignupPage() {
 
   return (
     <div className="w-full universal min-h-screen p-5 mt-16">
-      <div className="fixed_width p-5 universal">
+      <div className="fixed_width universal">
         <div className="max-w-[500px] w-full p-5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] rounded-sm flex flex-col gap-2">
           <h1 className="capitalize text-2xl font-semibold">
             Register Account
@@ -153,7 +153,7 @@ export default function SignupPage() {
 
             </button>
 
-            <div className="flex items-center justify-center gap-1.5">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
               <p>Already have an account?</p>
               <Link href="/login" className="text-blue-600 font-semibold">
                 Please Login...
