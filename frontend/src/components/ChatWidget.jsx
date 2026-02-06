@@ -9,6 +9,11 @@ import { FaUser, FaWhatsapp } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
 import { BiSupport } from "react-icons/bi";
 
+const supportPeople = [
+  { name: "Preety", image: "/images/girl.png" },
+  { name: "Naznin", image: "/images/girl1.png" },
+  { name: "Mitu", image: "/images/girl2.jpg" },
+];
 
 const reggaeOne = Reggae_One({
   subsets: ["latin"],
@@ -24,11 +29,14 @@ const openMessenger = () => {
   }, 800);
 };
 
+const startDate = new Date("2026-01-01T00:00:00");
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [showButtons, setShowButtons] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [currentUser, setCurrentUser] = useState(supportPeople[0]);
 
   const router = useRouter();
   const fullText = "How can I assist you?";
@@ -45,18 +53,19 @@ export default function ChatWidget() {
 
     let i = 0;
     const typingInterval = setInterval(() => {
-    i++;
-    setTypedText(fullText.slice(0, i));
+      i++;
+      setTypedText(fullText.slice(0, i));
 
-    if (i === fullText.length) {
-      clearInterval(typingInterval);
-      setTimeout(() => setShowButtons(true), 400);
-    }
-  }, 45);
+      if (i === fullText.length) {
+        clearInterval(typingInterval);
+        setTimeout(() => setShowButtons(true), 400);
+      }
+    }, 45);
 
     return () => clearInterval(typingInterval);
   }, [open]);
 
+  // Support Hint Effect
   useEffect(() => {
     if (open) {
       setShowHint(false);
@@ -67,26 +76,54 @@ export default function ChatWidget() {
       setShowHint(true);
       setTimeout(() => {
         setShowHint(false);
-      }, 5000); // visible time
+      }, 10000); // visible time
     }, 6000);
     return () => clearInterval(interval);
   }, [open]);
 
+  // Change Support Person every 7 hours
+  useEffect(() => {
+    const calculateUser = () => {
+      const now = new Date();
+      const hour = now.getHours(); // 0-23
+      const daysSinceStart = Math.floor(
+        (now - startDate) / (1000 * 60 * 60 * 24)
+      ); // total days
+      const block = Math.floor(daysSinceStart / 10); // current 10-day block
+      const shiftIndex = Math.floor(hour / 8); // 0-2
+      const userIndex = (shiftIndex + block) % supportPeople.length;
+      setCurrentUser(supportPeople[userIndex]);
+    };
+
+    calculateUser();
+
+    // Optional: check every hour to update automatically if someone keeps the page open
+    const timer = setInterval(calculateUser, 1000 * 60 * 60); // every hour
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
-
-    <div className="fixed bottom-3 right-3 z-50">
-      {showHint && !open && (
+      <div className="fixed bottom-15 sm:bottom-3 right-3 z-50">
+        {showHint && !open && (
           <div
-            className="absolute right-12 top-1/2 -translate-y-1/2
-            bg-[#2b2a29] text-white text-base px-3 pb-0.5
-            rounded-sm shadow-lg whitespace-nowrap
+            className="absolute right-17 top-1/2 -translate-y-1/2
             origin-right animate-supportHint capitalize"
           >
-            Message us!
+            <div className="w-full max-w-fit flex items-center justify-center gap-1.5 shadow-lg whitespace-nowrap">
+              <img
+                src={currentUser.image}
+                alt={currentUser.name}
+                className="w-10 h-10 rounded-full"
+              />
+              <div className="flex flex-col gap-0 bg-[#2b2a29] text-white text-xs px-3 py-1 rounded-sm">
+                <span>Hi! I'm {currentUser.name}</span>
+                <span>How can I assist you?</span>
+              </div>
+            </div>
             {/* bubble arrow */}
             <span
-              className="absolute -right-2 top-1/2 -translate-y-1/2
+              className="absolute -right-7 top-1/2 -translate-y-1/2
               w-0 h-0 border-t-6 border-t-transparent
               border-b-6 border-b-transparent
               border-l-8 border-l-[#2b2a29]"
@@ -103,7 +140,7 @@ export default function ChatWidget() {
         >
           <BiSupport size={26} />
         </button>
-    </div>
+      </div>
 
       {/* Chat Box */}
       <div
@@ -116,11 +153,11 @@ export default function ChatWidget() {
         }`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center bg-[#2b2a29]
-        text-white px-4 py-2 rounded-t-xl">
-          <h1 className={`${reggaeOne.className} text-lg`}>
-            A Plus Mart BD
-          </h1>
+        <div
+          className="flex justify-between items-center bg-[#2b2a29]
+        text-white px-4 py-2 rounded-t-xl"
+        >
+          <h1 className={`${reggaeOne.className} text-lg`}>A Plus Mart BD</h1>
           <button
             onClick={() => setOpen(false)}
             className="hover:text-[#971900] transition cursor-pointer"
@@ -132,17 +169,23 @@ export default function ChatWidget() {
         {/* Body */}
         <div className="p-4 space-y-2 text-sm">
           {/* Auto Message */}
-          <div className="flex gap-2.5">
-            <span className="text-[#971900] border border-[#971900] rounded-full p-1">
-              <FaUser size={22} />
-            </span>
+          <div className="flex items-center gap-2">
+            <img
+              src={currentUser.image}
+              alt={currentUser.name}
+              className="w-10 h-10 rounded-full"
+            />
 
-            <div className="relative bg-gray-600 text-white py-1 px-3
-            rounded-r-lg rounded-t-lg w-fit max-w-[80%] text-base">
+            <div
+              className="relative bg-gray-600 text-white px-3 h-7
+            rounded-r-lg rounded-t-lg w-fit max-w-[80%] text-base universal"
+            >
               {typedText}
-              <span className="absolute -left-1.5 bottom-1 w-0 h-0
+              <span
+                className="absolute -left-1.5 bottom-1 w-0 h-0
               border-t-6 border-t-transparent border-b-6 border-b-transparent
-              border-r-6 border-r-gray-600"></span>
+              border-r-6 border-r-gray-600"
+              ></span>
             </div>
           </div>
 

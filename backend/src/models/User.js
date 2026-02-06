@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema(
     },
 
     // COMMON FIELDS
-    email: { type: String, required: true, unique: true, sparse: true, },
-    phone: { type: String, required: true, unique: true, sparse: true, },
+    email: { type: String, required: true, unique: true, sparse: true },
+    phone: { type: String, required: true, unique: true, sparse: true },
     password: { type: String, required: true },
 
     // CUSTOMER FIELDS
@@ -22,15 +22,20 @@ const userSchema = new mongoose.Schema(
     location: { type: String },
     resellerName: { type: String },
     pointsHistory: [
-  {
-    points: { type: Number, required: true },
-    createdAt: { type: Date, default: Date.now }
-  }
-]
-
+      {
+        points: { type: Number, required: true },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    // 🔥 PASSWORD RESET FIELDS (REQUIRED)
+    resetToken: {
+      type: String,
+    },
+    resetTokenExpiry: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
-
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

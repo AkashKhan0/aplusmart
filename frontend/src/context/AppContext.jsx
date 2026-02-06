@@ -263,6 +263,7 @@ export const AppProvider = ({ children }) => {
       credentials: "include",
     });
   };
+  
   // ---------------- Greeting ----------------
   useEffect(() => {
     const updateGreeting = () => {

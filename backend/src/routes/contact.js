@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
       port: 465,
       secure: true, // true for 465
       auth: {
-        user: process.env.SMTP_EMAIL, // aplusadvertisinglimited@gmail.com
+        user: process.env.SMTP_EMAIL, // aplusmartbd247@gmail.com
         pass: process.env.SMTP_PASS,  // App Password
       },
     });
@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     // Send email
     await transporter.sendMail({
       from: `"A Plus Mart BD" <${process.env.SMTP_EMAIL}>`,
-      to: "aplusadvertisinglimited@gmail.com", // where form data will be sent
+      to: "aplusmartbd247@gmail.com", // where form data will be sent
       subject: `Contact Form: ${subject}`,
       html: `
         <h3>New Contact Message</h3>

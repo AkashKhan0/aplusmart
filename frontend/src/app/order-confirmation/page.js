@@ -118,6 +118,9 @@ export default function OrderConfirmation() {
                 <p>
                   <strong>Comment:</strong> {order.billing.comment}
                 </p>
+                <p>
+                  <strong>Points:</strong> {order.points}
+                </p>
               </div>
             )}
 

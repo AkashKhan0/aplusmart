@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Orders({ onOrdersFetch }) {
+  const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,6 +55,7 @@ export default function Orders({ onOrdersFetch }) {
               <th className="px-4 py-2 text-left">Order Item</th>
               <th className="px-4 py-2 text-left">Order Status</th>
               <th className="px-4 py-2 text-left">Payment Status</th>
+              <th className="px-4 py-2 text-left">Details</th>
               <th className="px-4 py-2 text-right">Total Amount</th>
             </tr>
           </thead>
@@ -106,6 +109,18 @@ export default function Orders({ onOrdersFetch }) {
                     {order.paymentStatus}
                   </span>
                 </td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() =>
+                      router.push(
+                        `/order-confirmation?orderId=${order.orderId}`,
+                      )
+                    }
+                    className="px-2 py-0.5 bg-[#2b2a29] text-white rounded cursor-pointer hover:bg-[#590000] transition text-sm"
+                  >
+                    Order Details
+                  </button>
+                </td>
                 <td className="px-4 py-2 text-right font-semibold">
                   <span className="taka">৳- </span>
                   {Number(order.grandTotal).toLocaleString("en-IN")}/=
@@ -148,6 +163,20 @@ export default function Orders({ onOrdersFetch }) {
                 >
                   {order.paymentStatus}
                 </span>
+              </div>
+
+              <div className="flex justify-between mt-1 text-sm">
+                <span>Order Details:</span>
+                <button
+                    onClick={() =>
+                      router.push(
+                        `/order-confirmation?orderId=${order.orderId}`,
+                      )
+                    }
+                    className="px-2 py-0.5 bg-[#2b2a29] text-white rounded cursor-pointer hover:bg-[#590000] transition text-sm"
+                  >
+                    Order Details
+                  </button>
               </div>
 
               <div className="flex justify-between mt-2 border-t border-t-gray-300 pt-2">

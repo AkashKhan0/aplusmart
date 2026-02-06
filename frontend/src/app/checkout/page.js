@@ -208,6 +208,7 @@ export default function CheckoutPage() {
           paymentMethod,
           usedPoints: appliedPoints,
           pointsDiscount,
+          earnedPoints: totalEarnedPoints,
           grandTotal: finalTotalAmount,
         }),
       });
@@ -506,19 +507,19 @@ export default function CheckoutPage() {
             </div>
 
             {usePoints && (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
                 <input
                   type="number"
                   min={0}
                   max={maxUsablePoints}
-                  value={pointsToUse}
+                  value={pointsToUse === 0 ? "" : pointsToUse}
                   onChange={handlePointsChange}
                   className="checkout_inp w-full"
                   placeholder="Enter points"
                 />
 
                 <p className="text-lg text-green-600">
-                  Discount: <span className="taka">৳ - </span> {pointsDiscount}
+                  Discount: <span className="taka">৳ - </span> {pointsDiscount}/=
                 </p>
 
                 <p className="text-xs text-red-500">

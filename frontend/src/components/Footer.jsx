@@ -45,7 +45,7 @@ const scrollToTop = () => {
 export default function Footer() {
   return (
     <>
-      <div className="w-full h-fit universal_column bg-[#2B2A29] text-[#FFFFFF] py-5">
+      <div className="w-full h-fit universal_column bg-[#2B2A29] text-[#FFFFFF] pt-5 pb-16 sp:mb-0 pd:mb-0">
         <div className="fixed_width h-full px-5">
           <div className="w-full flex flex-col sm:flex-col md:flex-row items-stretch gap-2.5">
             <div className="w-full smw-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
@@ -128,7 +128,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="w-full smw-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
+            <div className="w-full sm:w-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
               <h1 className="ftr_h1">Stay Connected</h1>
               <div className="w-fit text-center sm:text-center md:text-start ftr_span text-sm">
                 <p className="font-medium">A Plus Mart BD</p>
@@ -170,7 +170,7 @@ export default function Footer() {
         <div className="">
           <button
             onClick={scrollToTop}
-            className="scroll-float fixed cursor-pointer bottom-3 left-3 z-50 w-fit flex justify-center text-[#971900] hover:text-[#ffffff] transition-colors duration-300 p-2 bg-[#00000080] rounded-full shadow-lg"
+            className="scroll-float fixed cursor-pointer bottom-15 sm:bottom-3 left-3 z-50 w-fit flex justify-center text-[#971900] hover:text-[#ffffff] transition-colors duration-300 p-2 bg-[#00000080] rounded-full shadow-lg"
             aria-label="Scroll to top"
           >
             <FaChevronUp size={22} />

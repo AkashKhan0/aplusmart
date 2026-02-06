@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import sendEmail from "../utils/sendEmail.js";
 
 // ------------------ SIGNUP ------------------
 export const signup = async (req, res) => {
@@ -100,7 +101,7 @@ export const getProfile = async (req, res) => {
       const now = new Date();
       user.pointsHistory.forEach((p) => {
         const diffDays = (now - new Date(p.createdAt)) / (1000 * 60 * 60 * 24);
-        if (diffDays <= 90) {
+        if (diffDays <= 90 && p.orderStatus !== "cancelled") {
           totalPoints += p.points;
         }
       });
@@ -111,6 +112,7 @@ export const getProfile = async (req, res) => {
       _id: user._id,
       fullName: user.fullName || user.resellerName || user.shopName,
       email: user.email,
+      phone: user.phone,
       role: user.role,
       points: totalPoints,
     });
@@ -143,37 +145,67 @@ export const logoutUser = async (req, res) => {
 // ================= FORGOT PASSWORD =================
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.json({ message: "If email exists, link sent" });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ message: "If email exists, link sent" });
+    }
 
-  const token = crypto.randomBytes(32).toString("hex");
-  user.resetToken = token;
-  user.resetTokenExpiry = Date.now() + 15 * 60 * 1000;
-  await user.save();
+    const token = crypto.randomBytes(32).toString("hex");
 
-  // 👉 এখানে email পাঠাবে (console for now)
-  console.log(
-    `Reset Link: ${process.env.FRONTEND_URL}/reset-password/${token}`
-  );
+    user.resetToken = token;
+    user.resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+    await user.save();
 
-  res.json({ message: "Reset link sent" });
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+    await sendEmail({
+      to: email,
+      subject: "Reset your password",
+      html: `
+        <h3>Password Reset</h3>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetUrl}">${resetUrl}</a>
+        <p>This link will expire in 15 minutes.</p>
+      `,
+    });
+    res.json({ message: "Reset link sent" });
+    console.log("✅ Reset link sent to email", resetUrl);
+  } catch (error) {
+    console.error("❌ Forgot password error:", error);
+    res.status(500).json({ message: "Email sending failed" });
+  }
 };
 
 // ================= RESET PASSWORD =================
 export const resetPassword = async (req, res) => {
-  const { token, password } = req.body;
+  try {
+    const { password } = req.body;
+    const { token } = req.params;
 
-  const user = await User.findOne({
-    resetToken: token,
-    resetTokenExpiry: { $gt: Date.now() },
-  });
+    console.log("🔑 Incoming token:", token);
 
-  if (!user) return res.status(400).json({ error: "Invalid or expired token" });
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: new Date() }, // ✅ Date vs Date
+    });
 
-  user.password = await bcrypt.hash(password, 10);
-  user.resetToken = null;
-  user.resetTokenExpiry = null;
-  await user.save();
+    console.log("👤 User found:", user);
 
-  res.json({ message: "Password updated" });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired token" });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("❌ Reset password error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
 };
+
+

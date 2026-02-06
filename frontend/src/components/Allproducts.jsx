@@ -45,7 +45,6 @@ export default function Allproducts() {
       quantity: 1, // default
       colors: [], // no color selection here
       role: user.role,
-
       hasOffer,
       discountPercent,
       earnedPoints,

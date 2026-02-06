@@ -60,7 +60,7 @@ export default function HeroCarousel() {
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
-        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 py-5">
+        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 pb-5">
           <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
             {current.title}
           </h2>
@@ -70,7 +70,7 @@ export default function HeroCarousel() {
           </p>
 
           <Link href={current.buttonUrl}>
-            <button className="buy_btn">
+            <button className="buy_btn mb-5 sm:mb-0">
               <span>Buy Now</span>
               <span className="text-sm shop_btn_icon"><GiShoppingBag /></span>
             </button>
@@ -81,7 +81,7 @@ export default function HeroCarousel() {
       {/* Prev Button */}
       <button
         onClick={prevSlide}
-        className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute left-[30%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronLeft />
       </button>
@@ -89,7 +89,7 @@ export default function HeroCarousel() {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute right-[30%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronRight />
       </button>

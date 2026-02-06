@@ -24,6 +24,7 @@ export default function ForgotPassword() {
       );
 
       const data = await res.json();
+      console.log("💌 Response received:", data);
       setSuccess(true);
       setMessage(data.message || "Reset link sent");
     } catch {
@@ -34,20 +35,20 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5">
-      <div className="w-full max-w-[400px] shadow p-5">
+      <div className="w-full max-w-[400px] shadow-2xl p-5">
         <h1 className="text-xl font-semibold mb-4">Forgot Password</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="email"
             placeholder="Enter your email"
-            className="border px-3 py-1 outline-none"
+            className="border border-gray-300 rounded-sm px-3 py-1 outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <button className="bg-[#FFCE1B] py-1 font-semibold">
-            Send Reset Link
+            Continue
           </button>
 
           {message && (

@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       paymentMethod,
       grandTotal,
       usedPoints = 0,
-  pointsDiscount = 0,
+      pointsDiscount = 0,
     } = req.body;
 
     if (!cart || cart.length === 0) {
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-  // 🔐 POINTS VALIDATION
+    // 🔐 POINTS VALIDATION
     if (usedPoints > user.points || usedPoints < 0) {
       return res.status(400).json({ error: "Invalid points usage" });
     }
@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
     cart.forEach((item) => {
       if (!item.hasOffer) {
         const productPoint = Math.floor(
-          (item.offerPrice * item.quantity) / 100
+          (item.offerPrice * item.quantity) / 100,
         );
         earnedPoints += Math.min(productPoint, 500);
       }
@@ -78,7 +78,7 @@ router.post("/", async (req, res) => {
       paymentMethod,
       usedPoints,
       pointsDiscount,
-      pointsEarned: earnedPoints,
+      points: earnedPoints,
       grandTotal,
     });
 
@@ -131,7 +131,7 @@ router.get("/my", protectUser, async (req, res) => {
 router.get("/:orderId", async (req, res) => {
   try {
     const order = await Order.findOne({ orderId: req.params.orderId }).populate(
-      "user"
+      "user",
     );
     if (!order) return res.status(404).json({ error: "Order not found" });
     res.status(200).json(order);
@@ -142,16 +142,46 @@ router.get("/:orderId", async (req, res) => {
 
 // UPDATE order status
 router.put("/:id/status", async (req, res) => {
-  const { status } = req.body;
+  try {
+    const { status } = req.body;
 
-  const order = await Order.findByIdAndUpdate(
-    req.params.id,
-    { status },
-    { new: true }
-  );
+    // 1️⃣ Order খুঁজে বের করো
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
 
-  res.json(order);
+    // 2️⃣ যদি cancelled করা হয়
+    if (status === "cancelled" && order.status !== "cancelled") {
+      const user = await User.findById(order.user);
+
+      if (user && order.points > 0) {
+        // user points rollback
+        user.points -= order.points;
+
+        user.pointsHistory.push({
+          orderId: order.orderId,
+          points: -order.points,
+          note: "Order cancelled",
+          date: new Date(),
+        });
+
+        await user.save();
+      }
+      // order points reset
+      order.points = 0;
+    }
+    // 3️⃣ status update (ALWAYS)
+    order.status = status;
+    await order.save();
+
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
+
 
 // UPDATE payment status
 router.put("/:id/payment", async (req, res) => {
@@ -160,16 +190,48 @@ router.put("/:id/payment", async (req, res) => {
   const order = await Order.findByIdAndUpdate(
     req.params.id,
     { paymentStatus },
-    { new: true }
+    { new: true },
   );
-
   res.json(order);
 });
 
 // DELETE order
+// router.delete("/:id", async (req, res) => {
+//   await Order.findByIdAndDelete(req.params.id);
+//   res.json({ message: "Order deleted" });
+// });
+
 router.delete("/:id", async (req, res) => {
-  await Order.findByIdAndDelete(req.params.id);
-  res.json({ message: "Order deleted" });
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // 1️⃣ User fetch
+    const user = await User.findById(order.user);
+    if (user) {
+      // 2️⃣ Rollback points only if order.points > 0
+      if (order.points > 0) {
+        user.points -= order.points;
+      }
+
+      // 3️⃣ Remove this order from pointsHistory
+      user.pointsHistory = user.pointsHistory.filter(
+        (p) => p.orderId !== order.orderId
+      );
+
+      await user.save();
+    }
+
+    // 4️⃣ Delete the order
+    await order.deleteOne();
+
+    res.json({ success: true, message: "Order deleted & points cleaned" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;

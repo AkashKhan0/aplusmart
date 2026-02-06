@@ -63,11 +63,21 @@ export default function CartPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="text-left">
-                <th className="p-2 bg-[#dddddd] border border-gray-300">Image</th>
-                <th className="p-2 bg-[#dddddd] border border-gray-300">Product</th>
-                <th className="p-2 bg-[#dddddd] border border-gray-300">Quantity</th>
-                <th className="p-2 bg-[#dddddd] border border-gray-300">Price</th>
-                <th className="p-2 bg-[#dddddd] border border-gray-300 text-end">Cancel</th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">
+                  Image
+                </th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">
+                  Product
+                </th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">
+                  Quantity
+                </th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300">
+                  Price
+                </th>
+                <th className="p-2 bg-[#dddddd] border border-gray-300 text-end">
+                  Cancel
+                </th>
               </tr>
             </thead>
 
@@ -176,15 +186,18 @@ export default function CartPage() {
           <div className="flex justify-between mt-7">
             <Link href="/">
               <button className="buy_btn">
-                
-                              <span>Shop More</span>
-                              <span className="text-sm shop_btn_icon"><FaCartArrowDown /></span>
+                <span>Shop More</span>
+                <span className="text-sm shop_btn_icon">
+                  <FaCartArrowDown />
+                </span>
               </button>
             </Link>
             <Link href="/checkout">
-              <button className="buy_btn">                
-              <span>Purchase</span>
-              <span className="text-sm shop_btn_icon"><GiShoppingBag /></span>
+              <button className="buy_btn">
+                <span>Purchase</span>
+                <span className="text-sm shop_btn_icon">
+                  <GiShoppingBag />
+                </span>
               </button>
             </Link>
           </div>

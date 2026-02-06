@@ -96,7 +96,7 @@ export default function Hero({ openMenu }) {
           </div>
 
           {/* menu search bar account cart */}
-          <div className="w-full max-w-[900px] flex items-center justify-between gap-5 px-5 sm:px-16 md:px-5">
+          <div className="w-full max-w-[900px] flex items-center justify-between gap-5 px-5 sm:px-10 md:px-5">
             <div className="w-fit sm:w-full md:w-full flex items-center justify-between gap-2.5">
               <div
                 className="font-semibold text-4xl cursor-pointer"
@@ -172,7 +172,7 @@ export default function Hero({ openMenu }) {
                   // onClick={handleAccountClick}
                   className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
                 >
-                  <p className="capitalize hidden sm:block">{user ? "profile" : "login"}</p> <span className="relative"> <FaUser size={28} /></span>
+                  <p className="capitalize hidden sm:block">{user ? "profile" : "login"}</p> <span className="relative"> <FaUser size={24} /></span>
                 </div>
               </Link>
 

@@ -57,7 +57,7 @@ export default function OrderList() {
             [field === "status" ? "status" : "paymentStatus"]: value,
           }),
           credentials: "include",
-        }
+        },
       );
       // Update local state
       setOrders(
@@ -67,8 +67,8 @@ export default function OrderList() {
                 ...order,
                 [field === "status" ? "status" : "paymentStatus"]: value,
               }
-            : order
-        )
+            : order,
+        ),
       );
     } catch (err) {
       console.error(err);
@@ -88,7 +88,7 @@ export default function OrderList() {
             .includes(search.toLowerCase());
 
         const productMatch = order.items.some((item) =>
-          item.name.toLowerCase().includes(search.toLowerCase())
+          item.name.toLowerCase().includes(search.toLowerCase()),
         );
         return orderIdMatch || customerMatch || productMatch;
       })
@@ -187,12 +187,18 @@ export default function OrderList() {
                       Total: <span className="taka_font taka">৳- </span>
                       {Number(order.grandTotal).toLocaleString("en-IN")}/={" "}
                     </p>
+                    <p>
+                      Points: {order.points} <IoMdStar className="inline text-yellow-500" />
+                    </p>
                   </td>
                   <td className="p-2 border text-start">
                     <p>Name: {order.billing.fullName}</p>
                     <p>Address: {order.billing.address}</p>
                     <p>City: {order.billing.city}</p>
-                    <p>Thana: {order.billing.thana} , Dist: {order.billing.district}</p>
+                    <p>
+                      Thana: {order.billing.thana} , Dist:{" "}
+                      {order.billing.district}
+                    </p>
                     <p>Phone: {order.billing.phone}</p>
                     <p>Comment: {order.billing.comment}</p>
                   </td>
