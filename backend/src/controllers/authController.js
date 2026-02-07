@@ -131,12 +131,12 @@ export const logoutUser = async (req, res) => {
     path: "/",
   });
   // 🔥 clear cart cookie
-  // res.clearCookie("cart", {
-  //   httpOnly: true,
-  //   secure: true,
-  //   sameSite: "none",
-  //   path: "/",
-  // });
+  res.clearCookie("cart", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
   res.json({ message: "Logged out" });
 };
 
