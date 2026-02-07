@@ -76,9 +76,10 @@ const districts = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { cart, clearCart, user } = useAppContext();
+  const isCustomer = user?.role === "customer";
 
-  const availablePoints = user?.points || 0;
-  const POINT_VALUE = 5;
+  const availablePoints = isCustomer ? user?.points || 0 : 0;
+  const POINT_VALUE = 1;
 
   const [usePoints, setUsePoints] = useState(false);
   const [pointsToUse, setPointsToUse] = useState(0);
@@ -114,7 +115,7 @@ export default function CheckoutPage() {
 
   // District filter
   const filtered = districts.filter((d) =>
-    d.toLowerCase().includes(search.toLowerCase())
+    d.toLowerCase().includes(search.toLowerCase()),
   );
 
   // Validation
@@ -138,18 +139,25 @@ export default function CheckoutPage() {
   };
 
   /* ---------------- TOTAL PRODUCT PRICE ---------------- */
-  const totalProductPrice = cart.reduce(
-    (sum, item) => sum + item.offerPrice * item.quantity,
-    0
-  );
+  const totalProductPrice = cart.reduce((sum, item) => {
+    const price =
+      user?.role === "reseller"
+        ? Number(item.resellerPrice) || 0
+        : Number(item.offerPrice) || 0;
+    const qty = Number(item.quantity) || 0;
+    return sum + price * qty;
+  }, 0);
 
   /* ---------------- POINTS CALCULATION ---------------- */
-  const maxUsablePoints = Math.min(
-    availablePoints,
-    Math.floor(totalProductPrice / POINT_VALUE)
-  );
+  const maxUsablePoints =
+    user?.role === "customer"
+      ? Math.min(availablePoints, Math.floor(totalProductPrice / POINT_VALUE))
+      : 0;
 
-  const appliedPoints = usePoints ? Math.min(pointsToUse, maxUsablePoints) : 0;
+  const appliedPoints =
+    user?.role === "customer" && usePoints
+      ? Math.min(Number(pointsToUse) || 0, maxUsablePoints)
+      : 0;
 
   const pointsDiscount = appliedPoints * POINT_VALUE;
 
@@ -159,12 +167,17 @@ export default function CheckoutPage() {
     getShippingCharge(selectedDistrict, shippingMethod) -
     pointsDiscount;
 
-  const totalEarnedPoints = cart.reduce((acc, item) => {
-    if (item.hasOffer) return acc;
-    const productPoint = Math.floor((item.offerPrice / 100) * item.quantity);
-    const earnedPoint = Math.min(productPoint, 500);
-    return acc + earnedPoint;
-  }, 0);
+  const totalEarnedPoints =
+    user?.role === "customer"
+      ? cart.reduce((acc, item) => {
+          if (item.hasOffer) return acc;
+          const productPoint = Math.floor(
+            ((Number(item.offerPrice) || 0) / 100) *
+              (Number(item.quantity) || 0),
+          );
+          return acc + Math.min(productPoint, 500);
+        }, 0)
+      : 0;
 
   const handlePointsChange = (e) => {
     let value = Number(e.target.value);
@@ -206,10 +219,10 @@ export default function CheckoutPage() {
           shippingMethod,
           shippingCharge: getShippingCharge(selectedDistrict, shippingMethod),
           paymentMethod,
-          usedPoints: appliedPoints,
-          pointsDiscount,
-          earnedPoints: totalEarnedPoints,
-          grandTotal: finalTotalAmount,
+          usedPoints: Number(appliedPoints) || 0,
+          pointsDiscount: Number(pointsDiscount) || 0,
+          earnedPoints: Number(totalEarnedPoints) || 0,
+          grandTotal: Number(finalTotalAmount) || 0,
         }),
       });
 
@@ -426,9 +439,11 @@ export default function CheckoutPage() {
                     </td>
                     <td className="p-2 border border-[#dddddd]">
                       <span className="taka">৳- </span>{" "}
-                      {Number(item.offerPrice * item.quantity).toLocaleString(
-                        "en-IN"
-                      )}
+                      {Number(
+                        user?.role === "reseller"
+                          ? item.resellerPrice * item.quantity
+                          : item.offerPrice * item.quantity,
+                      ).toLocaleString("en-IN")}
                       /=
                     </td>
                   </tr>
@@ -471,9 +486,11 @@ export default function CheckoutPage() {
                       <span className="taka">৳- </span>
                       {Number(finalTotalAmount).toLocaleString("en-IN")}/=
                     </p>
-                    <span className="flex items-center text-[#931905]">
-                      {totalEarnedPoints} <IoMdStar />
-                    </span>
+                    {user?.role === "customer" && (
+                      <span className="flex items-center text-[#931905]">
+                        {totalEarnedPoints} <IoMdStar />
+                      </span>
+                    )}
                   </th>
                 </tr>
               </thead>
@@ -481,53 +498,56 @@ export default function CheckoutPage() {
           </div>
 
           {/* use points */}
-          <div className="w-full p-3 bg-gray-200 mt-5 rounded">
-            <h2 className="text-lg font-medium mb-2 flex items-center gap-2">
-              Use Reward Points <IoMdStar className="text-[#931905]" />
-            </h2>
+          {isCustomer && (
+            <div className="w-full p-3 bg-gray-200 mt-5 rounded">
+              <h2 className="text-lg font-medium mb-2 flex items-center gap-2">
+                Use Reward Points <IoMdStar className="text-[#931905]" />
+              </h2>
 
-            <p className="text-base mb-2">
-              Available Points:
-              <span className="font-semibold text-[#931905] ml-1">
-                {availablePoints}
-              </span>{" "}
-              (1 Point = {POINT_VALUE} tk)
-            </p>
+              <p className="text-base mb-2">
+                Available Points:
+                <span className="font-semibold text-[#931905] ml-1">
+                  {availablePoints}
+                </span>
+                (1 Point = {POINT_VALUE} tk)
+              </p>
 
-            <div className="flex items-center gap-2 mb-2">
-              <input
-                type="checkbox"
-                checked={usePoints}
-                onChange={(e) => {
-                  setUsePoints(e.target.checked);
-                  if (!e.target.checked) setPointsToUse(0);
-                }}
-              />
-              <span>Use points for this order</span>
-            </div>
-
-            {usePoints && (
-              <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-2">
                 <input
-                  type="number"
-                  min={0}
-                  max={maxUsablePoints}
-                  value={pointsToUse === 0 ? "" : pointsToUse}
-                  onChange={handlePointsChange}
-                  className="checkout_inp w-full"
-                  placeholder="Enter points"
+                  type="checkbox"
+                  checked={usePoints}
+                  onChange={(e) => {
+                    setUsePoints(e.target.checked);
+                    if (!e.target.checked) setPointsToUse(0);
+                  }}
                 />
-
-                <p className="text-lg text-green-600">
-                  Discount: <span className="taka">৳ - </span> {pointsDiscount}/=
-                </p>
-
-                <p className="text-xs text-red-500">
-                  Max usable points: {maxUsablePoints}
-                </p>
+                <span>Use points for this order</span>
               </div>
-            )}
-          </div>
+
+              {usePoints && (
+                <div className="flex flex-col">
+                  <input
+                    type="number"
+                    min={0}
+                    max={maxUsablePoints}
+                    value={pointsToUse === 0 ? "" : pointsToUse}
+                    onChange={handlePointsChange}
+                    className="checkout_inp w-full"
+                    placeholder="Enter points"
+                  />
+
+                  <p className="text-lg text-green-600">
+                    Discount: <span className="taka">৳ - </span>{" "}
+                    {pointsDiscount}/=
+                  </p>
+
+                  <p className="text-xs text-red-500">
+                    Max usable points: {maxUsablePoints}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Payment */}
           <div className="w-full mt-5">
@@ -580,7 +600,6 @@ export default function CheckoutPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
                   Terms and Conditions,
                 </a>
                 <a
@@ -588,16 +607,14 @@ export default function CheckoutPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
-                  Privacy Policy{" "}
-                </a>{" "}
+                  Privacy Policy
+                </a>
                 and
                 <a
                   href="/return-policy"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
                   Refund and Return Policy.
                 </a>
               </p>

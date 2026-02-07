@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppContext } from "@/src/context/AppContext";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaShoppingCart } from "react-icons/fa";
 
 export default function Searchresult() {
   const [q, setQ] = useState(null);
@@ -14,6 +14,8 @@ export default function Searchresult() {
   const [loading, setLoading] = useState(true);
   const { user, addToCart } = useAppContext();
   const [successProductId, setSuccessProductId] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   // ✅ Read query params safely (client-side only)
   useEffect(() => {
@@ -59,9 +61,11 @@ export default function Searchresult() {
   // add to cart handler
   const handleAddToCart = (product) => {
     if (!user) {
-      alert("Please login first");
+      setShowLoginModal(true); // ✅ login popup open
       return;
     }
+
+    const quantity = user.role === "reseller" ? 10 : 1;
 
     const hasOffer =
       product?.offerPrice > 0 &&
@@ -84,15 +88,20 @@ export default function Searchresult() {
       _id: product._id,
       name: product.name,
       images: product.images,
-      offerPrice: product.offerPrice,
-      regularPrice: product.regularPrice,
-      quantity: 1, // default
-      colors: [], // no color selection here
+      quantity,
+      colors: [],
       role: user.role,
-
-      hasOffer,
-      discountPercent,
-      earnedPoints,
+      ...(user.role === "reseller"
+        ? {
+            resellerPrice: product.resellerPrice,
+          }
+        : {
+            offerPrice: product.offerPrice,
+            regularPrice: product.regularPrice,
+            hasOffer,
+            discountPercent,
+            earnedPoints,
+          }),
     };
 
     addToCart(cartItem);
@@ -120,98 +129,223 @@ export default function Searchresult() {
     );
 
   return (
-    <div className="w-full h-fit universal">
-      <div className="fixed_width h-full min-h-screen p-5 mt-20">
-        <h2 className="text-xl font-bold mb-5">
-          Results for:{" "}
-          <span className="text-red-500">
-            {q || mainCategory || subCategory}
-          </span>
-        </h2>
+    <>
+      <div className="w-full h-fit universal">
+        <div className="fixed_width h-full min-h-screen p-5 mt-20">
+          <h2 className="text-xl font-bold mb-5">
+            Results for:{" "}
+            <span className="text-red-500">
+              {q || mainCategory || subCategory}
+            </span>
+          </h2>
 
-        {products.length === 0 ? (
-          <p>No products found!</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
-            {products.map((item) => (
-              <Link key={item._id} href={`/products/${item._id}`}>
-                <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
-                  {/* % OFF */}
-                  {item?.offerPrice > 0 &&
-                  item?.regularPrice > 0 &&
-                  item.offerPrice < item.regularPrice ? (
-                    <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
-                      {Math.round(
-                        ((item.regularPrice - item.offerPrice) /
-                          item.regularPrice) *
-                          100,
-                      )}
-                      % off
-                    </div>
-                  ) : (
-                    item?.offerPrice > 0 && (
-                      <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
-                        Earn Points
-                        <span className="text-[#c9c601] flex items-center">
-                          {Math.min(Math.floor(item.offerPrice / 100), 500)} ⭐
-                        </span>
+          {products.length === 0 ? (
+            <p>No products found!</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+              {products.map((item) => (
+                <Link key={item._id} href={`/products/${item._id}`}>
+                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                    {/* % OFF */}
+                    {user?.role === "customer" &&
+                    (item?.offerPrice > 0 &&
+                    item?.regularPrice > 0 &&
+                    item.offerPrice < item.regularPrice ? (
+                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                        {Math.round(
+                          ((item.regularPrice - item.offerPrice) /
+                            item.regularPrice) *
+                            100,
+                        )}
+                        % off
                       </div>
-                    )
-                  )}
+                    ) : (
+                      item?.offerPrice > 0 && (
+                        <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
+                          Earn Points
+                          <span className="text-[#c9c601] flex items-center">
+                            {Math.min(Math.floor(item.offerPrice / 100), 500)}{" "}
+                            ⭐
+                          </span>
+                        </div>
+                      )
+                    ))}
 
-                  <div className="w-full h-[250px]">
-                    <Image
-                      src={item.images?.[0]}
-                      alt={item.name}
-                      width={500}
-                      height={500}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
+                    <div className="w-full h-[250px]">
+                      <Image
+                        src={item.images?.[0]}
+                        alt={item.name}
+                        width={500}
+                        height={500}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
 
-                  <div className="w-full flex flex-col items-center py-2 gap-1.5">
-                    <h1 className="text-base font-medium text-center capitalize">
-                      {item.name}
-                    </h1>
-                    <p className="text-[#931905] flex items-center gap-1 font-bold">
-                      <span className="taka">৳-</span>
-                      {Number(item.offerPrice).toLocaleString("en-IN")}
-                      {item?.regularPrice > 0 && (
-                        <del className="text-sm text-[#2B2A29]">
-                          <span className="taka">৳-</span>
-                          {Number(item.regularPrice).toLocaleString("en-IN")}
-                        </del>
-                      )}
-                    </p>
+                    <div className="w-full flex flex-col items-center py-2 gap-1.5">
+                      <h1 className="text-base font-medium text-center capitalize">
+                        {item.name}
+                      </h1>
+                      <p className="text-[#931905] flex items-center gap-1 font-bold">
+                        <span className="taka">৳-</span>
+                       {
+                          user?.role === "reseller"
+                            ? Number(item.resellerPrice).toLocaleString(
+                                "en-IN",
+                              ) // Reseller price
+                            : Number(item.offerPrice).toLocaleString("en-IN") // Customer price
+                        }/-
 
-                    {/* add to cart button */}
-                    <div className="w-full flex flex-col items-center justify-center mb-2">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddToCart(item);
-                        }}
-                        className="add_to_cart_btn"
-                      >
-                        <span>add to cart</span>
-                        <span className="shop_btn_icon">
-                          <FaShoppingCart />
-                        </span>
-                      </button>
-                      {successProductId === item._id && (
-                        <p className="text-green-600 text-xs mt-1">
-                          Added to cart successfully!
-                        </p>
-                      )}
+                        {/* Show regular price only for customer */}
+                        {user?.role !== "reseller" &&
+                          item?.regularPrice > 0 && (
+                            <del className="text-sm text-[#2B2A29]">
+                              <span className="taka">৳-</span>
+                              {Number(item.regularPrice).toLocaleString(
+                                "en-IN",
+                              )}/-
+                            </del>
+                          )}
+                      </p>
+
+                      {/* add to cart button */}
+                      <div className="w-full flex flex-col items-center justify-center mb-2">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddToCart(item);
+                          }}
+                          className="add_to_cart_btn"
+                        >
+                          <span>add to cart</span>
+                          <span className="shop_btn_icon">
+                            <FaShoppingCart />
+                          </span>
+                        </button>
+                        {successProductId === item._id && (
+                          <p className="text-green-600 text-xs mt-1">
+                            Added to cart successfully!
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
+          <div className="bg-white p-5 rounded-sm w-full max-w-[400px] relative shadow-lg">
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-2 text-gray-600 font-bold text-lg duration-300 hover:text-[#931905] cursor-pointer"
+              onClick={() => setShowLoginModal(false)}
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl font-semibold mb-2 text-center">
+              Account Login
+            </h2>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+
+                try {
+                  const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/userauth/login`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      credentials: "include",
+                      body: JSON.stringify({ email, password }),
+                    },
+                  );
+                  const data = await res.json();
+                  if (!res.ok) {
+                    alert(data.error || "Login failed");
+                    return;
+                  }
+
+                  // login successful
+                  setShowLoginModal(false);
+                  window.location.reload(); // reload to update user context
+                } catch (err) {
+                  alert("Something went wrong");
+                }
+              }}
+              className="flex flex-col gap-1"
+            >
+              {/* Email */}
+              <div className="flex flex-col">
+                <label className="font-semibold">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  className="border border-gray-300 rounded-sm px-3 py-2 outline-none w-full"
+                  required
+                />
+              </div>
+
+              {/* Password with Eye Icon */}
+              <div className="flex flex-col relative">
+                <label className="font-semibold">Password</label>
+                <div className="border border-gray-300 rounded-sm mb-1 relative flex items-center px-3 py-2">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    className="outline-none w-full"
+                    required
+                  />
+                  <span
+                    className="right-3 top-9 cursor-pointer text-gray-600"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {showPass ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+              </div>
+
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg cursor-pointer"
+              >
+                Login
+              </button>
+
+              {/* Optional: Register link */}
+              <div className="text-center text-sm">
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-blue-600 font-semibold hover:underline"
+                  onClick={() => setShowLoginModal(false)}
+                >
+                  Register
+                </Link>
+              </div>
+              <div className="flex items-center justify-center">
+                <Link
+                  href="/forgot-password"
+                  className="text-base font-medium text-green-600 hover:text-green-800 duration-300"
+                >
+                  Forget password?
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

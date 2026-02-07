@@ -46,12 +46,27 @@ export default function OrderConfirmation() {
     fetchOrder();
   }, [orderId]);
 
-  if (!orderId) return <p className="text-center py-10">Invalid order ID</p>;
-  if (loading) return <p className="text-center py-10">Loading order...</p>;
-  if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
+  if (loading)
+    return (
+      <div className="universal w-full h-full min-h-screen font-semibold">
+        Loading order...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="universal w-full h-full min-h-screen text-red-500 font-semibold">
+        {error}
+      </div>
+    );
+  if (!orderId)
+    return (
+      <div className="universal w-full h-full min-h-screen font-semibold">
+        Invalid order ID
+      </div>
+    );
 
   return (
-    <div className="w-full h-full universal">
+    <div className="w-full h-full min-h-screen universal">
       <div className="w-full sm:w-full md:w-[60%] px-5 h-full min-h-screen universal_column mt-16">
         <div className="w-full h-full min-h-screen py-10">
           <h1 className="text-2xl font-bold text-center text-[#931905] mb-3">
@@ -118,9 +133,11 @@ export default function OrderConfirmation() {
                 <p>
                   <strong>Comment:</strong> {order.billing.comment}
                 </p>
-                <p>
-                  <strong>Points:</strong> {order.points}
-                </p>
+                {order?.user?.role === "customer" && (
+                  <p>
+                    <strong>Points:</strong> {order.points}
+                  </p>
+                )}
               </div>
             )}
 

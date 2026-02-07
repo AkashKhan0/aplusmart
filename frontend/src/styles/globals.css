@@ -457,3 +457,37 @@ label {
     inset 10px 10px 10px -1px #0000002f,
     inset -10px -10px 10px -1px #0000002f;
 }
+.tab {
+  box-shadow:
+    10px 10px 10px -1px #0000000c,
+    -10px -10px 10px -1px #0000000c;
+  max-width: 400px;
+}
+.tab_active {
+  box-shadow:
+    inset 10px 10px 10px -1px #00000033,
+    inset -10px -10px 10px -1px #00000033;
+}
+
+/* toast message */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+}
+.animate-slideDown {
+  animation: slideDown 5s forwards;
+}

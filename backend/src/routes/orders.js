@@ -38,59 +38,70 @@ router.post("/", async (req, res) => {
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // 🔐 POINTS VALIDATION
-    if (usedPoints > user.points || usedPoints < 0) {
+    // ---------------- POINTS HANDLING ----------------
+    let safeUsedPoints = Number(usedPoints) || 0;
+    if (user.role !== "customer") {
+      // Reseller: points system off
+      safeUsedPoints = 0;
+    }
+
+    if (safeUsedPoints > user.points || safeUsedPoints < 0) {
       return res.status(400).json({ error: "Invalid points usage" });
     }
-    if (grandTotal < 0) {
-      return res.status(400).json({ error: "Invalid total amount" });
+
+    // Deduct points only for customer
+    if (user.role === "customer") {
+      user.points -= safeUsedPoints;
     }
-    // 🔻 DEDUCT USED POINTS
-    user.points -= usedPoints;
 
-    // 🧮 CALCULATE POINTS (Backend only)
+    // ---------------- CALCULATE EARNED POINTS ----------------
     let earnedPoints = 0;
-    cart.forEach((item) => {
-      if (!item.hasOffer) {
-        const productPoint = Math.floor(
-          (item.offerPrice * item.quantity) / 100,
-        );
-        earnedPoints += Math.min(productPoint, 500);
-      }
-    });
-
+    if (user.role === "customer") {
+      cart.forEach((item) => {
+        if (!item.hasOffer) {
+          const productPoint = Math.floor(
+            (Number(item.offerPrice) || 0) * (Number(item.quantity) || 0) / 100
+          );
+          earnedPoints += Math.min(productPoint, 500);
+        }
+      });
+    }
+const isCustomer = user.role === "customer"; 
+    // ---------------- MAP ITEMS ----------------
     const items = cart.map((item) => ({
       productId: item._id,
       name: item.name,
-      quantity: item.quantity,
-      price: item.offerPrice,
+      quantity: Number(item.quantity) || 1,
+      price: Number(isCustomer ? item.offerPrice : item.resellerPrice) || 0,
       colors: item.colors || [],
       image: item.images?.[0] || "",
     }));
 
+    // ---------------- CREATE ORDER ----------------
     const order = await Order.create({
       user: user._id,
       orderId: generateOrderId(),
       billing,
       items,
       shippingMethod,
-      shippingCharge,
+      shippingCharge: Number(shippingCharge) || 0,
       paymentMethod,
-      usedPoints,
-      pointsDiscount,
-      points: earnedPoints,
-      grandTotal,
+      points: earnedPoints, // reseller = 0
+      grandTotal: Number(grandTotal) || 0,
     });
 
-    user.points += earnedPoints;
+    // ---------------- UPDATE USER POINTS ----------------
+    if (user.role === "customer") {
+      user.points += earnedPoints;
 
-    // ⭐ ADD POINTS TO USER DATABASE
-    user.pointsHistory.push({
-      points: earnedPoints - usedPoints,
-      earned: earnedPoints,
-      used: usedPoints,
-      orderId: order.orderId,
-    });
+      user.pointsHistory.push({
+        points: earnedPoints - safeUsedPoints,
+        earned: earnedPoints,
+        used: safeUsedPoints,
+        orderId: order.orderId,
+      });
+    }
+
     await user.save();
 
     res.status(201).json({

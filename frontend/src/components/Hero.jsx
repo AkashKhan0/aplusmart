@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
-import { IoCart } from "react-icons/io5";
 import { BsCartFill, BsFire } from "react-icons/bs";
 import { LuPackagePlus } from "react-icons/lu";
 import HeroCarousel from "./HeroCarousel";
@@ -21,9 +20,8 @@ const reggaeOne = Reggae_One({
 
 export default function Hero({ openMenu }) {
   const { user, search, setSearch, handleSearch, cart } = useAppContext();
-
   const dropdownRef = useRef(null);
-
+  const [showMessage, setShowMessage] = useState(false);
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("category");
@@ -56,10 +54,24 @@ export default function Hero({ openMenu }) {
   }, []);
 
   const uniqueCategories = [
-  ...new Map(
-    categories.map((cat) => [cat.mainCategory, cat])
-  ).values(),
-];
+    ...new Map(categories.map((cat) => [cat.mainCategory, cat])).values(),
+  ];
+
+  const handleClick = (e) => {
+    if (user?.role !== "customer") {
+      e.preventDefault(); // page navigate hobena
+      setShowMessage(true); // message show
+    }
+  };
+
+  useEffect(() => {
+    if (showMessage) {
+      const timer = setTimeout(() => {
+        setShowMessage(false); // 5s por message hide
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B]">
@@ -67,13 +79,20 @@ export default function Hero({ openMenu }) {
         {/* Top offers/deals/combo bar */}
         <div className="w-full flex items-start justify-center top_nav_bar">
           <div className="w-full max-w-[900px] bg-[#2B2A29] top_bg_nav">
-            <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold">
-              <Link href="/offers">
+            <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold relative">
+              <Link href="/offers" onClick={handleClick}>
                 <div className="hero_top">
                   <BsFire className="text-[#FFCE1B]" />
                   <span className="hidden sm:block">supper</span> offers
                 </div>
               </Link>
+              {/* Toast Message */}
+              {showMessage && (
+                <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-5 py-3 rounded shadow-lg animate-slideDown fade-in-out z-50">
+                  Sorry! This page is only for customer users.
+                </div>
+              )}
+
               <Link href="/combo">
                 <div className="hero_top">
                   <LuPackagePlus className="text-[#FFCE1B]" />
@@ -121,10 +140,10 @@ export default function Hero({ openMenu }) {
                     <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50">
                       {uniqueCategories.map((cat) => (
                         <Link
-                        className="w-full"
+                          className="w-full"
                           key={cat._id}
                           href={`/search?mainCategory=${encodeURIComponent(
-                            cat.mainCategory
+                            cat.mainCategory,
                           )}`}
                         >
                           <div
@@ -165,14 +184,19 @@ export default function Hero({ openMenu }) {
 
             {/* Account + Cart */}
             <div className="w-fit flex items-center justify-end gap-2.5">
-
               {/* profile */}
               <Link href={user ? "/profile" : "/login"}>
                 <div
                   // onClick={handleAccountClick}
                   className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
                 >
-                  <p className="capitalize hidden sm:block">{user ? "profile" : "login"}</p> <span className="relative"> <FaUser size={24} /></span>
+                  <p className="capitalize hidden sm:block">
+                    {user ? "profile" : "login"}
+                  </p>{" "}
+                  <span className="relative">
+                    {" "}
+                    <FaUser size={24} />
+                  </span>
                 </div>
               </Link>
 
@@ -192,31 +216,30 @@ export default function Hero({ openMenu }) {
                   )}
                 </div>
               </Link>
-
             </div>
           </div>
 
           {/* mobile search bar */}
           <div className="block sm:hidden md:hidden w-full px-5 mt-3">
             <form
-                onSubmit={handleSearch}
-                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
-              >
-                <input
-                  type="search"
-                  placeholder="Search products..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full py-[3px] px-2 outline-0"
-                />
-                <div className="px-2 bg-[#2B2A29] py-1 text-[#ffffff]">
-                  <button type="submit">
-                    <FaSearch />
-                  </button>
-                </div>
-              </form>
+              onSubmit={handleSearch}
+              className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+            >
+              <input
+                type="search"
+                placeholder="Search products..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full py-[3px] px-2 outline-0"
+              />
+              <div className="px-2 bg-[#2B2A29] py-1 text-[#ffffff]">
+                <button type="submit">
+                  <FaSearch />
+                </button>
+              </div>
+            </form>
           </div>
-          
+
           {/* slider images and text */}
           <HeroCarousel />
         </div>

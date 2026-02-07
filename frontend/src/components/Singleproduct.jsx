@@ -43,7 +43,7 @@ export default function Singleproduct() {
 
         if (productData?.images?.length > 0)
           setActiveImage(productData.images[0]);
-        if (user?.role === "reseller") setQuantity(50);
+        if (user?.role === "reseller") setQuantity(10);
       } catch (err) {
         console.error("LOAD FAILED:", err);
       } finally {
@@ -63,8 +63,8 @@ export default function Singleproduct() {
       if (type === "inc") newQuantity = quantity + 1;
       if (type === "dec") newQuantity = Math.max(1, quantity - 1);
     } else if (user.role === "reseller") {
-      if (type === "inc") newQuantity = quantity + 50;
-      if (type === "dec") newQuantity = Math.max(50, quantity - 50);
+      if (type === "inc") newQuantity = quantity + 10;
+      if (type === "dec") newQuantity = Math.max(10, quantity - 10);
     }
     setQuantity(newQuantity);
     setSelectedColor((prev) => prev.slice(0, newQuantity));
@@ -107,14 +107,18 @@ export default function Singleproduct() {
       _id: product._id,
       name: product.name,
       images: product.images,
-      offerPrice: product.offerPrice,
-      regularPrice: product.regularPrice,
       quantity,
       colors: selectedColor,
       role: user.role,
-      hasOffer,
-      discountPercent,
-      earnedPoints,
+      ...(user.role === "customer"
+    ? {
+        offerPrice: product.offerPrice,
+        regularPrice: product.regularPrice,
+        hasOffer,
+        discountPercent,
+        earnedPoints,
+      }
+    : { resellerPrice: product.resellerPrice }),
     };
     addToCart(cartItem);
     setMessage("Added to cart!");
@@ -127,7 +131,7 @@ export default function Singleproduct() {
     product?.regularPrice > 0 &&
     product.offerPrice < product.regularPrice;
 
-  const discountPercent = hasOffer
+  const discountPercent = user?.role === "customer" && hasOffer
     ? Math.round(
         ((product.regularPrice - product.offerPrice) / product.regularPrice) *
           100,
@@ -136,7 +140,7 @@ export default function Singleproduct() {
 
   // ✅ UPDATED POINTS LOGIC
   const earnedPoints =
-    !hasOffer && product?.offerPrice > 0
+   user?.role === "customer" && product?.offerPrice > 0
       ? Math.min(
           Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
           500,
@@ -267,17 +271,23 @@ export default function Singleproduct() {
               </h1>
               <div className="w-full flex flex-wrap items-center gap-2.5 my-2">
                 <p className="pro_p_b_s_B">
-                  price : <span className="taka">৳-</span>
-                  <strong>
-                    {Number(product.offerPrice).toLocaleString("en-IN")}
-                  </strong>
-                  {product.regularPrice > 0 && (
-                    <del className="text-[#931905] font-bold">
-                      <span className="taka">৳- </span>
-                      {Number(product.regularPrice).toLocaleString("en-IN")}
-                    </del>
-                  )}
-                </p>
+  price : <span className="taka">৳-</span>
+  <strong>
+    {user?.role === "reseller"
+      ? Number(product.resellerPrice).toLocaleString("en-IN") // Reseller price
+      : Number(product.offerPrice).toLocaleString("en-IN") // Customer price
+    }
+  </strong>
+
+  {/* Show regular price only for customer */}
+  {user?.role !== "reseller" && product.regularPrice > 0 && (
+    <del className="text-[#931905] font-bold">
+      <span className="taka">৳- </span>
+      {Number(product.regularPrice).toLocaleString("en-IN")}
+    </del>
+  )}
+</p>
+
                 <p className="pro_p_b_s_B">
                   brand : <strong>{product.brand}</strong>
                 </p>
@@ -333,16 +343,19 @@ export default function Singleproduct() {
               </div>
 
               {/* Offer / Points Badge */}
-              {hasOffer ? (
-                <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
-                  {discountPercent}% OFF
-                </div>
-              ) : earnedPoints > 0 ? (
-                <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1 text-sm font-medium my-2">
-                  Earn Points
-                  <span className="text-[#c9c601]">{earnedPoints} ⭐</span>
-                </div>
-              ) : null}
+              {user?.role === "customer" && (
+  hasOffer ? (
+    <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
+      {discountPercent}% OFF
+    </div>
+  ) : earnedPoints > 0 ? (
+    <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1 text-sm font-medium my-2">
+      Earn Points
+      <span className="text-[#c9c601]">{earnedPoints} ⭐</span>
+    </div>
+  ) : null
+)}
+
 
               {/* Quantity */}
               <div className="w-full max-w-fit flex flex-col sm:flex-row md:flex-row items-center justify-start gap-3 my-5">

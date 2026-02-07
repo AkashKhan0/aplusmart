@@ -13,6 +13,9 @@ const ProductSchema = new mongoose.Schema(
     offerPrice: {
       type: Number,
     },
+    resellerPrice: {
+      type: Number,
+    },
     stockStatus: {
       type: String,
       enum: ["inStock", "outOfStock", "upcoming"],

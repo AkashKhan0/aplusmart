@@ -11,16 +11,17 @@ export default function CartPage() {
 
   const isEmpty = !cart || cart.length === 0;
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.offerPrice * item.quantity,
-    0,
-  );
+  const totalPrice = cart.reduce((sum, item) => {
+  const price =
+    user?.role === "reseller"
+      ? item.resellerPrice
+      : item.offerPrice;
 
-  // const step = user?.role === "reseller" ? 50 : 1;
-  // const minQty = user?.role === "reseller" ? 50 : 1;
+  return sum + price * item.quantity;
+}, 0);
 
-  const getStep = (item) => (item.role === "reseller" ? 50 : 1);
-  const getMin = (item) => (item.role === "reseller" ? 50 : 1);
+  const getStep = (item) => (item.role === "reseller" ? 10 : 1);
+  const getMin = (item) => (item.role === "reseller" ? 10 : 1);
 
   /* =====================
      EMPTY CART
@@ -154,9 +155,11 @@ export default function CartPage() {
                   {/* PRICE */}
                   <td className="px-2 font-semibold">
                     <span className="taka">৳-</span>
-                    {Number(item.offerPrice * item.quantity).toLocaleString(
-                      "en-IN",
-                    )}
+                    {Number(
+                      user?.role === "reseller"
+                        ? item.resellerPrice * item.quantity
+                        : item.offerPrice * item.quantity,
+                    ).toLocaleString("en-IN")}
                     /=
                   </td>
 

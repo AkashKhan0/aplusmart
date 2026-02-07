@@ -112,16 +112,16 @@ export default function ProfilePage() {
         </div>
 
         {/* ================= DASHBOARD ================= */}
-        <div className="w-full mt-5 flex flex-col sm:flex-row md:flex-row items-stretch gap-5">
+        <div className="w-full mt-5 flex flex-col items-stretch gap-5">
           {/* ===== Sidebar ===== */}
-          <div className="w-full sm:w-[300px] flex flex-row sm:flex-col md:flex-col gap-3 items-stretch justify-between h-full ">
+          <div className="w-full flex gap-3 items-stretch justify-center h-full ">
             <div
               onClick={() => setTab("orders")}
-              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg ${
-                tab === "orders" && "font-bold"
-              } rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full`}
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab ${
+                tab === "orders" && "tab_active"
+              } rounded-sm flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full`}
             >
-              <div className="w-10 h-10 border rounded-full universal text-3xl text-[#931905] p-2">
+              <div className="w-10 h-10 rounded-full universal text-3xl text-[#931905] p-2 tab_active">
                 <HiClipboardDocumentList />
               </div>
               <p className="text-[12px] sm:text-base capitalize">Orders</p>
@@ -129,11 +129,11 @@ export default function ProfilePage() {
 
             <div
               onClick={() => setTab("transactions")}
-              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 shadow-lg rounded-sm flex flex-col sm:flex-row items-center gap-2 cursor-pointer w-full ${
-                tab === "transactions" && "font-bold"
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab rounded-sm flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full ${
+                tab === "transactions" && "tab_active"
               }`}
             >
-              <div className="w-10 h-10 border rounded-full universal text-3xl text-[#931905] p-2">
+              <div className="w-10 h-10 rounded-full universal text-3xl text-[#931905] p-2 tab_active">
                 <IoIosCard />
               </div>
               <p className="text-[12px] sm:text-base capitalize">
@@ -143,7 +143,7 @@ export default function ProfilePage() {
           </div>
 
           {/* ===== Main Content ===== */}
-          <div className="w-full h-fit max-h-[500px] overflow-x-auto overflow-y-auto shadow-lg">
+          <div className="w-full overflow-x-auto overflow-y-auto shadow-lg">
             {tab === "orders" && <Orders onOrdersFetch={setOrders} />}
             {tab === "transactions" && <Transactions />}
           </div>

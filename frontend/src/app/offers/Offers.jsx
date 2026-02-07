@@ -3,13 +3,66 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAppContext } from "@/src/context/AppContext";
+import { FaEye, FaEyeSlash, FaShoppingCart } from "react-icons/fa";
 
 export default function Offers() {
   const [products, setProducts] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [offerStatus, setOfferStatus] = useState("upcoming");
-
+  const [timeLefts, setTimeLefts] = useState({});
+  const [offerStatuses, setOfferStatuses] = useState({});
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
+  const { user, addToCart } = useAppContext();
+  const [successProductId, setSuccessProductId] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+
+  // add to cart handler
+  const handleAddToCart = (product) => {
+    if (!user) {
+      setShowLoginModal(true); // ✅ login popup open
+      return;
+    }
+
+    const quantity = user.role === "reseller" ? 10 : 1;
+
+    const hasOffer =
+      product?.offerPrice > 0 &&
+      product?.regularPrice > 0 &&
+      product.offerPrice < product.regularPrice;
+
+    const discountPercent = hasOffer
+      ? Math.round(
+          ((product.regularPrice - product.offerPrice) / product.regularPrice) *
+            100,
+        )
+      : 0;
+
+    const earnedPoints =
+      !hasOffer && product?.offerPrice > 0
+        ? Math.min(Math.floor(product.offerPrice / 100), 500)
+        : 0;
+
+    const cartItem = {
+      _id: product._id,
+      name: product.name,
+      images: product.images,
+      offerPrice: product.offerPrice,
+      regularPrice: product.regularPrice,
+      quantity,
+      colors: [], // no color selection here
+      role: user.role,
+
+      hasOffer,
+      discountPercent,
+      earnedPoints,
+    };
+
+    addToCart(cartItem);
+    setSuccessProductId(product._id);
+    setTimeout(() => {
+      setSuccessProductId(null);
+    }, 2000);
+  };
 
   // Fetch all products
   const fetchProducts = async () => {
@@ -26,9 +79,6 @@ export default function Offers() {
     fetchProducts();
   }, []);
 
-  const [timeLefts, setTimeLefts] = useState({});
-  const [offerStatuses, setOfferStatuses] = useState({});
-
   useEffect(() => {
     const interval = setInterval(() => {
       const newTimeLefts = {};
@@ -38,7 +88,7 @@ export default function Offers() {
         .filter(
           (p) =>
             p.mainCategory?.toLowerCase() === "offer" ||
-            p.subCategory?.toLowerCase() === "offer"
+            p.subCategory?.toLowerCase() === "offer",
         )
         .forEach((product) => {
           const now = new Date().getTime();
@@ -104,7 +154,7 @@ export default function Offers() {
               .filter(
                 (product) =>
                   product.mainCategory?.toLowerCase() === "offer" ||
-                  product.subCategory?.toLowerCase() === "offer"
+                  product.subCategory?.toLowerCase() === "offer",
               )
               .map((product) => {
                 const status = offerStatuses[product._id] || "upcoming";
@@ -116,7 +166,7 @@ export default function Offers() {
                         <div className="bg-[#3c3c3c] text-white text-xs px-2 w-fit h-6 flex items-center rounded-br-full rounded-tr-full">
                           Offer starts on{" "}
                           {new Date(
-                            product.offerStartDate
+                            product.offerStartDate,
                           ).toLocaleDateString()}
                         </div>
                       )}
@@ -127,7 +177,7 @@ export default function Offers() {
                             {Math.round(
                               ((product.regularPrice - product.offerPrice) /
                                 product.regularPrice) *
-                                100
+                                100,
                             )}
                             % OFF
                           </div>
@@ -180,11 +230,32 @@ export default function Offers() {
                             <span className="taka">
                               ৳-{" "}
                               {Number(product.regularPrice).toLocaleString(
-                                "en-IN"
+                                "en-IN",
                               )}
                             </span>
                           </del>
                         </p>
+                        {/* add to cart button */}
+                        <div className="w-full flex flex-col items-center justify-center mb-2">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddToCart(product);
+                            }}
+                            className="add_to_cart_btn"
+                          >
+                            <span>add to cart</span>
+                            <span className="shop_btn_icon">
+                              <FaShoppingCart />
+                            </span>
+                          </button>
+                          {successProductId === product._id && (
+                            <p className="text-green-600 text-xs mt-1">
+                              Added to cart successfully!
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -193,6 +264,116 @@ export default function Offers() {
           </div>
         </div>
       </div>
+
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
+          <div className="bg-white p-5 rounded-sm w-full max-w-[400px] relative shadow-lg">
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-2 text-gray-600 font-bold text-lg duration-300 hover:text-[#931905] cursor-pointer"
+              onClick={() => setShowLoginModal(false)}
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl font-semibold mb-2 text-center">
+              Account Login
+            </h2>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+
+                try {
+                  const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/userauth/login`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      credentials: "include",
+                      body: JSON.stringify({ email, password }),
+                    },
+                  );
+                  const data = await res.json();
+                  if (!res.ok) {
+                    alert(data.error || "Login failed");
+                    return;
+                  }
+
+                  // login successful
+                  setShowLoginModal(false);
+                  window.location.reload(); // reload to update user context
+                } catch (err) {
+                  alert("Something went wrong");
+                }
+              }}
+              className="flex flex-col gap-1"
+            >
+              {/* Email */}
+              <div className="flex flex-col">
+                <label className="font-semibold">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  className="border border-gray-300 rounded-sm px-3 py-2 outline-none w-full"
+                  required
+                />
+              </div>
+
+              {/* Password with Eye Icon */}
+              <div className="flex flex-col relative">
+                <label className="font-semibold">Password</label>
+                <div className="border border-gray-300 rounded-sm mb-1 relative flex items-center px-3 py-2">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    className="outline-none w-full"
+                    required
+                  />
+                  <span
+                    className="right-3 top-9 cursor-pointer text-gray-600"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {showPass ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+              </div>
+
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg cursor-pointer"
+              >
+                Login
+              </button>
+
+              {/* Optional: Register link */}
+              <div className="text-center text-sm">
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-blue-600 font-semibold hover:underline"
+                  onClick={() => setShowLoginModal(false)}
+                >
+                  Register
+                </Link>
+              </div>
+              <div className="flex items-center justify-center">
+                <Link
+                  href="/forgot-password"
+                  className="text-base font-medium text-green-600 hover:text-green-800 duration-300"
+                >
+                  Forget password?
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }

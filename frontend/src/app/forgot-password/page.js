@@ -47,7 +47,7 @@ export default function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <button className="bg-[#FFCE1B] py-1 font-semibold">
+          <button className="bg-[#FFCE1B] py-1 font-semibold cursor-pointer">
             Continue
           </button>
 

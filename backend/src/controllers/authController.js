@@ -130,15 +130,13 @@ export const logoutUser = async (req, res) => {
     sameSite: "none",
     path: "/",
   });
-
   // 🔥 clear cart cookie
-  res.clearCookie("cart", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-  });
-
+  // res.clearCookie("cart", {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "none",
+  //   path: "/",
+  // });
   res.json({ message: "Logged out" });
 };
 
@@ -148,7 +146,9 @@ export const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ message: "If email exists, link sent" });
+      return res.json({
+        message: "If the email exists, a password reset link has been sent.",
+      });
     }
 
     const token = crypto.randomBytes(32).toString("hex");
@@ -207,5 +207,3 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
-

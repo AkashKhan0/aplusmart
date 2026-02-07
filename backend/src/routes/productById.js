@@ -31,6 +31,7 @@ router.put("/:id", async (req, res) => {
       brand,
       regularPrice,
       offerPrice,
+      resellerPrice,
       stockStatus,
       colors,
       shortTitle,
@@ -57,6 +58,7 @@ router.put("/:id", async (req, res) => {
     product.brand = brand ?? product.brand;
     product.regularPrice = regularPrice ?? product.regularPrice;
     product.offerPrice = offerPrice ?? product.offerPrice;
+    product.resellerPrice = resellerPrice ?? product.resellerPrice;
     product.stockStatus = stockStatus ?? product.stockStatus;
     product.shortTitle = shortTitle ?? product.shortTitle;
     product.shortDescription = shortDescription ?? product.shortDescription;
@@ -70,8 +72,12 @@ router.put("/:id", async (req, res) => {
       ? specifications
       : product.specifications;
     product.images = Array.isArray(images) ? images : product.images;
-    product.offerStartDate = offerStartDate ? new Date(offerStartDate) : product.offerStartDate;
-    product.offerEndDate = offerEndDate ? new Date(offerEndDate) : product.offerEndDate;
+    product.offerStartDate = offerStartDate
+      ? new Date(offerStartDate)
+      : product.offerStartDate;
+    product.offerEndDate = offerEndDate
+      ? new Date(offerEndDate)
+      : product.offerEndDate;
 
     await product.save();
 

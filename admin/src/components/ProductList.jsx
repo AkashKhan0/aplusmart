@@ -89,6 +89,7 @@ export default function ProductList() {
       images: editImages,
       regularPrice: Number(editProduct.regularPrice || 0),
       offerPrice: Number(editProduct.offerPrice || 0),
+      resellerPrice: Number(editProduct.resellerPrice || 0),
     };
 
     await fetch(
@@ -154,8 +155,9 @@ export default function ProductList() {
                       {p.mainCategory} / {p.subCategory}
                     </td>
                     <td className="border">{p.brand || "-"}</td>
-                    <td className="border">
-                      <span className="taka">৳-</span>{Number(p.offerPrice || p.regularPrice).toLocaleString("en-IN")}/=
+                    <td className="border flex flex-col">
+                     <p><span className="taka">৳- </span>{Number(p.offerPrice || p.regularPrice).toLocaleString("en-IN")}/=</p> 
+                      <p><span className="taka">Re- </span>{Number(p.resellerPrice).toLocaleString("en-IN")}/=</p>
                     </td>
                     <td className="border">
                       {p.stockStatus === "inStock" ? (
@@ -278,6 +280,13 @@ export default function ProductList() {
                 type="number"
                 name="offerPrice"
                 value={editProduct.offerPrice}
+                onChange={handleChange}
+                className="border p-1 w-full"
+              />
+              <input
+                type="number"
+                name="resellerPrice"
+                value={editProduct.resellerPrice}
                 onChange={handleChange}
                 className="border p-1 w-full"
               />

@@ -30,6 +30,7 @@ export default function Addproduct() {
     brand: "",
     regularPrice: "",
     offerPrice: "",
+    resellerPrice: "",
     points: "",
     stockStatus: "inStock",
     colors: [],
@@ -54,7 +55,7 @@ export default function Addproduct() {
   useEffect(() => {
     const fetchCategories = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
       );
       const data = await res.json();
 
@@ -150,6 +151,7 @@ export default function Addproduct() {
 
         regularPrice: Number(productData.regularPrice || 0),
         offerPrice: Number(productData.offerPrice || 0),
+        resellerPrice: Number(productData.resellerPrice || 0),
         images: flatImages,
       };
 
@@ -161,7 +163,7 @@ export default function Addproduct() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await res.json();
@@ -178,6 +180,7 @@ export default function Addproduct() {
           brand: "",
           regularPrice: "",
           offerPrice: "",
+          resellerPrice: "",
           points: "",
           stockStatus: "inStock",
           colors: [],
@@ -236,7 +239,9 @@ export default function Addproduct() {
               }))
             }
           >
-            <option value="" className="w-full">Select Main Category</option>
+            <option value="" className="w-full">
+              Select Main Category
+            </option>
             {mainCategories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -254,7 +259,9 @@ export default function Addproduct() {
               }))
             }
           >
-            <option value="" className="w-full">Select Sub Category</option>
+            <option value="" className="w-full">
+              Select Sub Category
+            </option>
             {subCategories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -341,6 +348,18 @@ export default function Addproduct() {
                 setProductData((prev) => ({
                   ...prev,
                   offerPrice: e.target.value,
+                }))
+              }
+              className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"
+            />
+            <input
+              type="number"
+              placeholder="Reseller Price"
+              value={productData.resellerPrice} // ✅ bind state
+              onChange={(e) =>
+                setProductData((prev) => ({
+                  ...prev,
+                  resellerPrice: e.target.value, // ✅ update state
                 }))
               }
               className="w-full py-1 px-2 border outline-none border-[#2B2A29] rounded-md"

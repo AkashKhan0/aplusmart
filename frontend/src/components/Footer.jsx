@@ -45,7 +45,7 @@ const scrollToTop = () => {
 export default function Footer() {
   return (
     <>
-      <div className="w-full h-fit universal_column bg-[#2B2A29] text-[#FFFFFF] pt-5 pb-16 sp:mb-0 pd:mb-0">
+      <div className="w-full h-fit universal_column bg-[#2B2A29] text-[#FFFFFF] pt-5 pb-16 sm:pb-5 md:pb-5">
         <div className="fixed_width h-full px-5">
           <div className="w-full flex flex-col sm:flex-col md:flex-row items-stretch gap-2.5">
             <div className="w-full smw-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
