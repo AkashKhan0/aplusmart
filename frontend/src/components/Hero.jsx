@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
 import { BsCartFill, BsFire } from "react-icons/bs";
@@ -13,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 import { Reggae_One } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const reggaeOne = Reggae_One({
   subsets: ["latin"],
@@ -21,6 +21,7 @@ const reggaeOne = Reggae_One({
 
 export default function Hero({ openMenu }) {
   const { user, search, setSearch, handleSearch, cart } = useAppContext();
+  const router = useRouter();
   const dropdownRef = useRef(null);
   const [showMessage, setShowMessage] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -58,17 +59,19 @@ export default function Hero({ openMenu }) {
     ...new Map(categories.map((cat) => [cat.mainCategory, cat])).values(),
   ];
 
-  const router = useRouter();
-  const handleClick = () => {
-  if (!user) return;
+  const handleSeller = (e) => {
+    e.stopPropagation(); // 🔥 parent click বন্ধ
+    e.preventDefault(); // 🔥 default action বন্ধ
 
-  if (user.role === "reseller") {
-    setShowMessage(true);
-    return;
-  }
-  router.push("/offers");
-};
+    if (!user) return;
 
+    if (user.role === "reseller") {
+      setShowMessage(true);
+      return;
+    }
+
+    router.push("/offers");
+  };
 
   useEffect(() => {
     if (showMessage) {
@@ -86,18 +89,15 @@ export default function Hero({ openMenu }) {
         <div className="w-full flex items-start justify-center top_nav_bar">
           <div className="w-full max-w-[900px] bg-[#2B2A29] top_bg_nav">
             <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold relative">
-              {/* <Link href="/offers" onClick={handleClick}> */}
-                <div className="hero_top cursor-pointer" onClick={handleClick}>
-                  <BsFire className="text-[#FFCE1B]" />
-                  <span className="hidden sm:block">supper</span> offers
-                </div>
-              {/* </Link> */}
+              <button
+                type="button"
+                className="hero_top cursor-pointer"
+                onClick={handleSeller}
+              >
+                <BsFire className="text-[#FFCE1B]" />
+                <span className="hidden sm:block">supper</span> offers
+              </button>
               {/* Toast Message */}
-              {showMessage && (
-                <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-5 py-3 rounded shadow-lg animate-slideDown fade-in-out z-50">
-                  Sorry! This page is only for customer users.
-                </div>
-              )}
 
               <Link href="/combo">
                 <div className="hero_top">
@@ -131,7 +131,10 @@ export default function Hero({ openMenu }) {
               </div>
 
               <div className="font-medium text-base bg-[#2B2A29] rounded-[50px] universal gap-2.5 text-[#ffffff]">
-                <div className="relative hidden sm:flex md:flex" ref={dropdownRef}>
+                <div
+                  className="relative hidden sm:flex md:flex"
+                  ref={dropdownRef}
+                >
                   {/* Button */}
                   <div
                     onClick={() => setOpen(!open)}
@@ -143,7 +146,7 @@ export default function Hero({ openMenu }) {
 
                   {/* Dropdown */}
                   {open && (
-                    <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50 category_sing">
+                    <div className="absolute left-0 top-8 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50 category_sing">
                       {uniqueCategories.map((cat) => (
                         <Link
                           className="w-full"
@@ -248,6 +251,12 @@ export default function Hero({ openMenu }) {
           {/* slider images and text */}
           <HeroCarousel />
         </div>
+
+      {showMessage && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-center py-1 px-3 rounded shadow-lg animate-slideDown fade-in-out z-50">
+          Sorry! This page is only for customer users.
+        </div>
+      )}
       </div>
     </div>
   );

@@ -126,7 +126,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
                       <a
                         href={`/search?subCategory=${encodeURIComponent(sub)}`}
                         onClick={() => setIsOpen(false)}
-                        className="block py-1 capitalize text-sm text-gray-200 hover:text-[#971900]"
+                        className="block py-1 px-3 capitalize text-sm text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
                       >
                         {sub}
                       </a>

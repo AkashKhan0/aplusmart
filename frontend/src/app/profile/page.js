@@ -119,7 +119,7 @@ export default function ProfilePage() {
               onClick={() => setTab("orders")}
               className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab ${
                 tab === "orders" && "tab_active"
-              } rounded-sm flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full`}
+              } rounded-[50px] flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full`}
             >
               <div className="w-10 h-10 rounded-full universal text-3xl text-[#931905] p-2 tab_active">
                 <HiClipboardDocumentList />
@@ -129,7 +129,7 @@ export default function ProfilePage() {
 
             <div
               onClick={() => setTab("transactions")}
-              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab rounded-sm flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full ${
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab rounded-[50px] flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full ${
                 tab === "transactions" && "tab_active"
               }`}
             >
