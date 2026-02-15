@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
 import { BsCartFill, BsFire } from "react-icons/bs";
@@ -57,17 +58,22 @@ export default function Hero({ openMenu }) {
     ...new Map(categories.map((cat) => [cat.mainCategory, cat])).values(),
   ];
 
-  const handleClick = (e) => {
-    if (user?.role !== "customer") {
-      e.preventDefault(); // page navigate hobena
-      setShowMessage(true); // message show
-    }
-  };
+  const router = useRouter();
+  const handleClick = () => {
+  if (!user) return;
+
+  if (user.role === "reseller") {
+    setShowMessage(true);
+    return;
+  }
+  router.push("/offers");
+};
+
 
   useEffect(() => {
     if (showMessage) {
       const timer = setTimeout(() => {
-        setShowMessage(false); // 5s por message hide
+        setShowMessage(false);
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -80,12 +86,12 @@ export default function Hero({ openMenu }) {
         <div className="w-full flex items-start justify-center top_nav_bar">
           <div className="w-full max-w-[900px] bg-[#2B2A29] top_bg_nav">
             <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold relative">
-              <Link href="/offers" onClick={handleClick}>
-                <div className="hero_top">
+              {/* <Link href="/offers" onClick={handleClick}> */}
+                <div className="hero_top cursor-pointer" onClick={handleClick}>
                   <BsFire className="text-[#FFCE1B]" />
                   <span className="hidden sm:block">supper</span> offers
                 </div>
-              </Link>
+              {/* </Link> */}
               {/* Toast Message */}
               {showMessage && (
                 <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-5 py-3 rounded shadow-lg animate-slideDown fade-in-out z-50">
@@ -124,12 +130,12 @@ export default function Hero({ openMenu }) {
                 <IoMdMenu />
               </div>
 
-              <div className="font-medium text-base bg-[#2B2A29] rounded-sm universal gap-2.5 text-[#ffffff] category_btn">
-                <div className="relative" ref={dropdownRef}>
+              <div className="font-medium text-base bg-[#2B2A29] rounded-[50px] universal gap-2.5 text-[#ffffff]">
+                <div className="relative hidden sm:flex md:flex" ref={dropdownRef}>
                   {/* Button */}
                   <div
                     onClick={() => setOpen(!open)}
-                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] hover:bg-[#ffffff] hover:text-[#2B2A29] duration-300 rounded-sm universal gap-2.5 text-[#ffffff] category_btn flex items-center justify-between min-w-[100px] py-1"
+                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] hover:bg-[#ffffff] hover:text-[#2B2A29] duration-300 rounded-[50px] universal gap-2.5 text-[#ffffff] flex items-center justify-between min-w-[100px] py-1 overflow-hidden"
                   >
                     <p className="capitalize">{selected || "Category"}</p>
                     <FaCaretDown />
@@ -137,7 +143,7 @@ export default function Hero({ openMenu }) {
 
                   {/* Dropdown */}
                   {open && (
-                    <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50">
+                    <div className="absolute left-0 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50 category_sing">
                       {uniqueCategories.map((cat) => (
                         <Link
                           className="w-full"
@@ -165,7 +171,7 @@ export default function Hero({ openMenu }) {
               {/* Search form */}
               <form
                 onSubmit={handleSearch}
-                className="w-full overflow-hidden items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] hidden sm:flex md:flex"
+                className="w-full overflow-hidden items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] hidden sm:flex md:flex"
               >
                 <input
                   type="search"
@@ -188,13 +194,12 @@ export default function Hero({ openMenu }) {
               <Link href={user ? "/profile" : "/login"}>
                 <div
                   // onClick={handleAccountClick}
-                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-sm universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
+                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
                 >
                   <p className="capitalize hidden sm:block">
                     {user ? "profile" : "login"}
-                  </p>{" "}
+                  </p>
                   <span className="relative">
-                    {" "}
                     <FaUser size={24} />
                   </span>
                 </div>
@@ -206,11 +211,11 @@ export default function Hero({ openMenu }) {
                   <BsCartFill size={32} />
 
                   {cart.length > 0 ? (
-                    <span className="text-[#931905] rounded-full universal absolute -top-3 left-3 font-medium">
+                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
                       {cart.length}
                     </span>
                   ) : (
-                    <span className="text-[#FFFFFF] rounded-full universal absolute top-0.5 left-3 font-medium">
+                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
                       0
                     </span>
                   )}
@@ -223,7 +228,7 @@ export default function Hero({ openMenu }) {
           <div className="block sm:hidden md:hidden w-full px-5 mt-3">
             <form
               onSubmit={handleSearch}
-              className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-sm filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+              className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
             >
               <input
                 type="search"

@@ -32,53 +32,60 @@ export default function Underhero() {
   return (
     <>
       <div className="w-full universal_column">
-        {/* all products */}
         <div className="fixed_width px-5">
+
+          {/* policys */}
           <div className="w-full universal_column py-5 mt-5 sm:mt-10">
             <div className="fixed_width">
               {/* empty space under hero for universal nav spacing */}
-              <div className="w-full h-auto flex items-stretch justify-center gap-2.5">
-                <div className="w-full max-w-[250px] duration-300">
+              <div className="w-full h-auto flex flex-wrap items-stretch justify-center gap-2.5">
+                <div className="drop">
                   <Link
                     href="/online-delivery"
-                    className="flex flex-col sm:flex-row md:flex-row items-center justify-start gap-1.5 points h-full"
+                    className=""
                   >
-                    <span className="point_icon">
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                      <span className="point_icon">
                       <TbTruckDelivery />
                     </span>
-                    <div className="">
+                    <div className="flex flex-col items-center justify-center">
                       <h1 className="point_h1">Online Delivery</h1>
                       <p className="point_p">From store to you.</p>
                     </div>
-                  </Link>
-                </div>
-
-                <div className="w-full max-w-[250px] duration-300">
-                  <Link
-                    href="/star-point-policy"
-                    className="flex flex-col sm:flex-row md:flex-row items-center justify-start gap-1.5 points h-full"
-                  >
-                    <span className="point_icon">
-                      <BsStars />
-                    </span>
-                    <div className="">
-                      <h1 className="point_h1">Star Point Policy</h1>
-                      <p className="point_p">Earn points easily.</p>
                     </div>
                   </Link>
                 </div>
 
-                <div className="w-full max-w-[250px] duration-300">
+                <div className="drop">
+                  <Link
+                    href="/star-point-policy"
+                    className=""
+                  >
+                   <div className="w-full h-full flex flex-col items-center justify-center">
+                     <span className="point_icon">
+                      <BsStars />
+                    </span>
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="point_h1">Star Point Policy</h1>
+                      <p className="point_p">Earn points easily.</p>
+                    </div>
+                   </div>
+                  </Link>
+                </div>
+
+                <div className="drop">
                   <Link
                     href="/return&refund-policy"
-                    className="flex flex-col sm:flex-row md:flex-row items-center justify-start gap-1.5 points h-full"
+                    className=""
                   >
-                    <span className="point_icon">
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                      <span className="point_icon">
                       <GiReturnArrow />
                     </span>
-                    <div className="">
+                    <div className="flex flex-col items-center justify-center">
                       <h1 className="point_h1">Return & Refund</h1>
                       <p className="point_p">Return with confidence.</p>
+                    </div>
                     </div>
                   </Link>
                 </div>
@@ -224,7 +231,7 @@ export default function Underhero() {
                   <img
                     src="/images/gimbal.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Gimbal</p>
@@ -240,7 +247,7 @@ export default function Underhero() {
                   <img
                     src="/images/kitchen.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Kitchen Accessories</p>
@@ -250,7 +257,7 @@ export default function Underhero() {
                   <img
                     src="/images/clean.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Cloth Cleaner</p>
@@ -260,7 +267,7 @@ export default function Underhero() {
                   <img
                     src="/images/jewelry.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Jewellery</p>
@@ -270,7 +277,7 @@ export default function Underhero() {
                   <img
                     src="/images/suitcase.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Travel Bags</p>
@@ -280,7 +287,7 @@ export default function Underhero() {
                   <img
                     src="/images/toys.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Kids Toys</p>
@@ -290,7 +297,7 @@ export default function Underhero() {
                   <img
                     src="/images/music.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Musical Instruments</p>
@@ -300,7 +307,7 @@ export default function Underhero() {
                   <img
                     src="/images/drive.png"
                     alt="Gimbal"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Enclosure</p>
@@ -310,7 +317,7 @@ export default function Underhero() {
                   <img
                     src="/images/cable.png"
                     alt="Cable Organizer"
-                    className="w-full h-full object-contain"
+                    className="w-[26px] h-[26px] object-contain"
                   />
                 </span>
                 <p className="features_p">Cable Organizer</p>

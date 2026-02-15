@@ -96,7 +96,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
 
             <div className="w-full max-w-fit md:w-fit  hidden sm:flex md:flex items-center justify-between gap-2.5 md:gap-5">
               <Link href={user ? "/profile" : "/login"}>
-                <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent sm:bg-transparent hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] text-xl md:text-base cursor-pointer">
+                <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent  transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] hover:text-[#c23216] text-xl md:text-base cursor-pointer profile_btn">
                   <p className="capitalize hidden md:block">
                     {user ? "profile" : "login"}
                   </p>
@@ -124,17 +124,17 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
         <div className="w-full hidden sm:block">
           <div className="w-full universal bg-[#ffffff] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
             <div className="fixed_width px-5">
-              <ul className="flex flex-wrap items-center justify-center gap-1">
+              <ul className="flex flex-wrap items-center justify-center gap-2">
                 {Object.entries(menuData).map(
                   ([mainCategory, subCategories]) => (
                     <li
                       key={mainCategory}
-                      className="relative group cursor-pointer py-1 px-2"
+                      className="relative group cursor-pointer py-1 px-0 w-fit"
                     >
                       {/* Main Category */}
                       <a
                         href={`/search?mainCategory=${encodeURIComponent(mainCategory)}`}
-                        className="font-medium text-gray-800 capitalize"
+                        className="font-medium text-gray-800 capitalize main_menu_item"
                       >
                         {mainCategory}
                       </a>
