@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ForgotPassword() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -31,6 +33,7 @@ export default function ForgotPassword() {
         setEmail("");
         setMessage("");
         setSuccess(false);
+        router.push("/login");
       }, 5000);
     } catch (error) {
       setSuccess(false);
