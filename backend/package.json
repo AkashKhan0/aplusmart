@@ -13,7 +13,8 @@
     "mongoose": "^9.0.0",
     "multer": "^2.0.2",
     "nanoid": "^5.1.6",
-    "nodemailer": "^7.0.11"
+    "nodemailer": "^7.0.11",
+    "resend": "^6.9.2"
   },
   "scripts": {
     "dev": "nodemon src/server.js",

@@ -31,14 +31,14 @@ export default function ForgotPassword() {
         setEmail("");
         setMessage("");
         setSuccess(false);
-      }, 3000);
-    } catch {
+      }, 5000);
+    } catch (error) {
       setSuccess(false);
       setMessage("Something went wrong");
       setTimeout(() => {
         setEmail("");
         setMessage("");
-      }, 3000);
+      }, 5000);
     }
   };
 
