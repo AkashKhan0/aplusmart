@@ -49,8 +49,8 @@ export default function Orders({ onOrdersFetch }) {
   return (
     <div>
       <div className="w-full overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden hidden md:table">
-          <thead className="bg-gray-100 text-gray-700 text-sm">
+        <table className="min-w-full border border-gray-200 overflow-hidden hidden md:table">
+          <thead className="bg-gray-200 text-gray-700 text-sm">
             <tr>
               <th className="px-4 py-2 text-left">Order Item</th>
               <th className="px-4 py-2 text-left">Order Status</th>
@@ -94,7 +94,9 @@ export default function Orders({ onOrdersFetch }) {
                   ))}
                 </td>
                 <td className="px-4 py-2">
-                  <span className="px-2 py-1 rounded text-xs bg-blue-100 text-blue-700 capitalize">
+                  <span
+                    className={`px-2 py-1 rounded text-xs capitalize ${order.status === "cancelled" ? "bg-red-400 text-black" : order.status === "delivered" ?"bg-green-300 text-green-700" : "bg-blue-100 text-blue-700"}`}
+                  >
                     {order.status}
                   </span>
                 </td>
@@ -102,8 +104,10 @@ export default function Orders({ onOrdersFetch }) {
                   <span
                     className={`px-2 py-1 rounded text-xs capitalize ${
                       order.paymentStatus === "paid"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-yellow-700"
+                        ? "bg-green-600 text-white"
+                        : order.paymentStatus === "delivery_fee"
+                          ? "bg-green-300 text-green-700"
+                          : "bg-red-400 text-black"
                     }`}
                   >
                     {order.paymentStatus}
@@ -131,7 +135,7 @@ export default function Orders({ onOrdersFetch }) {
         </table>
 
         {/* 📱 Mobile View (Card Style) */}
-        <div className="md:hidden space-y-2">
+        <div className="md:hidden space-y-3 mt-2">
           {orders.map((order) => (
             <div
               key={order._id}
@@ -149,17 +153,19 @@ export default function Orders({ onOrdersFetch }) {
 
               <div className="flex justify-between mt-2 text-sm">
                 <span>Order Status:</span>
-                <span className="font-medium capitalize">{order.status}</span>
+                <span className={`px-2 py-1 rounded text-xs capitalize ${order.status === "cancelled" ? "bg-red-400 text-black" : order.status === "delivered" ?"bg-green-300 text-green-700" : "bg-blue-100 text-blue-700"}`}>{order.status}</span>
               </div>
 
               <div className="flex justify-between mt-1 text-sm">
                 <span>Payment Status:</span>
                 <span
-                  className={`font-medium capitalize ${
-                    order.paymentStatus === "paid"
-                      ? "text-green-600"
-                      : "text-yellow-600"
-                  }`}
+                  className={`px-2 py-1 rounded text-xs capitalize ${
+                      order.paymentStatus === "paid"
+                        ? "bg-green-600 text-white"
+                        : order.paymentStatus === "delivery_fee"
+                          ? "bg-green-300 text-green-700"
+                          : "bg-red-400 text-black"
+                    }`}
                 >
                   {order.paymentStatus}
                 </span>
@@ -168,15 +174,13 @@ export default function Orders({ onOrdersFetch }) {
               <div className="flex justify-between mt-1 text-sm">
                 <span>Order Details:</span>
                 <button
-                    onClick={() =>
-                      router.push(
-                        `/order-confirmation?orderId=${order.orderId}`,
-                      )
-                    }
-                    className="px-2 py-0.5 bg-[#2b2a29] text-white rounded cursor-pointer hover:bg-[#590000] transition text-sm"
-                  >
-                    Order Details
-                  </button>
+                  onClick={() =>
+                    router.push(`/order-confirmation?orderId=${order.orderId}`)
+                  }
+                  className="px-2 py-0.5 bg-[#2b2a29] text-white rounded cursor-pointer hover:bg-[#590000] transition text-sm"
+                >
+                  See Details
+                </button>
               </div>
 
               <div className="flex justify-between mt-2 border-t border-t-gray-300 pt-2">

@@ -140,17 +140,17 @@ export default function Footer() {
                   <a href="mailto:info@aplusmartbd.com">info@aplusmartbd.com</a>
                 </div>
                 <div className="flex items-center justify-center sm:justify-center md:justify-start text-lg mt-5 gap-2.5">
-                  <Link href="">
-                    <FaFacebookF className="text-[#FFFFFF] hover:text-[#971900] transition-colors duration-300" />
+                  <Link href="" className="social_btn_icn" >
+                    <FaFacebookF />
                   </Link>
-                  <Link href="">
-                    <FaInstagram className="text-[#FFFFFF] hover:text-[#971900] transition-colors duration-300" />
+                  <Link href="" className="social_btn_icn" >
+                    <FaInstagram />
                   </Link>
-                  <Link href="">
-                    <FaYoutube className="text-[#FFFFFF] hover:text-[#971900] transition-colors duration-300" />
+                  <Link href="" className="social_btn_icn" >
+                    <FaYoutube />
                   </Link>
-                  <Link href="">
-                    <FaTiktok className="text-[#FFFFFF] hover:text-[#971900] transition-colors duration-300" />
+                  <Link href="" className="social_btn_icn" >
+                    <FaTiktok />
                   </Link>
                 </div>
               </div>

@@ -35,6 +35,7 @@ export const AppProvider = ({ children }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState("idle");
 
   // Helpers, email and phone number validation
   const validateEmail = (email) => {
@@ -46,16 +47,15 @@ export const AppProvider = ({ children }) => {
     return re.test(phone);
   };
   useEffect(() => {
-  if (message) {
-    const timer = setTimeout(() => {
-      setMessage("");
-      setIsSuccess(false);
-    }, 2000);
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setIsSuccess(false);
+      }, 2000);
 
-    return () => clearTimeout(timer);
-  }
-}, [message]);
-
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   // reset form input box
   const resetForm = () => {
@@ -74,54 +74,54 @@ export const AppProvider = ({ children }) => {
   // ---------------- Register ----------------
   const registerUser = async () => {
     // CUSTOMER
-    if (role === "customer" && !fullName.trim()){
-    setIsSuccess(false);
-    return setMessage("Full name is required");
-  }
+    if (role === "customer" && !fullName.trim()) {
+      setIsSuccess(false);
+      return setMessage("Full name is required");
+    }
 
     // RESELLER
     if (role === "reseller") {
       if (!shopName.trim()) {
-      setIsSuccess(false);
-      return setMessage("Shop name is required");
-    }
-    if (!location.trim()) {
-      setIsSuccess(false);
-      return setMessage("Location is required");
-    }
-    if (!resellerName.trim()) {
-      setIsSuccess(false);
-      return setMessage("Reseller full name is required");
-    }
+        setIsSuccess(false);
+        return setMessage("Shop name is required");
+      }
+      if (!location.trim()) {
+        setIsSuccess(false);
+        return setMessage("Location is required");
+      }
+      if (!resellerName.trim()) {
+        setIsSuccess(false);
+        return setMessage("Reseller full name is required");
+      }
     }
 
     // COMMON
     if (!email.trim()) {
-    setIsSuccess(false);
-    return setMessage("Email is required");
-  }
+      setIsSuccess(false);
+      return setMessage("Email is required");
+    }
     if (!validateEmail(email)) {
-    setIsSuccess(false);
-    return setMessage("Invalid email");
-  }
+      setIsSuccess(false);
+      return setMessage("Invalid email");
+    }
 
     if (!phone.trim()) {
-    setIsSuccess(false);
-    return setMessage("Phone is required");
-  }
+      setIsSuccess(false);
+      return setMessage("Phone is required");
+    }
     if (!validatePhone(phone)) {
-    setIsSuccess(false);
-    return setMessage("Please enter a valid phone number");
-  }
+      setIsSuccess(false);
+      return setMessage("Please enter a valid phone number");
+    }
 
     if (password.length < 6) {
-    setIsSuccess(false);
-    return setMessage("Password must be at least 6 characters");
-  }
+      setIsSuccess(false);
+      return setMessage("Password must be at least 6 characters");
+    }
     if (password !== confirm) {
-    setIsSuccess(false);
-    return setMessage("Passwords do not match");
-  }
+      setIsSuccess(false);
+      return setMessage("Passwords do not match");
+    }
 
     const payload =
       role === "customer"
@@ -129,6 +129,7 @@ export const AppProvider = ({ children }) => {
         : { role, shopName, location, resellerName, email, phone, password };
 
     try {
+      setButtonStatus("loading");
       const res = await fetch(`${API}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -140,17 +141,22 @@ export const AppProvider = ({ children }) => {
 
       if (!res.ok) {
         setIsSuccess(false);
+        setButtonStatus("idle");
         return setMessage(data.error || "Registration failed");
       }
 
       setIsSuccess(true);
       setMessage("Registration successful");
+      setButtonStatus("success");
+
       setTimeout(() => {
+        setButtonStatus("idle");
         resetForm();
         router.push("/login");
       }, 2000);
     } catch (error) {
       setIsSuccess(false);
+      setButtonStatus("idle");
       setMessage("Something went wrong");
     }
   };
@@ -169,7 +175,7 @@ export const AppProvider = ({ children }) => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
-          { credentials: "include" }
+          { credentials: "include" },
         );
         const data = await res.json();
         if (data.user) setUser(data.user);
@@ -217,7 +223,7 @@ export const AppProvider = ({ children }) => {
 
   const addToCart = (newItem) => {
     const existingIndex = cart.findIndex(
-      (item) => item._id === newItem._id && item.role === newItem.role
+      (item) => item._id === newItem._id && item.role === newItem.role,
     );
 
     let updatedCart = [...cart];
@@ -227,7 +233,7 @@ export const AppProvider = ({ children }) => {
       const existing = updatedCart[existingIndex];
       // merge colors (no duplicate)
       const mergedColors = Array.from(
-        new Set([...(existing.colors || []), ...(newItem.colors || [])])
+        new Set([...(existing.colors || []), ...(newItem.colors || [])]),
       );
       updatedCart[existingIndex] = {
         ...existing,
@@ -245,7 +251,7 @@ export const AppProvider = ({ children }) => {
     if (quantity < 1) return;
 
     const updated = cart.map((item) =>
-      item._id === id ? { ...item, quantity } : item
+      item._id === id ? { ...item, quantity } : item,
     );
 
     syncCart(updated);
@@ -263,7 +269,7 @@ export const AppProvider = ({ children }) => {
       credentials: "include",
     });
   };
-  
+
   // ---------------- Greeting ----------------
   useEffect(() => {
     const updateGreeting = () => {
@@ -339,6 +345,8 @@ export const AppProvider = ({ children }) => {
         user,
         setUser,
         placeOrder,
+        buttonStatus,
+        setButtonStatus,
       }}
     >
       {children}

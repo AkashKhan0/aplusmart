@@ -7,7 +7,7 @@ import { useAppContext } from "@/src/context/AppContext";
 export default function SignupPage() {
   const context = useAppContext();
 
-  const isLoading = context.isSuccess && context.message === "Registration successful";
+  // const isLoading = context.isSuccess && context.message === "Registration successful";
 
   return (
     <div className="w-full universal min-h-screen p-5 mt-16">
@@ -39,9 +39,9 @@ export default function SignupPage() {
           </div>
 
           <form
-            onSubmit={async(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-               await context.registerUser();
+              await context.registerUser();
             }}
             className="flex flex-col gap-1"
           >
@@ -53,6 +53,7 @@ export default function SignupPage() {
                   type="text"
                   className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.fullName}
+                  placeholder="Full name"
                   onChange={(e) => context.setFullName(e.target.value)}
                 />
               </>
@@ -66,6 +67,7 @@ export default function SignupPage() {
                   type="text"
                   className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.shopName}
+                  placeholder="Shop name"
                   onChange={(e) => context.setShopName(e.target.value)}
                 />
 
@@ -74,6 +76,7 @@ export default function SignupPage() {
                   type="text"
                   className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.location}
+                  placeholder="Shop location"
                   onChange={(e) => context.setLocation(e.target.value)}
                 />
 
@@ -82,6 +85,7 @@ export default function SignupPage() {
                   type="text"
                   className="w-full border border-gray-300 rounded-sm py-1 px-3"
                   value={context.resellerName}
+                  placeholder="Reseller full name"
                   onChange={(e) => context.setResellerName(e.target.value)}
                 />
               </>
@@ -93,16 +97,24 @@ export default function SignupPage() {
               type="email"
               className="w-full border border-gray-300 rounded-sm py-1 px-3"
               value={context.email}
+              placeholder="aplusmartbd@gmail.com"
               onChange={(e) => context.setEmail(e.target.value)}
             />
 
             <p className="font-semibold">Phone</p>
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-sm py-1 px-3"
-              value={context.phone}
-              onChange={(e) => context.setPhone(e.target.value)}
-            />
+            <div className="flex items-center w-full border border-gray-300 rounded-sm">
+              <span className="px-1 text-gray-900">+88</span>
+              <input
+                type="text"
+                className="w-full rounded-sm py-1 px-1"
+                value={context.phone}
+                placeholder="016XXXXXXXX"
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "");
+                  context.setPhone(value);
+                }}
+              />
+            </div>
 
             {/* PASSWORD */}
             <p className="font-semibold">Password</p>
@@ -111,6 +123,7 @@ export default function SignupPage() {
                 type={context.showPass ? "text" : "password"}
                 className="w-full border border-gray-300 rounded-sm py-1 px-3 pr-10"
                 value={context.password}
+                placeholder="*********"
                 onChange={(e) => context.setPassword(e.target.value)}
               />
               <span
@@ -127,6 +140,7 @@ export default function SignupPage() {
                 type={context.showConfirm ? "text" : "password"}
                 className="w-full border border-gray-300 rounded-sm py-1 px-3 pr-10"
                 value={context.confirm}
+                placeholder="*********"
                 onChange={(e) => context.setConfirm(e.target.value)}
               />
               <span
@@ -137,20 +151,26 @@ export default function SignupPage() {
               </span>
             </div>
 
+            <div className="w-full h-5">
+              {context.message && context.buttonStatus === "idle" && (
+                <p className="text-red-600 text-sm font-medium">
+                  {context.message}
+                </p>
+              )}
+            </div>
+
             {/* BUTTON WITH MESSAGE INSIDE */}
             <button
               type="submit"
-              disabled={isLoading}
-              className={`w-full py-1 rounded-sm font-semibold text-lg my-3 cursor-pointer
-                ${
-                  isLoading
-                    ? "bg-green-600 text-white cursor-not-allowed"
-                    : "bg-[#FFCE1B] hover:bg-[#fdc701]"
-                }
-              `}
+              disabled={
+                context.buttonStatus === "loading" ||
+                context.buttonStatus === "success"
+              }
+              className={`w-full py-1 rounded-sm font-semibold text-lg bg-[#FFCE1B] text-black transition-all duration-150 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_2px_0_#d1a900] disabled:cursor-not-allowed cursor-pointer ${context.buttonStatus === "success" ? "bg-green-500 text-white shadow-none" : "hover:bg-[#fdc701]"}`}
             >
-              {typeof context.message === "string" && context.message !== "" ? context.message : "Register"}
-
+              {context.buttonStatus === "loading" && "Please wait..."}
+              {context.buttonStatus === "success" && "Registration successful"}
+              {context.buttonStatus === "idle" && "Register"}
             </button>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">

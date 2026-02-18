@@ -75,11 +75,30 @@ export default function OrderConfirmation() {
 
           <div className="bg-white border border-[#dddddd] p-4 rounded shadow-sm">
             <div className="w-full">
-              <h1 className="text-xl font-medium text-[#2B2A29] flex items-start gap-2">
-                <FaHandPointRight className="mt-1 text-red-600 w-5 min-w-5" />{" "}
-                Please pay delivery fee to confirm your order. Use order ID as
-                reference.
-              </h1>
+              {order?.paymentMethod === "Cash on Delivery" && (
+                <div className="flex items-start gap-2">
+                  <FaHandPointRight className="mt-1 text-red-600 w-5 min-w-5" />{" "}
+                  <h1 className="text-xl font-medium text-[#2B2A29]">
+                    Please pay the delivery fee of{" "}
+                    {Number(order.shippingCharge).toLocaleString("en-IN")}{" "}
+                    taka to confirm your order.{" "}
+                    <strong>
+                      Kindly use your <strong>Order ID</strong> as the payment
+                      reference.
+                    </strong>
+                  </h1>
+                </div>
+              )}
+              {order?.paymentMethod === "Online Payment" && (
+                <div className="flex items-start gap-2">
+                  <FaHandPointRight className="mt-1 text-red-600 w-5 min-w-5" />{" "}
+                  <h1 className="text-xl font-medium text-[#2B2A29]">
+                    Clear your Online Payment{" "}
+                    {Number(order.grandTotal).toLocaleString("en-IN")}/= taka.{" "}
+                    <strong>Use order ID as reference.</strong>
+                  </h1>{" "}
+                </div>
+              )}
 
               <div className="border p-3 border-red-600 rounded-sm bg-amber-200 my-3">
                 <h1 className="text-lg font-semibold capitalize">
@@ -185,7 +204,7 @@ export default function OrderConfirmation() {
                   <strong>
                     {" "}
                     <span className="taka">৳- </span>
-                    {order.shippingCharge}/=
+                    {Number(order.shippingCharge).toLocaleString("en-IN")}/=
                   </strong>
                 </p>
                 <p>

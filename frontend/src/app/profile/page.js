@@ -112,31 +112,24 @@ export default function ProfilePage() {
         </div>
 
         {/* ================= DASHBOARD ================= */}
-        <div className="w-full mt-5 flex flex-col items-stretch gap-5">
-          {/* ===== Sidebar ===== */}
-          <div className="w-full flex gap-3 items-stretch justify-center h-full ">
+        <div className="w-full mt-5 flex flex-col items-stretch">
+          <div className="w-full flex items-stretch h-full ">
             <div
               onClick={() => setTab("orders")}
               className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab ${
                 tab === "orders" && "tab_active"
-              } rounded-[50px] flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full`}
+              } universal gap-0.5 cursor-pointer w-full min-w-fit max-w-[120px]`}
             >
-              <div className="w-10 h-10 rounded-full universal text-3xl text-[#931905] p-2 tab_active">
-                <HiClipboardDocumentList />
-              </div>
-              <p className="text-[12px] sm:text-base capitalize">Orders</p>
+              <p className="text-base font-medium capitalize">Orders</p>
             </div>
 
             <div
               onClick={() => setTab("transactions")}
-              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab rounded-[50px] flex flex-col sm:flex-row items-center justify-center gap-0.5 cursor-pointer w-full ${
+              className={`py-2 px-0 sm:px-5 md:px-5 transition-all duration-300 tab universal gap-0.5 cursor-pointer w-full min-w-fit max-w-[120px] ${
                 tab === "transactions" && "tab_active"
               }`}
             >
-              <div className="w-10 h-10 rounded-full universal text-3xl text-[#931905] p-2 tab_active">
-                <IoIosCard />
-              </div>
-              <p className="text-[12px] sm:text-base capitalize">
+              <p className="text-base font-medium capitalize">
                 Transactions
               </p>
             </div>

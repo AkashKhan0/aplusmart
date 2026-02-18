@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { FaEye, FaEyeSlash, FaShoppingCart } from "react-icons/fa";
+import { HiViewGrid } from "react-icons/hi";
 
 export default function Allproducts() {
   const [products, setProducts] = useState([]);
@@ -101,7 +102,7 @@ export default function Allproducts() {
 
   return (
     <>
-      <div className="w-full universal_column py-10">
+      <div className="w-full universal_column pt-10 pb-5">
         {/* all products */}
         <div className="fixed_width px-5">
           <div className="w-full flex flex-col items-center justify-center mb-5">
@@ -120,13 +121,13 @@ export default function Allproducts() {
                 (product) =>
                   product.mainCategory?.toLowerCase() !== "offer" &&
                   product.mainCategory?.toLowerCase() !== "combo" &&
-                  product.mainCategory?.toLowerCase() !== "deals" &&
-                  product.subCategory?.toLowerCase() !== "deals",
+                  product.subCategory?.toLowerCase() !== "offer" &&
+                  product.subCategory?.toLowerCase() !== "combo",
               )
-              .slice(0, 40)
+              .slice(0, 30)
               .map((product) => (
                 <Link key={product._id} href={`/products/${product._id}`}>
-                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
                     {/* Offer % or Earn Points - only for customer */}
                     {user?.role === "customer" &&
                       (product?.offerPrice > 0 &&
@@ -143,7 +144,7 @@ export default function Allproducts() {
                       ) : (
                         product?.offerPrice > 0 && (
                           <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-0.5 justify-center text-sm font-normal capitalize">
-                            Earn Points
+                            Earn Points{" "}
                             <span className="text-[#c9c601] flex items-center">
                               {Math.min(
                                 Math.floor(product.offerPrice / 100),
@@ -165,13 +166,13 @@ export default function Allproducts() {
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5">
+                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl">
                       <h1 className="text-base font-medium text-center capitalize">
                         {product.name}
                       </h1>
 
                       {/* Price display */}
-                      <p className="text-[#931905] flex items-center gap-1 font-bold">
+                      <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                         <span className="taka">৳-</span>
                         {
                           user?.role === "reseller"
@@ -210,7 +211,7 @@ export default function Allproducts() {
                         </button>
                         {successProductId === product._id && (
                           <p className="text-green-600 text-xs mt-1">
-                            Added to cart successfully!
+                            Added to cart!
                           </p>
                         )}
                       </div>
@@ -218,6 +219,14 @@ export default function Allproducts() {
                   </div>
                 </Link>
               ))}
+          </div>
+          <div className="w-full universal mt-10">
+            <Link href="/allproducts">
+            <button className="buy_btn">
+              <span>view all products</span>
+              <span className="text-sm shop_btn_icon"><HiViewGrid /></span>
+            </button>
+          </Link>
           </div>
         </div>
       </div>

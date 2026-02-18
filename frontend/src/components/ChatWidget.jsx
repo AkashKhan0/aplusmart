@@ -133,10 +133,7 @@ export default function ChatWidget() {
 
         <button
           onClick={() => setOpen(true)}
-          className="bg-[#971900] hover:bg-[#590000]
-          transition-all duration-300 text-white
-          w-10 h-10 flex items-center justify-center
-          rounded-full shadow-lg cursor-pointer relative"
+          className="support_icon_btn relative"
         >
           <BiSupport size={26} />
         </button>

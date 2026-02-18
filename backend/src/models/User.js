@@ -8,16 +8,10 @@ const userSchema = new mongoose.Schema(
       enum: ["customer", "reseller"],
       required: true,
     },
-
-    // COMMON FIELDS
     email: { type: String, required: true, unique: true, sparse: true },
     phone: { type: String, required: true, unique: true, sparse: true },
     password: { type: String, required: true },
-
-    // CUSTOMER FIELDS
     fullName: { type: String },
-
-    // RESELLER FIELDS
     shopName: { type: String },
     location: { type: String },
     resellerName: { type: String },
@@ -27,7 +21,6 @@ const userSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
-    // 🔥 PASSWORD RESET FIELDS (REQUIRED)
     resetToken: {
       type: String,
     },

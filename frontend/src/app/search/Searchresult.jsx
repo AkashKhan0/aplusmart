@@ -145,7 +145,7 @@ export default function Searchresult() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
               {products.map((item) => (
                 <Link key={item._id} href={`/products/${item._id}`}>
-                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
                     {/* % OFF */}
                     {user?.role === "customer" &&
                     (item?.offerPrice > 0 &&
@@ -181,11 +181,11 @@ export default function Searchresult() {
                       />
                     </div>
 
-                    <div className="w-full flex flex-col items-center py-2 gap-1.5">
+                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl">
                       <h1 className="text-base font-medium text-center capitalize">
                         {item.name}
                       </h1>
-                      <p className="text-[#931905] flex items-center gap-1 font-bold">
+                      <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                         <span className="taka">৳-</span>
                        {
                           user?.role === "reseller"
@@ -224,7 +224,7 @@ export default function Searchresult() {
                         </button>
                         {successProductId === item._id && (
                           <p className="text-green-600 text-xs mt-1">
-                            Added to cart successfully!
+                            Added to cart!
                           </p>
                         )}
                       </div>

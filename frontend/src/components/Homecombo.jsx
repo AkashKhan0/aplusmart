@@ -124,7 +124,7 @@ export default function Homecombo() {
               .slice(0, 10)
               .map((product) => (
                 <Link key={product._id} href={`/products/${product._id}`}>
-                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
                     {/* Offer % or Earn Points - only for customer */}
                     {user?.role === "customer" &&
                     (product?.offerPrice > 0 &&
@@ -164,13 +164,13 @@ export default function Homecombo() {
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5">
+                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl">
                       <h1 className="text-base font-medium text-center capitalize">
                         {product.name}
                       </h1>
 
                       {/* Price display */}
-                      <p className="text-[#931905] flex items-center gap-1 font-bold">
+                      <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                         <span className="taka">৳-</span>
                         {
                           user?.role === "reseller"
@@ -209,7 +209,7 @@ export default function Homecombo() {
                         </button>
                         {successProductId === product._id && (
                           <p className="text-green-600 text-xs mt-1">
-                            Added to cart successfully!
+                            Added to cart!
                           </p>
                         )}
                       </div>

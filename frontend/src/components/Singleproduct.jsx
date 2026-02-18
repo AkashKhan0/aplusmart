@@ -3,33 +3,34 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FaMinus, FaPenNib, FaPlus } from "react-icons/fa";
 import { useAppContext } from "../context/AppContext";
 import { GiCrossMark, GiShoppingBag } from "react-icons/gi";
 
 export default function Singleproduct() {
   const { id } = useParams();
+  const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
-
   const { user, addToCart } = useAppContext();
-
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [activeImage, setActiveImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-
   const [selectedColor, setSelectedColor] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-
   // Review states
   const [reviews, setReviews] = useState(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewMessage, setReviewMessage] = useState("");
+  // review form states
+  const [formMessage, setFormMessage] = useState("");
+  const [formMessageType, setFormMessageType] = useState(""); // "error" | "success"
+  const [showThankYou, setShowThankYou] = useState(false);
 
   useEffect(() => {
     async function loadProduct() {
@@ -72,6 +73,15 @@ export default function Singleproduct() {
 
   /* ================= COLOR HANDLER ================= */
   const handleColorSelect = (color) => {
+    if (quantity === 1) {
+      if (selectedColor[0] === color) {
+        setSelectedColor([]); // same color click করলে unselect
+      } else {
+        setSelectedColor([color]); // নতুন color select → আগেরটা remove
+      }
+      return;
+    }
+
     if (selectedColor.includes(color)) {
       setSelectedColor(selectedColor.filter((c) => c !== color));
       return;
@@ -88,21 +98,18 @@ export default function Singleproduct() {
 
   const handleBuyNow = () => {
     if (!user) return;
-
     if (selectedColor.length === 0) {
       setMessage("Please select at least one color!");
       setMessageType("error");
       setTimeout(() => setMessage(""), 2000);
       return;
     }
-
     if (selectedColor.length > quantity) {
       setMessage(`You can select maximum ${quantity} color(s)!`);
       setMessageType("error");
       setTimeout(() => setMessage(""), 2000);
       return;
     }
-
     const cartItem = {
       _id: product._id,
       name: product.name,
@@ -111,19 +118,22 @@ export default function Singleproduct() {
       colors: selectedColor,
       role: user.role,
       ...(user.role === "customer"
-    ? {
-        offerPrice: product.offerPrice,
-        regularPrice: product.regularPrice,
-        hasOffer,
-        discountPercent,
-        earnedPoints,
-      }
-    : { resellerPrice: product.resellerPrice }),
+        ? {
+            offerPrice: product.offerPrice,
+            regularPrice: product.regularPrice,
+            hasOffer,
+            discountPercent,
+            earnedPoints,
+          }
+        : { resellerPrice: product.resellerPrice }),
     };
     addToCart(cartItem);
     setMessage("Added to cart!");
     setMessageType("success");
-    setTimeout(() => setMessage(""), 2000);
+    setTimeout(() => {
+    setMessage("");
+    router.push("/cart");
+  }, 2000);
   };
 
   const hasOffer =
@@ -131,16 +141,17 @@ export default function Singleproduct() {
     product?.regularPrice > 0 &&
     product.offerPrice < product.regularPrice;
 
-  const discountPercent = user?.role === "customer" && hasOffer
-    ? Math.round(
-        ((product.regularPrice - product.offerPrice) / product.regularPrice) *
-          100,
-      )
-    : 0;
+  const discountPercent =
+    user?.role === "customer" && hasOffer
+      ? Math.round(
+          ((product.regularPrice - product.offerPrice) / product.regularPrice) *
+            100,
+        )
+      : 0;
 
   // ✅ UPDATED POINTS LOGIC
   const earnedPoints =
-   user?.role === "customer" && product?.offerPrice > 0
+    user?.role === "customer" && product?.offerPrice > 0
       ? Math.min(
           Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
           500,
@@ -169,7 +180,9 @@ export default function Singleproduct() {
 
   const handleSubmitReview = async () => {
     if (!reviewRating || !reviewMessage) {
-      alert("Please select rating and write a message!");
+      setFormMessage("Please select rating and write a message!");
+      setFormMessageType("error");
+      setTimeout(() => setFormMessage(""), 3000);
       return;
     }
 
@@ -187,19 +200,25 @@ export default function Singleproduct() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Review submitted!");
-        setReviewModalOpen(false);
+        setShowThankYou(true);
         setReviewRating(0);
         setReviewMessage("");
-
-        // Refresh reviews
         loadReviews();
+        setTimeout(() => {
+          setShowThankYou(false);
+          setReviewModalOpen(false);
+        }, 3000);
       } else {
-        alert(data.error || "Failed to submit review");
+        setFormMessage(data.error || "Failed to submit review");
+        setFormMessageType("error");
+        setTimeout(() => setFormMessage(""), 3000);
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to submit review");
+      setFormMessage("Failed to submit review");
+      setFormMessageType("error");
+      setTimeout(() => setFormMessage(""), 3000);
+
     }
   };
 
@@ -271,22 +290,22 @@ export default function Singleproduct() {
               </h1>
               <div className="w-full flex flex-wrap items-center gap-2.5 my-2">
                 <p className="pro_p_b_s_B">
-  price : <span className="taka">৳-</span>
-  <strong>
-    {user?.role === "reseller"
-      ? Number(product.resellerPrice).toLocaleString("en-IN") // Reseller price
-      : Number(product.offerPrice).toLocaleString("en-IN") // Customer price
-    }
-  </strong>
-
-  {/* Show regular price only for customer */}
-  {user?.role !== "reseller" && product.regularPrice > 0 && (
-    <del className="text-[#931905] font-bold">
-      <span className="taka">৳- </span>
-      {Number(product.regularPrice).toLocaleString("en-IN")}
-    </del>
-  )}
-</p>
+                  price : <span className="taka">৳-</span>
+                  <strong>
+                    {
+                      user?.role === "reseller"
+                        ? Number(product.resellerPrice).toLocaleString("en-IN") // Reseller price
+                        : Number(product.offerPrice).toLocaleString("en-IN") // Customer price
+                    }
+                  </strong>
+                  {/* Show regular price only for customer */}
+                  {user?.role !== "reseller" && product.regularPrice > 0 && (
+                    <del className="text-[#931905] font-bold">
+                      <span className="taka">৳- </span>
+                      {Number(product.regularPrice).toLocaleString("en-IN")}
+                    </del>
+                  )}
+                </p>
 
                 <p className="pro_p_b_s_B">
                   brand : <strong>{product.brand}</strong>
@@ -343,22 +362,20 @@ export default function Singleproduct() {
               </div>
 
               {/* Offer / Points Badge */}
-              {user?.role === "customer" && (
-  hasOffer ? (
-    <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
-      {discountPercent}% OFF
-    </div>
-  ) : earnedPoints > 0 ? (
-    <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1 text-sm font-medium my-2">
-      Earn Points
-      <span className="text-[#c9c601]">{earnedPoints} ⭐</span>
-    </div>
-  ) : null
-)}
-
+              {user?.role === "customer" &&
+                (hasOffer ? (
+                  <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
+                    {discountPercent}% OFF
+                  </div>
+                ) : earnedPoints > 0 ? (
+                  <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1 text-sm font-medium my-2">
+                    Earn Points
+                    <span className="text-[#c9c601]">{earnedPoints} ⭐</span>
+                  </div>
+                ) : null)}
 
               {/* Quantity */}
-              <div className="w-full max-w-fit flex flex-col sm:flex-row md:flex-row items-center justify-start gap-3 my-5">
+              <div className="w-full max-w-fit flex flex-col sm:flex-row md:flex-row items-start justify-start gap-3 my-5">
                 <div className="flex items-stretch gap-1.5">
                   <div
                     className="universal w-fit h-8 px-2 border border-[#ddd] cursor-pointer flex items-center justify-center text-sm"
@@ -377,7 +394,7 @@ export default function Singleproduct() {
                   </div>
                 </div>
 
-                <button
+                  <button
                   onClick={() => {
                     if (!user) {
                       setMessage("Please login first!");
@@ -410,7 +427,7 @@ export default function Singleproduct() {
           {/* Specifications + Related */}
           <div className="w-full mt-5 flex flex-col sm:flex-row md:flex-row gap-2.5 pt-5 border-t border-t-gray-300">
             {/* Specifications */}
-            <div className="w-full sm:w-[70%] md:w-[70%] p-3 rounded-md">
+            <div className="w-full sm:w-[70%] md:w-[70%] rounded-md">
               <h1 className="text-lg font-bold capitalize text-[#931905] mb-3">
                 Specification
               </h1>
@@ -509,34 +526,75 @@ export default function Singleproduct() {
                 >
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white p-5 rounded-md w-full max-w-md flex flex-col gap-3 relative"
+                    className="bg-white p-5 rounded-md w-full max-w-md flex flex-col relative"
                   >
-                    <h3 className="text-lg font-bold mb-2">Write a Review</h3>
-                    <div className="flex items-center gap-2">
-                      <span>Rating:</span>
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <span
-                          key={star}
-                          className={`text-2xl cursor-pointer hover:text-yellow-500 duration-300 ${
-                            reviewRating >= star
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
-                          onClick={() => setReviewRating(star)}
+                    {showThankYou ? (
+                      // ✅ Thank You view
+                      <div className="flex flex-col items-center justify-center py-12">
+                        <h2 className="text-3xl font-bold text-green-600">
+                          Thank You!
+                        </h2>
+                        <p className="mt-2 text-gray-600">
+                          Your review has been submitted successfully.
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Heading */}
+                        <h3 className="text-lg font-bold">Write a Review</h3>
+
+                        <div className="w-full">
+                          {/* ❌ Inline message */}
+                          {formMessage && (
+                            <p
+                              className={`text-sm ${
+                                formMessageType === "error"
+                                  ? "text-red-600"
+                                  : "text-green-600"
+                              }`}
+                            >
+                              {formMessage}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-2">
+                          <span>Rating:</span>
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <span
+                              key={star}
+                              className={`text-2xl cursor-pointer hover:text-yellow-500 duration-300 ${
+                                reviewRating >= star
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                              onClick={() => setReviewRating(star)}
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Message */}
+                        <textarea
+                          className="border p-2 rounded-md w-full"
+                          placeholder="Write your review..."
+                          value={reviewMessage}
+                          onChange={(e) => setReviewMessage(e.target.value)}
+                        />
+
+                        {/* Submit */}
+                        <button
+                          onClick={handleSubmitReview}
+                          className="buy_btn mt-3"
                         >
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                    <textarea
-                      className="border p-2 rounded-md w-full"
-                      placeholder="Write your review..."
-                      value={reviewMessage}
-                      onChange={(e) => setReviewMessage(e.target.value)}
-                    />
-                    <button onClick={handleSubmitReview} className="buy_btn">
-                      Submit
-                    </button>
+                          Submit
+                        </button>
+                      </>
+                    )}
+
+                    {/* Close button */}
                     <button
                       onClick={() => setReviewModalOpen(false)}
                       className="underline absolute top-2 right-2 text-red-600 cursor-pointer"

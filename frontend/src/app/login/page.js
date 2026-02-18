@@ -18,6 +18,7 @@ export default function Page() {
   const [passwordError, setPasswordError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const [buttonStatus, setButtonStatus] = useState("idle");
 
   // ---------------- Check existing session ----------------
   useEffect(() => {
@@ -33,16 +34,15 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-  if (message || passwordError) {
-    const timer = setTimeout(() => {
-      setMessage("");
-      setPasswordError("");
-    }, 2000);
+    if (message || passwordError) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setPasswordError("");
+      }, 2000);
 
-    return () => clearTimeout(timer);
-  }
-}, [message, passwordError]);
-
+      return () => clearTimeout(timer);
+    }
+  }, [message, passwordError]);
 
   // ---------------- Login Handler ----------------
   const handleLogin = async (e) => {
@@ -54,6 +54,7 @@ export default function Page() {
     if (!password.trim()) return setPasswordError("Password is required");
 
     try {
+      setButtonStatus("loading");
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/userauth/login`,
         {
@@ -65,24 +66,28 @@ export default function Page() {
             password,
             rememberMe,
           }),
-        }
+        },
       );
 
       const data = await res.json();
 
       if (!res.ok) {
+        setButtonStatus("idle");
         setIsSuccess(false);
         return setMessage(data.error || "Login failed");
       }
 
       setIsSuccess(true);
       setMessage("Login successful");
+      setButtonStatus("success");
 
       setTimeout(() => {
+        setButtonStatus("idle");
         router.push("/profile");
-      }, 800);
+      }, 1000);
     } catch (error) {
       setIsSuccess(false);
+      setButtonStatus("idle");
       setMessage("Something went wrong");
     }
   };
@@ -148,34 +153,34 @@ export default function Page() {
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg cursor-pointer"
+              disabled={
+                buttonStatus === "loading" || buttonStatus === "success"
+              }
+              className={`w-full py-1 rounded-sm font-semibold text-lg bg-[#FFCE1B] text-black transition-all duration-150 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_2px_0_#d1a900] disabled:cursor-not-allowed cursor-pointer ${buttonStatus === "success" ? "bg-green-500 text-white shadow-none" : "hover:bg-[#fdc701]"}`}
             >
-              Login
+              {buttonStatus === "loading" && "Please wait..."}
+              {buttonStatus === "success" && "Login successful"}
+              {buttonStatus === "idle" && "Login"}
             </button>
 
             {/* Message */}
             <div className="w-full flex items-center h-5">
               {message && (
-              <p
-                className={`text-sm font-semibold ${
-                  isSuccess ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {message}
-              </p>
-            )}
-            <p className="text-red-600 text-sm">
-                {passwordError}
-              </p>
+                <p
+                  className={`text-sm font-semibold ${
+                    isSuccess ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {message}
+                </p>
+              )}
+              <p className="text-red-600 text-sm">{passwordError}</p>
             </div>
 
             {/* Register */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
               <p>Don't have an account?</p>
-              <Link
-                href="/signup"
-                className="text-blue-600 font-semibold"
-              >
+              <Link href="/signup" className="text-blue-600 font-semibold">
                 Please Register...
               </Link>
             </div>

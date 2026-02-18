@@ -39,8 +39,8 @@ const orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["notyet", "delivery_fee", "paid"],
-      default: "notyet",
+      enum: ["not yet", "delivery_fee", "paid"],
+      default: "not yet",
     },
   },
   { timestamps: true }

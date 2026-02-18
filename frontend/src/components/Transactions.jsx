@@ -32,8 +32,8 @@ export default function Transactions() {
 {/* Desktop Table */}
 {transactions.length > 0 && (
   <div className="w-full overflow-x-auto">
-    <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden hidden md:table">
-      <thead className="bg-gray-100 text-gray-700 text-sm">
+    <table className="min-w-full border border-gray-200 overflow-hidden hidden md:table">
+      <thead className="bg-gray-200 text-gray-700 text-sm">
         <tr>
           <th className="px-4 py-2 text-left">Order ID</th>
           <th className="px-4 py-2 text-left">Payment Method</th>

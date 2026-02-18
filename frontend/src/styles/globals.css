@@ -144,15 +144,21 @@ input {
 }
 .profile_btn {
   border-radius: 50px;
-  box-shadow: 5px 5px 10px #0008, 10px 6px 15px rgba(64, 64, 64, 0.533) inset, -5px -5px 8px #a8a8a8 inset, 10px 6px 15px rgba(47, 47, 47, 0.267) inset, 0 0 8px #0005;
+  background: #2b2a29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    4px 4px 10px rgba(0, 0, 0, 0.6),
+    inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+  transition: all 0.5s ease;
 }
 
 /* buy now button */
 .buy_btn {
   padding: 5px 20px;
-  background-color: #b8b8b8;
   position: relative;
-  /* background-color: #2b2a29; */
   width: fit-content;
   color: rgb(91, 91, 91);
   font-weight: 600;
@@ -168,8 +174,7 @@ input {
   text-shadow: 2px 2px 5px #0008;
 }
 .buy_btn:hover {
-  /* background-color: #590000; */
-  background-color: #8e8e8e;
+  background-color: #d2d2d236;
   color: #ffffff;
 }
 
@@ -219,14 +224,14 @@ input {
   cursor: pointer;
   font-weight: 500;
   text-transform: capitalize;
-  background-color: #f3f4f6;
+  /* background-color: #f3f4f6; */
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   overflow-x: hidden;
   gap: 5px;
   color: rgb(91, 91, 91);
-  box-shadow: 5px 5px 10px #0008, 10px 6px 15px #0008 inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px #0004 inset, 0 0 8px #0005;
+  box-shadow: 5px 5px 10px rgba(89, 89, 89, 0.533), 10px 6px 15px rgba(84, 84, 84, 0.533) inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px rgba(196, 196, 196, 0.267) inset, 0 0 8px rgba(71, 71, 71, 0.333);
   text-shadow: 2px 2px 5px #0008;
 }
 .add_to_cart_btn::before{
@@ -343,6 +348,63 @@ input {
   transition: all 0.5s ease;
   max-width: 180px;
 }
+.pagination {
+  box-shadow: 5px 5px 10px rgba(89, 89, 89, 0.533), 10px 6px 15px rgba(84, 84, 84, 0.533) inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px rgba(196, 196, 196, 0.267) inset, 0 0 8px rgba(71, 71, 71, 0.333);
+  transition: all 0.5s ease;
+}
+.pagination_active {
+  background: #971900;
+  color: #ffffff;
+  box-shadow:
+    4px 4px 10px rgba(90, 0, 0, 0.6),
+    inset 6px 6px 12px rgba(60, 0, 0, 0.6),
+    inset -4px -4px 8px rgba(255, 180, 180, 0.35),
+    0 0 10px rgba(151, 25, 0, 0.6);
+  transition: all 0.5s ease;
+  transform: scale(0.95);
+}
+
+.social_btn_icn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2b2a29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    4px 4px 10px rgba(0, 0, 0, 0.6),
+    inset 3px 3px 6px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+  transition: all 0.5s ease;
+}
+.social_btn_icn:hover {
+  box-shadow:
+    inset 4px 4px 10px rgba(0, 0, 0, 0.6),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+  transition: all 0.5s ease;
+}
+
+.support_icon_btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: #971900;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    4px 4px 10px rgba(60, 0, 0, 0.6),
+    inset 5px 5px 10px rgba(80, 0, 0, 0.6),
+    inset -4px -4px 8px rgba(255, 180, 180, 0.35),
+    0 0 10px rgba(151, 25, 0, 0.6);
+
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
 .features_category:hover {
   border-radius: 76% 24% 40% 60% / 40% 69% 31% 60%;
 }
@@ -371,11 +433,12 @@ input {
 }
 
 .main_menu_item {
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; 
   padding: 2px 10px;
   border-radius: 50px;
+  font-size: 14px;
   color: rgb(91, 91, 91);
-  box-shadow: 5px 5px 10px #0008, 10px 6px 15px #0008 inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px #0004 inset, 0 0 8px #0005;
+  box-shadow: 5px 5px 10px rgba(79, 79, 79, 0.533), 10px 6px 15px rgba(187, 187, 187, 0.533) inset, -5px -5px 8px #ffffff inset, 10px 6px 15px rgba(102, 102, 102, 0.267) inset, 0 0 8px rgba(88, 88, 88, 0.333);
   text-shadow: 2px 2px 5px #0008;
 }
 label {
@@ -513,63 +576,6 @@ label {
   }
 }
 
-/* Shine text effect */
-.shine-text {
-  position: relative;
-  color: #971900;
-  display: inline-block;
-}
-
-/* moving white shine INSIDE text only */
-.shine-text::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  color: transparent;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.9) 45%,
-    rgba(0, 0, 0, 0.9) 50%,
-    rgba(0, 0, 0, 0.9) 55%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  background-position: -100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: textShine 3.5s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes textShine {
-  0% {
-    background-position: -100% 0;
-  }
-  100% {
-    background-position: 100% 0;
-  }
-}
-
-@keyframes supportHint {
-  0% {
-    opacity: 0;
-    transform: translateX(10px) scale(0.6);
-  }
-  20% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(10px) scale(0.6);
-  }
-}
-
 .animate-supportHint {
   animation: supportHint 2s ease-in-out forwards;
 }
@@ -594,12 +600,9 @@ label {
   box-shadow:
     10px 10px 10px -1px #0000000c,
     -10px -10px 10px -1px #0000000c;
-  max-width: 400px;
 }
 .tab_active {
-  box-shadow:
-    inset 10px 10px 10px -1px #00000033,
-    inset -10px -10px 10px -1px #00000033;
+    background-color: #e5e7eb;
 }
 
 /* toast message */

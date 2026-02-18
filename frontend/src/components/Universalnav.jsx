@@ -77,7 +77,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
 
               <form
                 onSubmit={handleSearch}
-                className="w-full overflow-hidden flex items-center gap-0 bg-[#F0F8FF]"
+                className="w-full overflow-hidden rounded-full flex items-center gap-0 bg-[#F0F8FF]"
               >
                 <input
                   type="search"

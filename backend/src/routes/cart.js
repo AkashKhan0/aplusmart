@@ -1,5 +1,5 @@
-
 import express from "express";
+import Cart from "../models/Cart.js";
 import { protectUser } from "../middleware/protectUser.js";
 
 const router = express.Router();
@@ -7,48 +7,34 @@ const router = express.Router();
 /* =====================
    GET CART
 ===================== */
-router.get("/", protectUser, (req, res) => {
-  const key = `cart_${req.user._id}`;
-  let cart = [];
-
-  try {
-    if (req.cookies[key]) {
-      cart = JSON.parse(req.cookies[key]);
-      if (!Array.isArray(cart)) cart = [];
-    }
-  } catch {
-    cart = [];
-  }
-
-  res.json({ cart });
+router.get("/", protectUser, async (req, res) => {
+  const cart = await Cart.findOne({ userId: req.user._id });
+  res.json({ cart: cart?.items || [] });
 });
 
 /* =====================
-   SET CART
+   SET / UPDATE CART
 ===================== */
-router.post("/", protectUser, (req, res) => {
-  const key = `cart_${req.user._id}`;
-  const cart = Array.isArray(req.body.cart) ? req.body.cart : [];
+router.post("/", protectUser, async (req, res) => {
+  const items = Array.isArray(req.body.cart) ? req.body.cart : [];
 
-  res.cookie(key, JSON.stringify(cart), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
-    path: "/",
-  });
+  const cart = await Cart.findOneAndUpdate(
+    { userId: req.user._id },
+    { items },
+    { new: true, upsert: true },
+  );
 
-  res.json({ success: true, cartCount: cart.length });
+  res.json({ success: true, cartCount: cart.items.length });
 });
 
 /* =====================
    CLEAR CART
 ===================== */
-router.delete("/", protectUser, (req, res) => {
-  const key = `cart_${req.user._id}`;
-  res.clearCookie(key, {
-    path: "/",
-  });
+router.delete("/", protectUser, async (req, res) => {
+  await Cart.findOneAndUpdate(
+    { userId: req.user._id },
+    { items: [] },
+  );
 
   res.json({ success: true });
 });
