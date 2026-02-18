@@ -47,7 +47,7 @@ export default function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <button className="bg-[#FFCE1B] py-1 font-semibold cursor-pointer">
+          <button className={`w-full py-1 rounded-sm font-semibold text-lg bg-[#FFCE1B] text-black transition-all duration-150 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_2px_0_#d1a900] disabled:cursor-not-allowed cursor-pointer ${success ? "bg-green-500 text-white shadow-none" : "hover:bg-[#fdc701]"}`}>
             Continue
           </button>
 
