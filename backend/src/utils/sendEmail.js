@@ -3,15 +3,10 @@ import nodemailer from "nodemailer";
 const sendEmail = async ({ to, subject, html }) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      service: "gmail",
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false, // Vercel serverless friendly
       },
     });
 

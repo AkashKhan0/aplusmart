@@ -20,16 +20,25 @@ export default function ForgotPassword() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
-        }
+        },
       );
 
       const data = await res.json();
       console.log("💌 Response received:", data);
       setSuccess(true);
       setMessage(data.message || "Reset link sent");
+      setTimeout(() => {
+        setEmail("");
+        setMessage("");
+        setSuccess(false);
+      }, 3000);
     } catch {
       setSuccess(false);
       setMessage("Something went wrong");
+      setTimeout(() => {
+        setEmail("");
+        setMessage("");
+      }, 3000);
     }
   };
 
@@ -47,7 +56,9 @@ export default function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <button className={`w-full py-1 rounded-sm font-semibold text-lg bg-[#FFCE1B] text-black transition-all duration-150 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_2px_0_#d1a900] disabled:cursor-not-allowed cursor-pointer ${success ? "bg-green-500 text-white shadow-none" : "hover:bg-[#fdc701]"}`}>
+          <button
+            className={`w-full py-1 rounded-sm font-semibold text-lg bg-[#FFCE1B] text-black transition-all duration-150 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[0_2px_0_#d1a900] disabled:cursor-not-allowed cursor-pointer ${success ? "bg-green-500 text-white shadow-none" : "bg-[#FFCE1B] hover:bg-[#fdc701]"}`}
+          >
             Continue
           </button>
 
