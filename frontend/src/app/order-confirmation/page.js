@@ -176,6 +176,12 @@ export default function OrderConfirmation() {
                 </div>
               </div>
 
+              <div className="w-full mt-2">
+                <h1 className="font-semibold capitalize text-xl">
+                  <strong>Bank Transfer Details</strong>
+                </h1>
+              </div>
+
               {/* bank details */}
               <div className="px-3 py-2 rounded-sm bg-amber-200 my-2">
                 <div className="flex flex-col md:flex-row gap-3">
@@ -187,7 +193,7 @@ export default function OrderConfirmation() {
                         onClick={() => setActiveBank(index)}
                         className={`text-left px-2 py-1 rounded-sm text-base font-medium transition cursor-pointer ${
                           activeBank === index
-                            ? "bg-red-600 text-white"
+                            ? "bg-gray-600 text-white"
                             : "bg-white hover:bg-red-100"
                         }`}
                       >
