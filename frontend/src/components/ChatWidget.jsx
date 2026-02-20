@@ -10,7 +10,7 @@ import { RiMessengerLine } from "react-icons/ri";
 import { BiSupport } from "react-icons/bi";
 
 const supportPeople = [
-  { name: "Preety", image: "/images/girl.png" },
+  { name: "Jannat", image: "/images/girl.png" },
   { name: "Naznin", image: "/images/girl1.png" },
   { name: "Mitu", image: "/images/girl2.jpg" },
 ];

@@ -58,13 +58,13 @@ export default function Footer() {
                 </h1>
               </Link>
 
-              <div className="w-fit flex items-center text-sm gap-2.5 border border-[#4d4d4d7c] px-5 py-2 rounded-lg cursor-pointer hover:border-[#971900] transition-colors duration-300">
+              <div className="w-fit flex items-center text-sm gap-2.5 border border-[#4d4d4d7c] px-5 py-2 rounded-lg cursor-pointer transition-all duration-100 profile_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
                 <div className="w-[15px] h-[15px] mt-[3px]">
                   <IoMdCall />
                 </div>
                 <a href="tel:+8801850219432">+8801850219432</a>
               </div>
-              <div className="w-fit flex items-center text-sm gap-2.5 border border-[#4d4d4d7c] px-5 py-2 rounded-lg cursor-pointer hover:border-[#971900] transition-colors duration-300 mt-2.5">
+              <div className="w-fit flex items-center text-sm gap-2.5 border border-[#4d4d4d7c] px-5 py-2 rounded-lg cursor-pointer transition-all duration-100 mt-2.5 profile_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
                 <div className="w-[15px] h-[15px] mt-[3px]">
                   <MdMail />
                 </div>
@@ -79,50 +79,50 @@ export default function Footer() {
 
               {/* desktop part */}
               <div className="w-full hidden sm:hidden md:flex gap-2.5">
-                <div className="w-full flex flex-col text-sm gap-1.5 ftr_span">
+                <div className="w-full flex flex-col text-sm gap-1.5">
                   <Link href="/online-delivery">
-                    <p>Online Delivery</p>
+                    <p className="ftr_span">Online Delivery</p>
                   </Link>
                   <Link href="/contact">
-                    <p>Contact Us</p>
+                    <p className="ftr_span">Contact Us</p>
                   </Link>
                   <Link href="/star-point-policy">
-                    <p>Star Point Policy</p>
+                    <p className="ftr_span">Star Point Policy</p>
                   </Link>
                 </div>
-                <div className="w-full flex flex-col text-sm gap-1.5 ftr_span">
+                <div className="w-full flex flex-col text-sm gap-1.5">
                   <Link href="/terms-condition">
-                    <p>Terms and Conditions</p>
+                    <p className="ftr_span">Terms and Conditions</p>
                   </Link>
                   <Link href="/privacy-policy">
-                    <p>Privacy Policy</p>
+                    <p className="ftr_span">Privacy Policy</p>
                   </Link>
                   <Link href="/return&refund-policy">
-                    <p>Refund and Return Policy</p>
+                    <p className="ftr_span">Refund and Return Policy</p>
                   </Link>
                 </div>
               </div>
 
               {/* mobile part */}
               <div className="w-full flex sm:flex md:hidden gap-2.5">
-                <div className="w-full flex flex-wrap justify-center ftr_span text-sm gap-5 gap-y-1">
+                <div className="w-full flex flex-wrap justify-center text-sm gap-5 gap-y-1">
                   <Link href="/online-delivery">
-                    <p>Online Delivery</p>
+                    <p className="ftr_span">Online Delivery</p>
                   </Link>
                   <Link href="/contact">
-                    <p>Contact Us</p>
+                    <p className="ftr_span">Contact Us</p>
                   </Link>
                   <Link href="/terms-condition">
-                    <p>Terms and Conditions</p>
+                    <p className="ftr_span">Terms and Conditions</p>
                   </Link>
                   <Link href="/star-point-policy">
-                    <p>Star Point Policy</p>
+                    <p className="ftr_span">Star Point Policy</p>
                   </Link>
                   <Link href="/privacy-policy">
-                    <p>Privacy Policy</p>
+                    <p className="ftr_span">Privacy Policy</p>
                   </Link>
                   <Link href="/return&refund-policy">
-                    <p>Refund and Return Policy</p>
+                    <p className="ftr_span">Refund and Return Policy</p>
                   </Link>
                 </div>
               </div>
@@ -130,7 +130,7 @@ export default function Footer() {
 
             <div className="w-full sm:w-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
               <h1 className="ftr_h1">Stay Connected</h1>
-              <div className="w-fit text-center sm:text-center md:text-start ftr_span text-sm">
+              <div className="w-fit text-center sm:text-center md:text-start text-sm">
                 <p className="font-medium">A Plus Mart BD</p>
 
                 <div className="w-fit flex items-center justify-center sm:justify-center md:justify-start text-sm gap-2.5 my-2">
@@ -140,18 +140,18 @@ export default function Footer() {
                   <a href="mailto:info@aplusmartbd.com">info@aplusmartbd.com</a>
                 </div>
                 <div className="flex items-center justify-center sm:justify-center md:justify-start text-lg mt-5 gap-2.5">
-                  <Link href="" className="social_btn_icn" >
+                  <a href="https://www.facebook.com/aaplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
                     <FaFacebookF />
-                  </Link>
-                  <Link href="" className="social_btn_icn" >
+                  </a>
+                  <a href="https://www.instagram.com/aplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
                     <FaInstagram />
-                  </Link>
-                  <Link href="" className="social_btn_icn" >
+                  </a>
+                  <a href="https://www.youtube.com/@aplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
                     <FaYoutube />
-                  </Link>
-                  <Link href="" className="social_btn_icn" >
+                  </a>
+                  <a href="https://www.tiktok.com/@aplusmartbd?lang=en" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
                     <FaTiktok />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@ export default function Footer() {
         <div className="fixed_width h-full px-5 mt-10">
           <div className="w-full flex flex-col items-center justify-center">
             <p className="ftr_p">
-              © 2025 A Plus Advertising Limited. All rights reserved.
+              © 2025 A Plus Mart BD. All rights reserved.
             </p>
             <p className="ftr_p">Powered By: A Plus Advertising Limited</p>
           </div>

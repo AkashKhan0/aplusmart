@@ -7,8 +7,6 @@ const orderSchema = new mongoose.Schema(
     billing: {
       fullName: String,
       address: String,
-      city: String,
-      thana: String,
       district: String,
       phone: String,
       email: String,

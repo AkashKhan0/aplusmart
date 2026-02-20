@@ -96,7 +96,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
 
             <div className="w-full max-w-fit md:w-fit  hidden sm:flex md:flex items-center justify-between gap-2.5 md:gap-5">
               <Link href={user ? "/profile" : "/login"}>
-                <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent  transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] hover:text-[#c23216] text-xl md:text-base cursor-pointer profile_btn">
+                <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent  transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] hover:text-[#c23216] text-xl md:text-base cursor-pointer profile_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
                   <p className="capitalize hidden md:block">
                     {user ? "profile" : "login"}
                   </p>
@@ -161,19 +161,19 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
         </div>
       </div>
 
-        {/* Mobile Footer */}
+      {/* Mobile Footer */}
       <div className="w-full h-14 block sm:hidden md:hidden fixed bottom-0 left- footer_mbl border">
         <div className="universal w-full h-full">
           <div className="w-[95%] bg-[#590000] flex items-center justify-between text-[#FFFFFF] h-full px-3 rounded-full">
             <Link href="/">
               <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
-                  <FaHome size={20} />
+                <FaHome size={20} />
                 <p className="text-xs font-medium">Home</p>
               </div>
             </Link>
             <Link href={user ? "/profile" : "/login"}>
               <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
-                  <FaUser size={18} />
+                <FaUser size={18} />
                 <p className="text-xs font-medium">
                   {user ? "Profile" : "Login"}
                 </p>

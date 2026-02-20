@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { FaMinus, FaPenNib, FaPlus } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaMinus, FaPenNib, FaPlus } from "react-icons/fa";
 import { useAppContext } from "../context/AppContext";
 import { GiCrossMark, GiShoppingBag } from "react-icons/gi";
 
@@ -31,6 +31,9 @@ export default function Singleproduct() {
   const [formMessage, setFormMessage] = useState("");
   const [formMessageType, setFormMessageType] = useState(""); // "error" | "success"
   const [showThankYou, setShowThankYou] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     async function loadProduct() {
@@ -131,9 +134,9 @@ export default function Singleproduct() {
     setMessage("Added to cart!");
     setMessageType("success");
     setTimeout(() => {
-    setMessage("");
-    router.push("/cart");
-  }, 2000);
+      setMessage("");
+      router.push("/cart");
+    }, 2000);
   };
 
   const hasOffer =
@@ -218,8 +221,22 @@ export default function Singleproduct() {
       setFormMessage("Failed to submit review");
       setFormMessageType("error");
       setTimeout(() => setFormMessage(""), 3000);
-
     }
+  };
+
+  const handleNext = () => {
+    if (!product?.images?.length) return;
+    const nextIndex = (currentIndex + 1) % product.images.length;
+    setCurrentIndex(nextIndex);
+    setActiveImage(product.images[nextIndex]);
+  };
+
+  const handlePrev = () => {
+    if (!product?.images?.length) return;
+    const prevIndex =
+      (currentIndex - 1 + product.images.length) % product.images.length;
+    setCurrentIndex(prevIndex);
+    setActiveImage(product.images[prevIndex]);
   };
 
   if (loading)
@@ -253,7 +270,10 @@ export default function Singleproduct() {
                 {product?.images?.map((img, index) => (
                   <div
                     key={index}
-                    onClick={() => setActiveImage(img)}
+                    onClick={() => {
+                      setActiveImage(img);
+                      setCurrentIndex(index);
+                    }}
                     className={`w-[60px] h-[60px] p-1 border rounded cursor-pointer ${
                       activeImage === img ? "border-black" : "border-gray-300"
                     }`}
@@ -277,7 +297,13 @@ export default function Singleproduct() {
                     alt={product.name}
                     className="object-contain w-full h-full max-h-[300px] md:max-h-[450px] cursor-zoom-in"
                     priority
-                    onClick={() => setIsViewerOpen(true)}
+                    onClick={() => {
+                      const idx = product.images.findIndex(
+                        (i) => i === activeImage,
+                      );
+                      setCurrentIndex(idx >= 0 ? idx : 0);
+                      setIsViewerOpen(true);
+                    }}
                   />
                 )}
               </div>
@@ -394,12 +420,10 @@ export default function Singleproduct() {
                   </div>
                 </div>
 
-                  <button
+                <button
                   onClick={() => {
                     if (!user) {
-                      setMessage("Please login first!");
-                      setMessageType("error");
-                      setTimeout(() => setMessage(""), 2000);
+                      setShowLoginModal(true); // ✅ login popup open
                       return;
                     }
                     handleBuyNow();
@@ -657,20 +681,156 @@ export default function Singleproduct() {
           onClick={() => setIsViewerOpen(false)}
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center cursor-zoom-out"
         >
-          <div className="relative w-[95%] max-w-[700px] h-auto">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[95%] max-w-[700px] h-auto flex items-center justify-center"
+          >
+            {/* ❌ Close */}
             <button
               className="absolute -top-10 right-0 text-white text-2xl"
               onClick={() => setIsViewerOpen(false)}
             >
               ✕
             </button>
+
+            {/* ⬅️ Prev */}
+            {product.images.length > 1 && (
+              <button
+                onClick={handlePrev}
+                className="absolute left-0 text-white text-3xl bg-black/40 hover:bg-black/70 px-3 pt-0.5 pb-2 cursor-pointer"
+              >
+                ‹
+              </button>
+            )}
+
+            {/* 🖼 Image */}
             <Image
-              src={activeImage}
+              src={product.images[currentIndex]}
               alt="image-view"
               width={1200}
               height={1200}
               className="w-full h-auto max-h-[90vh] object-contain"
             />
+
+            {/* ➡️ Next */}
+            {product.images.length > 1 && (
+              <button
+                onClick={handleNext}
+                className="absolute right-0 text-white text-3xl bg-black/40 hover:bg-black/70 px-3 pt-0.5 pb-2 cursor-pointer"
+              >
+                ›
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
+          <div className="bg-white p-5 rounded-sm w-full max-w-[400px] relative shadow-lg">
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-2 text-gray-600 font-bold text-lg duration-300 hover:text-[#931905] cursor-pointer"
+              onClick={() => setShowLoginModal(false)}
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl font-semibold mb-2 text-center">
+              Account Login
+            </h2>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+
+                try {
+                  const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/userauth/login`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      credentials: "include",
+                      body: JSON.stringify({ email, password }),
+                    },
+                  );
+                  const data = await res.json();
+                  if (!res.ok) {
+                    alert(data.error || "Login failed");
+                    return;
+                  }
+
+                  // login successful
+                  setShowLoginModal(false);
+                  window.location.reload(); // reload to update user context
+                } catch (err) {
+                  alert("Something went wrong");
+                }
+              }}
+              className="flex flex-col gap-1"
+            >
+              {/* Email */}
+              <div className="flex flex-col">
+                <label className="font-semibold">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  className="border border-gray-300 rounded-sm px-3 py-2 outline-none w-full"
+                  required
+                />
+              </div>
+
+              {/* Password with Eye Icon */}
+              <div className="flex flex-col relative">
+                <label className="font-semibold">Password</label>
+                <div className="border border-gray-300 rounded-sm mb-1 relative flex items-center px-3 py-2">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    className="outline-none w-full"
+                    required
+                  />
+                  <span
+                    className="right-3 top-9 cursor-pointer text-gray-600"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {showPass ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+              </div>
+
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="bg-[#FFCE1B] hover:bg-[#fdc701] py-1 rounded-sm font-semibold text-lg cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900] transition-all duration-150"
+              >
+                Login
+              </button>
+
+              {/* Optional: Register link */}
+              <div className="text-center text-sm">
+                Don't have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-blue-600 font-semibold hover:underline"
+                  onClick={() => setShowLoginModal(false)}
+                >
+                  Register
+                </Link>
+              </div>
+              <div className="flex items-center justify-center">
+                <Link
+                  href="/forgot-password"
+                  className="text-base font-medium text-green-600 hover:text-green-800 duration-300"
+                >
+                  Forget password?
+                </Link>
+              </div>
+            </form>
           </div>
         </div>
       )}

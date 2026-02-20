@@ -87,10 +87,8 @@ export default function CheckoutPage() {
   // Billing fields
   const [fullName, setFullName] = useState("");
   const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [thana, setThana] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("Dhaka");
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
@@ -123,14 +121,12 @@ export default function CheckoutPage() {
     const e = {};
     if (!fullName.trim()) e.fullName = "Full name is required.";
     if (!address.trim()) e.address = "Address is required.";
-    if (!city.trim()) e.city = "Town/City is required.";
     if (!phone.trim()) e.phone = "Phone number is required.";
     if (!email.trim()) e.email = "Valid email is required.";
     else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) e.email = "Enter a valid email.";
     }
-    if (!thana.trim()) e.thana = "Upazila/Thana is required.";
     if (!selectedDistrict) e.district = "District is required.";
     if (!paymentMethod) e.paymentMethod = "Please select a payment method.";
     if (!termsChecked) e.termsChecked = "You must agree to terms.";
@@ -200,8 +196,6 @@ export default function CheckoutPage() {
     const billing = {
       fullName,
       address,
-      city,
-      thana,
       district: selectedDistrict,
       phone,
       email,
@@ -280,9 +274,9 @@ export default function CheckoutPage() {
           {/* Address */}
           <div className="w-full flex flex-col">
             <label>
-              Address <span className="req_hash">*</span>
+              Full Address <span className="req_hash">*</span>
             </label>
-            <input
+            <textarea
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -291,23 +285,6 @@ export default function CheckoutPage() {
             />
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address}</p>
-            )}
-          </div>
-
-          {/* City */}
-          <div className="w-full flex flex-col">
-            <label>
-              Town / City <span className="req_hash">*</span>
-            </label>
-            <input
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Town / City"
-              className="checkout_inp mb-2"
-            />
-            {errors.city && (
-              <p className="text-red-500 text-sm">{errors.city}</p>
             )}
           </div>
 
@@ -342,23 +319,6 @@ export default function CheckoutPage() {
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
-
-          {/* Thana */}
-          <div className="w-full flex flex-col">
-            <label>
-              Upazila/Thana <span className="req_hash">*</span>
-            </label>
-            <input
-              type="text"
-              value={thana}
-              onChange={(e) => setThana(e.target.value)}
-              placeholder="Upazila/Thana"
-              className="checkout_inp mb-2"
-            />
-            {errors.thana && (
-              <p className="text-red-500 text-sm">{errors.thana}</p>
             )}
           </div>
 
@@ -432,8 +392,8 @@ export default function CheckoutPage() {
                 </tr>
               </thead>
               <tbody>
-                {cart?.map((item) => (
-                  <tr key={item._id} className="text-left">
+                {cart?.map((item, index) => (
+                  <tr key={index} className="text-left">
                     <td className="p-2 border border-[#dddddd]">
                       {item.name} x {item.quantity}
                     </td>
