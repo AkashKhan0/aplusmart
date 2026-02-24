@@ -140,16 +140,32 @@ export default function Footer() {
                   <a href="mailto:info@aplusmartbd.com">info@aplusmartbd.com</a>
                 </div>
                 <div className="flex items-center justify-center sm:justify-center md:justify-start text-lg mt-5 gap-2.5">
-                  <a href="https://www.facebook.com/aaplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
+                  <a
+                    href="https://www.facebook.com/aaplusmartbd"
+                    target="_blank"
+                    className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                  >
                     <FaFacebookF />
                   </a>
-                  <a href="https://www.instagram.com/aplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
+                  <a
+                    href="https://www.instagram.com/aplusmartbd"
+                    target="_blank"
+                    className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                  >
                     <FaInstagram />
                   </a>
-                  <a href="https://www.youtube.com/@aplusmartbd" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
+                  <a
+                    href="https://www.youtube.com/@aplusmartbd"
+                    target="_blank"
+                    className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                  >
                     <FaYoutube />
                   </a>
-                  <a href="https://www.tiktok.com/@aplusmartbd?lang=en" target="_blank" className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]" >
+                  <a
+                    href="https://www.tiktok.com/@aplusmartbd?lang=en"
+                    target="_blank"
+                    className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                  >
                     <FaTiktok />
                   </a>
                 </div>
@@ -160,9 +176,7 @@ export default function Footer() {
 
         <div className="fixed_width h-full px-5 mt-10">
           <div className="w-full flex flex-col items-center justify-center">
-            <p className="ftr_p">
-              © 2025 A Plus Mart BD. All rights reserved.
-            </p>
+            <p className="ftr_p">© 2025 A Plus Mart BD. All rights reserved.</p>
             <p className="ftr_p">Powered By: A Plus Advertising Limited</p>
           </div>
         </div>

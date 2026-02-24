@@ -52,8 +52,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
     };
 
     if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, setIsOpen]);
 
   const toggleCategory = (category) => {

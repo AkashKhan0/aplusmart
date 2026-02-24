@@ -224,12 +224,12 @@ export const AppProvider = ({ children }) => {
 
   const addToCart = (newItem) => {
     const existingIndex = cart.findIndex(
-    (item) =>
-      item.productId  === newItem.productId  &&
-      item.role === newItem.role &&
-      JSON.stringify(item.colors || []) ===
-        JSON.stringify(newItem.colors || []),
-  );
+      (item) =>
+        item.productId === newItem.productId &&
+        item.role === newItem.role &&
+        JSON.stringify(item.colors || []) ===
+          JSON.stringify(newItem.colors || []),
+    );
 
     let updatedCart = [...cart];
 
@@ -245,28 +245,26 @@ export const AppProvider = ({ children }) => {
       };
     } else {
       updatedCart.push({
-      ...newItem,
-      cartItemId: uuidv4(),
-    });
+        ...newItem,
+        cartItemId: uuidv4(),
+      });
     }
     syncCart(updatedCart);
   };
 
   const updateQuantity = (cartItemId, quantity) => {
-  if (quantity < 1) return;
+    if (quantity < 1) return;
 
-  const updated = cart.map((item) =>
-    item.cartItemId === cartItemId ? { ...item, quantity } : item,
-  );
-  syncCart(updated);
-};
+    const updated = cart.map((item) =>
+      item.cartItemId === cartItemId ? { ...item, quantity } : item,
+    );
+    syncCart(updated);
+  };
 
   const removeFromCart = (cartItemId) => {
-  const updated = cart.filter(
-    (item) => item.cartItemId !== cartItemId,
-  );
-  syncCart(updated);
-};
+    const updated = cart.filter((item) => item.cartItemId !== cartItemId);
+    syncCart(updated);
+  };
 
   const clearCart = async () => {
     setCart([]);

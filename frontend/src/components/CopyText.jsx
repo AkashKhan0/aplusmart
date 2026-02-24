@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 
-
 export default function CopyText({ text, className = "" }) {
   const [copied, setCopied] = useState(false);
 

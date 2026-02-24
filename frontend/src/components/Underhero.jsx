@@ -30,21 +30,41 @@ export default function Underhero() {
   // 🔥 feature categories data
   const categories = [
     { value: "Camera", label: "Camera", icon: <IoCamera /> },
-    { value: "Mobile Accessories", label: "Mobile Accessories", icon: <FaMobileAlt /> },
+    {
+      value: "Mobile Accessories",
+      label: "Mobile Accessories",
+      icon: <FaMobileAlt />,
+    },
     { value: "Women’s Bag", label: "Women’s Bag", icon: <BsFillHandbagFill /> },
     { value: "Power Bank", label: "Power Bank", icon: <GiBatteryPack /> },
     { value: "Gaming", label: "Gaming", icon: <IoGameController /> },
     { value: "Mini Projector", label: "Mini Projector", icon: <LuProjector /> },
-    { value: "Computer Accessories", label: "Computer Accessories", icon: <FaComputer /> },
-    { value: "Robotics Accessories", label: "Robotics Accessories", icon: <GiRobotGolem /> },
+    {
+      value: "Computer Accessories",
+      label: "Computer Accessories",
+      icon: <FaComputer />,
+    },
+    {
+      value: "Robotics Accessories",
+      label: "Robotics Accessories",
+      icon: <GiRobotGolem />,
+    },
     { value: "Table Lamp", label: "Table Lamp", icon: <BsFillLampFill /> },
     { value: "Umbrella", label: "Umbrella", icon: <GiUmbrella /> },
     { value: "Humidifier", label: "Humidifier", icon: <WiHumidity /> },
-    { value: "beauty products", label: "beauty products", icon: <GiFlowerPot /> },
+    {
+      value: "beauty products",
+      label: "beauty products",
+      icon: <GiFlowerPot />,
+    },
     { value: "Flash Drive", label: "Flash Drive", icon: <BsUsbDriveFill /> },
     { value: "Mini Sound Box", label: "Mini Sound Box", icon: <MdSpeaker /> },
     { value: "Mini printer", label: "Mini printer", icon: <ImPrinter /> },
-    { value: "Interior Lights", label: "Interior Lights", icon: <GiDeskLamp /> },
+    {
+      value: "Interior Lights",
+      label: "Interior Lights",
+      icon: <GiDeskLamp />,
+    },
     {
       value: "Keyboard & Mouse",
       label: "Keyboard & Mouse",
@@ -57,24 +77,47 @@ export default function Underhero() {
     },
     { value: "Laptop Stand", label: "Laptop Stand", icon: <GiLaptop /> },
     { value: "USB Hub", label: "USB Hub", icon: <FaUsb /> },
-    { value: "Earphones & Earbuds", label: "Earphones & Earbuds", icon: <BsEarbuds /> },
+    {
+      value: "Earphones & Earbuds",
+      label: "Earphones & Earbuds",
+      icon: <BsEarbuds />,
+    },
     { value: "Gimbal", label: "Gimbal", image: "/images/gimbal.png" },
     { value: "Drone", label: "Drone", icon: <GiDeliveryDrone /> },
-    { value: "Kitchen Accessories", label: "Kitchen Accessories", image: "/images/kitchen.png" },
-    { value: "Cloth Cleaner", label: "Cloth Cleaner", image: "/images/clean.png" },
+    {
+      value: "Kitchen Accessories",
+      label: "Kitchen Accessories",
+      image: "/images/kitchen.png",
+    },
+    {
+      value: "Cloth Cleaner",
+      label: "Cloth Cleaner",
+      image: "/images/clean.png",
+    },
     { value: "Jewellery", label: "Jewellery", image: "/images/jewelry.png" },
-    { value: "Travel Bags", label: "Travel Bags", image: "/images/suitcase.png" },
+    {
+      value: "Travel Bags",
+      label: "Travel Bags",
+      image: "/images/suitcase.png",
+    },
     { value: "Kids Toys", label: "Kids Toys", image: "/images/toys.png" },
-    { value: "Musical Instruments", label: "Musical Instruments", image: "/images/music.png" },
+    {
+      value: "Musical Instruments",
+      label: "Musical Instruments",
+      image: "/images/music.png",
+    },
     { value: "Enclosure", label: "Enclosure", image: "/images/drive.png" },
-    { value: "Cable Organizer", label: "Cable Organizer", image: "/images/cable.png" },
+    {
+      value: "Cable Organizer",
+      label: "Cable Organizer",
+      image: "/images/cable.png",
+    },
   ];
 
   return (
     <>
       <div className="w-full universal_column">
         <div className="fixed_width px-3">
-
           {/* policys */}
           <div className="w-full universal_column py-5 mt-5 sm:mt-10">
             <div className="fixed_width">

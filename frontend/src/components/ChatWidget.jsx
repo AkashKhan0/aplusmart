@@ -87,7 +87,7 @@ export default function ChatWidget() {
       const now = new Date();
       const hour = now.getHours(); // 0-23
       const daysSinceStart = Math.floor(
-        (now - startDate) / (1000 * 60 * 60 * 24)
+        (now - startDate) / (1000 * 60 * 60 * 24),
       ); // total days
       const block = Math.floor(daysSinceStart / 10); // current 10-day block
       const shiftIndex = Math.floor(hour / 8); // 0-2
