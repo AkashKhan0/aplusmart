@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema(
   {
+    cartItemId: {
+    type: String,
+    required: true,
+  },
     productId: { type: mongoose.Schema.Types.ObjectId, required: true },
     name: String,
     images: [String],
@@ -15,9 +19,7 @@ const cartItemSchema = new mongoose.Schema(
     resellerPrice: Number,
     hasOffer: Boolean,
     discountPercent: Number,
-    earnedPoints: Number,
   },
-  { _id: false },
 );
 
 const cartSchema = new mongoose.Schema(

@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import User from "./models/User.js";
 
 dotenv.config();
 const app = express();
@@ -63,23 +62,6 @@ app.use("/api/contact", contactRoutes);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-
-// 🔄 Cleanup expired points every day
-setInterval(async () => {
-  const now = new Date();
-  const users = await User.find();
-
-  for (let user of users) {
-    const beforeCount = user.pointsHistory.length;
-    user.pointsHistory = user.pointsHistory.filter(
-      p => (now - new Date(p.createdAt)) / (1000*60*60*24) <= 30
-    );
-    if (user.pointsHistory.length !== beforeCount) {
-      await user.save();
-    }
-  }
-  console.log("Expired points cleanup done");
-}, 24 * 60 * 60 * 1000);
 
 // Server Listening
 const PORT = process.env.PORT || 5000;

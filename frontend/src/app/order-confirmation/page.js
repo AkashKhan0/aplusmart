@@ -35,7 +35,7 @@ export default function OrderConfirmation() {
       branch: "Shewrapara BR 7264",
     },
     {
-      name: "Duch Bangla Bank",
+      name: "Dutch Bangla Bank",
       accNo: "7017317975920",
       accType: "",
       holder: "MD. FAHAD NUR AKASH",
@@ -205,7 +205,8 @@ export default function OrderConfirmation() {
                   {/* RIGHT — Bank Details */}
                   <div className="w-full md:w-[60%] bg-white p-2 rounded-sm text-base">
                     <p>
-                      <strong>Acc No:</strong> <CopyText text={bankList[activeBank].accNo} />
+                      <strong>Acc No:</strong>{" "}
+                      <CopyText text={bankList[activeBank].accNo} />
                     </p>
 
                     {bankList[activeBank].accType && (
@@ -262,17 +263,22 @@ export default function OrderConfirmation() {
                 <p>
                   <strong>Comment:</strong> {order.billing.comment}
                 </p>
-                {order?.user?.role === "customer" && (
-                  <p>
-                    <strong>Points:</strong> {order.points}
-                  </p>
+
+                {order && (
+                  <div className="mb-3">
+                    <p className="capitalize">
+                      Shipping Method: <strong>{order.shippingMethod}</strong>
+                    </p>
+                    <p>
+                      Payment Method: <strong>{order.paymentMethod}</strong>
+                    </p>
+                  </div>
                 )}
               </div>
             )}
 
             {order?.items && (
               <div className="mb-3">
-                <h3 className="font-semibold">Items</h3>
                 <table className="w-full">
                   <thead>
                     <tr>
@@ -285,46 +291,35 @@ export default function OrderConfirmation() {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.items.map((it) => (
-                      <tr key={it.productId}>
+                    {order.items.map((it, index) => (
+                      <tr key={`${it.productId}-${index}`}>
                         <td className="border border-[#dddddd] p-2">
                           {it.name} x {it.quantity}
                         </td>
                         <td className="text-right border border-[#dddddd] p-2">
-                          <span className="taka">৳- </span>
                           {Number(it.price * it.quantity).toLocaleString(
                             "en-IN",
-                          )}
-                          /=
+                          )}{" "}
+                          tk
                         </td>
                       </tr>
                     ))}
+
+                    <tr>
+                      <td className="border border-[#dddddd] p-2">
+                        Shipping Charge
+                      </td>
+                      <td className="text-right border border-[#dddddd] p-2">
+                        {Number(order.shippingCharge).toLocaleString("en-IN")}{" "}
+                        tk
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
             )}
-
             {order && (
-              <div className="mb-3">
-                <p className="capitalize">
-                  Shipping Method: <strong>{order.shippingMethod}</strong>
-                </p>
-                <p>
-                  Shipping Charge:{" "}
-                  <strong>
-                    {" "}
-                    <span className="taka">৳- </span>
-                    {Number(order.shippingCharge).toLocaleString("en-IN")}/=
-                  </strong>
-                </p>
-                <p>
-                  Payment Method: <strong>{order.paymentMethod}</strong>
-                </p>
-              </div>
-            )}
-
-            {order && (
-              <div className="border-t pt-3 w-full flex items-center justify-between gap-1.5">
+              <div className="w-full flex items-center justify-between gap-1.5">
                 <h3 className="font-bold">Totals :</h3>
                 <p>
                   <span className="taka">
@@ -336,13 +331,13 @@ export default function OrderConfirmation() {
           </div>
 
           <div className="w-full py-5 flex items-center justify-between flex-wrap">
-            <Link href="/" className="buy_btn">
+            <Link href="/" className="buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
               <span>Shop More</span>
               <span className="text-sm shop_btn_icon">
                 <GiShoppingBag />
               </span>
             </Link>
-            <Link href="/profile" className="buy_btn">
+            <Link href="/profile" className="buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
               <span>View Orders</span>
               <span className="text-sm shop_btn_icon">
                 <RiShoppingBag3Fill />

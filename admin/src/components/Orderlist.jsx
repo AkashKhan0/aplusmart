@@ -187,16 +187,12 @@ export default function OrderList() {
                       Total: <span className="taka_font taka">৳- </span>
                       {Number(order.grandTotal).toLocaleString("en-IN")}/={" "}
                     </p>
-                    <p>
-                      Points: {order.points} <IoMdStar className="inline text-yellow-500" />
-                    </p>
                   </td>
                   <td className="p-2 border text-start">
                     <p>Name: {order.billing.fullName}</p>
                     <p>Address: {order.billing.address}</p>
-                    <p>City: {order.billing.city}</p>
                     <p>
-                      Thana: {order.billing.thana} , Dist:{" "}
+                      Dist:{" "}
                       {order.billing.district}
                     </p>
                     <p>Phone: {order.billing.phone}</p>

@@ -22,8 +22,6 @@ router.post("/", async (req, res) => {
       shippingCharge,
       paymentMethod,
       grandTotal,
-      usedPoints = 0,
-      pointsDiscount = 0,
     } = req.body;
 
     if (!cart || cart.length === 0) {
@@ -37,36 +35,8 @@ router.post("/", async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ error: "User not found" });
+    const isCustomer = user.role === "customer";
 
-    // ---------------- POINTS HANDLING ----------------
-    let safeUsedPoints = Number(usedPoints) || 0;
-    if (user.role !== "customer") {
-      // Reseller: points system off
-      safeUsedPoints = 0;
-    }
-
-    if (safeUsedPoints > user.points || safeUsedPoints < 0) {
-      return res.status(400).json({ error: "Invalid points usage" });
-    }
-
-    // Deduct points only for customer
-    if (user.role === "customer") {
-      user.points -= safeUsedPoints;
-    }
-
-    // ---------------- CALCULATE EARNED POINTS ----------------
-    let earnedPoints = 0;
-    if (user.role === "customer") {
-      cart.forEach((item) => {
-        if (!item.hasOffer) {
-          const productPoint = Math.floor(
-            (Number(item.offerPrice) || 0) * (Number(item.quantity) || 0) / 100
-          );
-          earnedPoints += Math.min(productPoint, 500);
-        }
-      });
-    }
-const isCustomer = user.role === "customer"; 
     // ---------------- MAP ITEMS ----------------
     const items = cart.map((item) => ({
       productId: item._id,
@@ -86,28 +56,12 @@ const isCustomer = user.role === "customer";
       shippingMethod,
       shippingCharge: Number(shippingCharge) || 0,
       paymentMethod,
-      points: earnedPoints, // reseller = 0
       grandTotal: Number(grandTotal) || 0,
     });
-
-    // ---------------- UPDATE USER POINTS ----------------
-    if (user.role === "customer") {
-      user.points += earnedPoints;
-
-      user.pointsHistory.push({
-        points: earnedPoints - safeUsedPoints,
-        earned: earnedPoints,
-        used: safeUsedPoints,
-        orderId: order.orderId,
-      });
-    }
-
-    await user.save();
 
     res.status(201).json({
       success: true,
       orderId: order.orderId,
-      earnedPoints,
     });
   } catch (err) {
     console.error("Order error:", err.message);
@@ -155,33 +109,11 @@ router.get("/:orderId", async (req, res) => {
 router.put("/:id/status", async (req, res) => {
   try {
     const { status } = req.body;
-
-    // 1️⃣ Order খুঁজে বের করো
     const order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // 2️⃣ যদি cancelled করা হয়
-    if (status === "cancelled" && order.status !== "cancelled") {
-      const user = await User.findById(order.user);
-
-      if (user && order.points > 0) {
-        // user points rollback
-        user.points -= order.points;
-
-        user.pointsHistory.push({
-          orderId: order.orderId,
-          points: -order.points,
-          note: "Order cancelled",
-          date: new Date(),
-        });
-
-        await user.save();
-      }
-      // order points reset
-      order.points = 0;
-    }
     // 3️⃣ status update (ALWAYS)
     order.status = status;
     await order.save();
@@ -192,7 +124,6 @@ router.put("/:id/status", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // UPDATE payment status
 router.put("/:id/payment", async (req, res) => {
@@ -206,11 +137,6 @@ router.put("/:id/payment", async (req, res) => {
   res.json(order);
 });
 
-// DELETE order
-// router.delete("/:id", async (req, res) => {
-//   await Order.findByIdAndDelete(req.params.id);
-//   res.json({ message: "Order deleted" });
-// });
 
 router.delete("/:id", async (req, res) => {
   try {
@@ -218,27 +144,8 @@ router.delete("/:id", async (req, res) => {
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
-
-    // 1️⃣ User fetch
-    const user = await User.findById(order.user);
-    if (user) {
-      // 2️⃣ Rollback points only if order.points > 0
-      if (order.points > 0) {
-        user.points -= order.points;
-      }
-
-      // 3️⃣ Remove this order from pointsHistory
-      user.pointsHistory = user.pointsHistory.filter(
-        (p) => p.orderId !== order.orderId
-      );
-
-      await user.save();
-    }
-
-    // 4️⃣ Delete the order
     await order.deleteOne();
-
-    res.json({ success: true, message: "Order deleted & points cleaned" });
+    res.json({ success: true, message: "Order deleted" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

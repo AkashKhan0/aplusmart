@@ -15,12 +15,6 @@ const userSchema = new mongoose.Schema(
     shopName: { type: String },
     location: { type: String },
     resellerName: { type: String },
-    pointsHistory: [
-      {
-        points: { type: Number, required: true },
-        createdAt: { type: Date, default: Date.now },
-      },
-    ],
     resetToken: {
       type: String,
     },

@@ -54,7 +54,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
         <div className="fixed_width flex justify-center h-13 px-5 py-2">
           <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
             <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
-              <div className="w-full max-w-fit md:universal">
+              <div className="w-full max-w-fit flex items-center justify-start">
                 <Link href="/">
                   <h1
                     className={`${reggaeOne.className} text-[#971900] text-2xl hidden md:block cursor-pointer`}
@@ -62,7 +62,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                     A Plus Mart BD
                   </h1>
                   <h1
-                    className={`${reggaeOne.className} text-[#ffffff] hover:text-[#ffffff] transition-colors duration-300 text-2xl block md:hidden cursor-pointer`}
+                    className={`${reggaeOne.className} text-[#ffffff] hover:text-[#ffffff] transition-colors duration-300 text-2xl hidden sm:block md:hidden cursor-pointer`}
                   >
                     <FaHome />
                   </h1>
@@ -125,11 +125,19 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
           <div className="w-full universal bg-[#ffffff] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
             <div className="fixed_width px-5">
               <ul className="flex flex-wrap items-center justify-center gap-2">
+                <li className="relative group cursor-pointer py-1 px-0 w-fit active:translate-y-1 active:shadow-[0_2px_0_#d1a900] hidden sm:hidden md:block">
+                  <a
+                    href="/"
+                    className="font-medium text-gray-800 capitalize main_menu_item"
+                  >
+                    Home
+                  </a>
+                </li>
                 {Object.entries(menuData).map(
                   ([mainCategory, subCategories]) => (
                     <li
                       key={mainCategory}
-                      className="relative group cursor-pointer py-1 px-0 w-fit"
+                      className="relative group cursor-pointer py-1 px-0 w-fit active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
                     >
                       {/* Main Category */}
                       <a

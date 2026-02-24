@@ -114,7 +114,7 @@ export default function Singleproduct() {
       return;
     }
     const cartItem = {
-      _id: product._id,
+      productId: product._id,
       name: product.name,
       images: product.images,
       quantity,
@@ -126,7 +126,6 @@ export default function Singleproduct() {
             regularPrice: product.regularPrice,
             hasOffer,
             discountPercent,
-            earnedPoints,
           }
         : { resellerPrice: product.resellerPrice }),
     };
@@ -149,15 +148,6 @@ export default function Singleproduct() {
       ? Math.round(
           ((product.regularPrice - product.offerPrice) / product.regularPrice) *
             100,
-        )
-      : 0;
-
-  // ✅ UPDATED POINTS LOGIC
-  const earnedPoints =
-    user?.role === "customer" && product?.offerPrice > 0
-      ? Math.min(
-          Math.floor((product.offerPrice * (product.quantity || 1)) / 100),
-          500,
         )
       : 0;
 
@@ -388,17 +378,11 @@ export default function Singleproduct() {
               </div>
 
               {/* Offer / Points Badge */}
-              {user?.role === "customer" &&
-                (hasOffer ? (
-                  <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
-                    {discountPercent}% OFF
-                  </div>
-                ) : earnedPoints > 0 ? (
-                  <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center gap-1 text-sm font-medium my-2">
-                    Earn Points
-                    <span className="text-[#c9c601]">{earnedPoints} ⭐</span>
-                  </div>
-                ) : null)}
+              {user?.role === "customer" && hasOffer && (
+                <div className="w-fit px-3 h-6 rounded-full bg-[#3c3c3c] text-white flex items-center justify-center text-sm font-medium uppercase my-2">
+                  {discountPercent}% OFF
+                </div>
+              )}
 
               {/* Quantity */}
               <div className="w-full max-w-fit flex flex-col sm:flex-row md:flex-row items-start justify-start gap-3 my-5">
@@ -428,10 +412,19 @@ export default function Singleproduct() {
                     }
                     handleBuyNow();
                   }}
-                  className="buy_btn uppercase"
+                  className="buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
                 >
-                  <span className="text-sm">Buy Now</span>
-                  <span className="text-sm shop_btn_icon">
+                  {/* <span className="text-sm">Buy Now</span> */}
+                  <span
+                    className={
+                      product.stockStatus !== "inStock" ? "text-red-700" : ""
+                    }
+                  >
+                    {product.stockStatus === "inStock"
+                      ? "Buy Now"
+                      : "Pre Order"}
+                  </span>
+                  <span className="text-sm shop_btn_icon text-gray-700">
                     <GiShoppingBag />
                   </span>
                 </button>
@@ -498,7 +491,7 @@ export default function Singleproduct() {
                   {user && (
                     <div className="">
                       <button
-                        className="buy_btn"
+                        className="buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
                         onClick={() => setReviewModalOpen(true)}
                       >
                         <span>Review Us</span>

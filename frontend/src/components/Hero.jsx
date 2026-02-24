@@ -112,9 +112,9 @@ export default function Hero({ openMenu }) {
         {/* Logo + Menu/Search/Account/Cart */}
         <div className="flex flex-col items-center justify-center gap-2.5 w-full">
           {/* logo */}
-          <div className="w-full max-w-fit universal mt-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
+          <div className="w-full max-w-fit universal my-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
             <h1
-              className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold mb-1.5`}
+              className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold aplus_mart_logo`}
             >
               A Plus Mart BD
             </h1>
@@ -197,7 +197,7 @@ export default function Hero({ openMenu }) {
               <Link href={user ? "/profile" : "/login"}>
                 <div
                   // onClick={handleAccountClick}
-                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer"
+                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
                 >
                   <p className="capitalize hidden sm:block">
                     {user ? "profile" : "login"}

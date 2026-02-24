@@ -1,5 +1,6 @@
 "use client";
 
+import { v4 as uuidv4 } from "uuid";
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -223,15 +224,17 @@ export const AppProvider = ({ children }) => {
 
   const addToCart = (newItem) => {
     const existingIndex = cart.findIndex(
-      (item) => item._id === newItem._id && item.role === newItem.role,
-    );
+    (item) =>
+      item.productId  === newItem.productId  &&
+      item.role === newItem.role &&
+      JSON.stringify(item.colors || []) ===
+        JSON.stringify(newItem.colors || []),
+  );
 
     let updatedCart = [...cart];
 
     if (existingIndex !== -1) {
-      // product already exists
       const existing = updatedCart[existingIndex];
-      // merge colors (no duplicate)
       const mergedColors = Array.from(
         new Set([...(existing.colors || []), ...(newItem.colors || [])]),
       );
@@ -241,26 +244,29 @@ export const AppProvider = ({ children }) => {
         colors: mergedColors,
       };
     } else {
-      // first time add
-      updatedCart.push(newItem);
+      updatedCart.push({
+      ...newItem,
+      cartItemId: uuidv4(),
+    });
     }
     syncCart(updatedCart);
   };
 
-  const updateQuantity = (id, quantity) => {
-    if (quantity < 1) return;
+  const updateQuantity = (cartItemId, quantity) => {
+  if (quantity < 1) return;
 
-    const updated = cart.map((item) =>
-      item._id === id ? { ...item, quantity } : item,
-    );
+  const updated = cart.map((item) =>
+    item.cartItemId === cartItemId ? { ...item, quantity } : item,
+  );
+  syncCart(updated);
+};
 
-    syncCart(updated);
-  };
-
-  const removeFromCart = (id) => {
-    const updated = cart.filter((item) => item._id !== id);
-    syncCart(updated);
-  };
+  const removeFromCart = (cartItemId) => {
+  const updated = cart.filter(
+    (item) => item.cartItemId !== cartItemId,
+  );
+  syncCart(updated);
+};
 
   const clearCart = async () => {
     setCart([]);

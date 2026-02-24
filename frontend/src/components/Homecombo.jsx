@@ -35,13 +35,8 @@ export default function Homecombo() {
         )
       : 0;
 
-    const earnedPoints =
-      !hasOffer && product?.offerPrice > 0
-        ? Math.min(Math.floor(product.offerPrice / 100), 500)
-        : 0;
-
     const cartItem = {
-      _id: product._id,
+      productId: product._id,
       name: product.name,
       images: product.images,
       quantity,
@@ -56,7 +51,6 @@ export default function Homecombo() {
             regularPrice: product.regularPrice,
             hasOffer,
             discountPercent,
-            earnedPoints,
           }),
     };
 
@@ -127,32 +121,18 @@ export default function Homecombo() {
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
                     {/* Offer % or Earn Points - only for customer */}
                     {user?.role === "customer" &&
-                    (product?.offerPrice > 0 &&
-                    product?.regularPrice > 0 &&
-                    product.offerPrice < product.regularPrice ? (
-                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
-                        {Math.round(
-                          ((product.regularPrice - product.offerPrice) /
-                            product.regularPrice) *
-                            100,
-                        )}
-                        % off
-                      </div>
-                    ) : (
-                      /* Earn Points */
-                      product?.offerPrice > 0 && (
-                        <div className="w-28 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
-                          Earn Points
-                          <span className="text-[#c9c601]">
-                            {Math.min(
-                              Math.floor(product.offerPrice / 100),
-                              500,
-                            )}
-                            ⭐
-                          </span>
+                      product?.offerPrice > 0 &&
+                      product?.regularPrice > 0 &&
+                      product.offerPrice < product.regularPrice && (
+                        <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                          {Math.round(
+                            ((product.regularPrice - product.offerPrice) /
+                              product.regularPrice) *
+                              100,
+                          )}
+                          % off
                         </div>
-                      )
-                    ))}
+                      )}
 
                     <div className="w-full h-[250px]">
                       <Image
@@ -178,8 +158,8 @@ export default function Homecombo() {
                                 "en-IN",
                               ) // Reseller price
                             : Number(product.offerPrice).toLocaleString("en-IN") // Customer price
-                        }/-
-
+                        }
+                        /-
                         {/* Show regular price only for customer */}
                         {user?.role !== "reseller" &&
                           product?.regularPrice > 0 && (
@@ -187,7 +167,8 @@ export default function Homecombo() {
                               <span className="taka">৳-</span>
                               {Number(product.regularPrice).toLocaleString(
                                 "en-IN",
-                              )}/-
+                              )}
+                              /-
                             </del>
                           )}
                       </p>
@@ -202,7 +183,17 @@ export default function Homecombo() {
                           }}
                           className="add_to_cart_btn"
                         >
-                          <span>add to cart</span>
+                          <span
+                            className={
+                              product.stockStatus !== "inStock"
+                                ? "text-red-700"
+                                : ""
+                            }
+                          >
+                            {product.stockStatus === "inStock"
+                              ? "Add to Cart"
+                              : "Pre Order"}
+                          </span>
                           <span className="shop_btn_icon">
                             <FaShoppingCart />
                           </span>

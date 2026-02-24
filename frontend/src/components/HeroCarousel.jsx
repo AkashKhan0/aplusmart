@@ -70,7 +70,7 @@ export default function HeroCarousel() {
           </p>
 
           <Link href={current.buttonUrl}>
-            <button className="buy_btn mb-5 sm:mb-0">
+            <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
               <span>Buy Now</span>
               <span className="text-sm shop_btn_icon"><GiShoppingBag /></span>
             </button>

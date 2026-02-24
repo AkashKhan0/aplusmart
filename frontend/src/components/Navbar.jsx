@@ -88,7 +88,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
 
         {/* Logo */}
         <Link href="/" onClick={() => setIsOpen(false)}>
-          <h1 className="text-[#971900] text-2xl font-bold text-center mb-6">
+          <h1 className="text-[#971900] text-2xl font-bold text-center mb-6 aplus_mart_logo">
             A Plus Mart BD
           </h1>
         </Link>

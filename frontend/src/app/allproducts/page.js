@@ -99,13 +99,8 @@ export default function Allproducts() {
         )
       : 0;
 
-    const earnedPoints =
-      !hasOffer && product?.offerPrice > 0
-        ? Math.min(Math.floor(product.offerPrice / 100), 500)
-        : 0;
-
     const cartItem = {
-      _id: product._id,
+      productId: product._id,
       name: product.name,
       images: product.images,
       quantity,
@@ -118,7 +113,6 @@ export default function Allproducts() {
             regularPrice: product.regularPrice,
             hasOffer,
             discountPercent,
-            earnedPoints,
           }),
     };
 
@@ -160,9 +154,9 @@ export default function Allproducts() {
                 <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9]">
                   {/* Offer / Points */}
                   {user?.role === "customer" &&
-                    (product?.offerPrice > 0 &&
+                    product?.offerPrice > 0 &&
                     product?.regularPrice > 0 &&
-                    product.offerPrice < product.regularPrice ? (
+                    product.offerPrice < product.regularPrice && (
                       <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-normal uppercase">
                         {Math.round(
                           ((product.regularPrice - product.offerPrice) /
@@ -171,15 +165,7 @@ export default function Allproducts() {
                         )}
                         % off
                       </div>
-                    ) : (
-                      product.offerPrice > 0 && (
-                        <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-0.5 justify-center text-sm font-normal capitalize">
-                          Earn Points{" "}
-                          {Math.min(Math.floor(product.offerPrice / 100), 500)}{" "}
-                          ⭐
-                        </div>
-                      )
-                    ))}
+                    )}
 
                   <div className="h-[250px]">
                     <Image
@@ -227,7 +213,17 @@ export default function Allproducts() {
                       }}
                       className="add_to_cart_btn mb-2"
                     >
-                      <span>Add to cart</span>
+                      <span
+                        className={
+                          product.stockStatus !== "inStock"
+                            ? "text-red-700"
+                            : ""
+                        }
+                      >
+                        {product.stockStatus === "inStock"
+                          ? "Add to Cart"
+                          : "Pre Order"}
+                      </span>
                       <FaShoppingCart />
                     </button>
 
@@ -248,7 +244,7 @@ export default function Allproducts() {
             {totalPages > 3 && (
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                className="w-8 h-8 rounded-full font-medium cursor-pointer transition-all pagination universal hover:scale-110"
+                className="w-8 h-8 rounded-full font-medium cursor-pointer transition-all pagination universal hover:scale-110 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
               >
                 <GrPrevious />
               </button>
@@ -264,7 +260,7 @@ export default function Allproducts() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 rounded-full font-medium cursor-pointer transition-all ${
+                className={`w-8 h-8 rounded-full active:translate-y-1 active:shadow-[0_2px_0_#d1a900] font-medium cursor-pointer transition-all ${
                   currentPage === page
                     ? "pagination_active"
                     : "pagination hover:scale-110"
@@ -285,7 +281,7 @@ export default function Allproducts() {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
-                className="w-8 h-8 rounded-full font-medium cursor-pointer transition-all pagination universal hover:scale-110"
+                className="w-8 h-8 rounded-full font-medium cursor-pointer transition-all pagination universal hover:scale-110 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
               >
                 <GrNext />
               </button>

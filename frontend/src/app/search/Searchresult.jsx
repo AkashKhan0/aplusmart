@@ -79,13 +79,8 @@ export default function Searchresult() {
         )
       : 0;
 
-    const earnedPoints =
-      !hasOffer && product?.offerPrice > 0
-        ? Math.min(Math.floor(product.offerPrice / 100), 500)
-        : 0;
-
     const cartItem = {
-      _id: product._id,
+      productId: product._id,
       name: product.name,
       images: product.images,
       quantity,
@@ -100,7 +95,6 @@ export default function Searchresult() {
             regularPrice: product.regularPrice,
             hasOffer,
             discountPercent,
-            earnedPoints,
           }),
     };
 
@@ -148,28 +142,18 @@ export default function Searchresult() {
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
                     {/* % OFF */}
                     {user?.role === "customer" &&
-                    (item?.offerPrice > 0 &&
-                    item?.regularPrice > 0 &&
-                    item.offerPrice < item.regularPrice ? (
-                      <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
-                        {Math.round(
-                          ((item.regularPrice - item.offerPrice) /
-                            item.regularPrice) *
-                            100,
-                        )}
-                        % off
-                      </div>
-                    ) : (
-                      item?.offerPrice > 0 && (
-                        <div className="w-fit px-2 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center gap-1.5 justify-center text-sm font-medium">
-                          Earn Points
-                          <span className="text-[#c9c601] flex items-center">
-                            {Math.min(Math.floor(item.offerPrice / 100), 500)}{" "}
-                            ⭐
-                          </span>
+                      item?.offerPrice > 0 &&
+                      item?.regularPrice > 0 &&
+                      item.offerPrice < item.regularPrice && (
+                        <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-medium uppercase">
+                          {Math.round(
+                            ((item.regularPrice - item.offerPrice) /
+                              item.regularPrice) *
+                              100,
+                          )}
+                          % off
                         </div>
-                      )
-                    ))}
+                      )}
 
                     <div className="w-full h-[250px]">
                       <Image
@@ -187,14 +171,12 @@ export default function Searchresult() {
                       </h1>
                       <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                         <span className="taka">৳-</span>
-                       {
+                        {
                           user?.role === "reseller"
-                            ? Number(item.resellerPrice).toLocaleString(
-                                "en-IN",
-                              ) // Reseller price
+                            ? Number(item.resellerPrice).toLocaleString("en-IN") // Reseller price
                             : Number(item.offerPrice).toLocaleString("en-IN") // Customer price
-                        }/-
-
+                        }
+                        /-
                         {/* Show regular price only for customer */}
                         {user?.role !== "reseller" &&
                           item?.regularPrice > 0 && (
@@ -202,7 +184,8 @@ export default function Searchresult() {
                               <span className="taka">৳-</span>
                               {Number(item.regularPrice).toLocaleString(
                                 "en-IN",
-                              )}/-
+                              )}
+                              /-
                             </del>
                           )}
                       </p>
@@ -217,7 +200,17 @@ export default function Searchresult() {
                           }}
                           className="add_to_cart_btn"
                         >
-                          <span>add to cart</span>
+                          <span
+                            className={
+                              item.stockStatus !== "inStock"
+                                ? "text-red-700"
+                                : ""
+                            }
+                          >
+                            {item.stockStatus === "inStock"
+                              ? "Add to Cart"
+                              : "Pre Order"}
+                          </span>
                           <span className="shop_btn_icon">
                             <FaShoppingCart />
                           </span>

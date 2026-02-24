@@ -66,9 +66,8 @@ export default function Orders({ onOrdersFetch }) {
                 className="border-t border-t-gray-200 hover:bg-gray-50 transition"
               >
                 <td className="px-4 py-2 font-medium">
-                  {order.items.map((item, index) => (
-                    <div key={index} className="mb-2">
-                      {/* Product Name */}
+                  {order.items.map((item) => (
+                    <div key={`${order._id}-${item.productId || item._id}`} className="mb-2">
                       <p className="text-sm font-medium">
                         {item.name} x {item.quantity}
                       </p>
@@ -76,9 +75,9 @@ export default function Orders({ onOrdersFetch }) {
                       {/* Colors */}
                       <div className="flex gap-1">
                         {item.colors && item.colors.length > 0 ? (
-                          item.colors.map((color, i) => (
+                          item.colors.map((color) => (
                             <span
-                              key={i}
+                              key={`${order._id}-${item._id || item.productId}-${color}`}
                               className="w-3 h-3 rounded-full border border-gray-300"
                               style={{ backgroundColor: color }}
                               title={color}
@@ -144,7 +143,7 @@ export default function Orders({ onOrdersFetch }) {
               <p className="text-sm">
                 <span className="font-semibold">Order Item:</span>
                 {order.items.map((item, index) => (
-                  <span key={item.productId}>
+                  <span key={`${order._id}-${item.productId || item._id}-${index}`}>
                     {item.name}
                     {index !== order.items.length - 1 && ", "}
                   </span>

@@ -37,13 +37,9 @@ export default function Offers() {
         )
       : 0;
 
-    const earnedPoints =
-      !hasOffer && product?.offerPrice > 0
-        ? Math.min(Math.floor(product.offerPrice / 100), 500)
-        : 0;
 
     const cartItem = {
-      _id: product._id,
+      productId: product._id,
       name: product.name,
       images: product.images,
       offerPrice: product.offerPrice,
@@ -54,7 +50,6 @@ export default function Offers() {
 
       hasOffer,
       discountPercent,
-      earnedPoints,
     };
 
     addToCart(cartItem);
@@ -245,7 +240,11 @@ export default function Offers() {
                             }}
                             className="add_to_cart_btn"
                           >
-                            <span>add to cart</span>
+                            <span className={product.stockStatus !== "inStock" ? "text-red-700" : ""}>
+                            {product.stockStatus === "inStock"
+                              ? "Add to Cart"
+                              : "Pre Order"}
+                          </span>
                             <span className="shop_btn_icon">
                               <FaShoppingCart />
                             </span>

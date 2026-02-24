@@ -64,8 +64,8 @@ export default function ProfilePage() {
     <div className="w-full h-fit min-h-screen flex justify-center mt-10 sm:mt-18 md:mt-18">
       <div className="fixed_width h-full p-3 universal_column">
         {/* ================= HEADER ================= */}
-        <div className="w-full max-w-[1000px] flex flex-col sm:flex-row md:flex-row items-center justify-between gap-2 my-5">
-          <div className="w-full flex items-center justify-center sm:justify-start md:justify-start gap-2.5">
+        <div className="w-full max-w-[1000px] flex items-center justify-between gap-2 my-5">
+          <div className="w-full flex items-center justify-start gap-2.5">
             <div className="universal">
               {user?.role === "reseller" ? (
                 <BsShop className="text-[#2B2A29] text-5xl" />
@@ -87,16 +87,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="w-full sm:w-fit md:w-fit flex items-center justify-between sm:justify-end md:justify-end gap-5">
-            <div className="w-fit universal_column">
-              <p className="text-sm font-medium flex items-center">
-                Points <span className="text-xs">⭐</span>
-              </p>
-              <p className="text-base font-semibold text-[#931905]">
-                <strong>{user?.points}</strong>
-              </p>
-            </div>
-
+          <div className="w-full sm:w-fit md:w-fit flex items-center justify-end">            
             <div
               className="flex items-stretch gap-0 cursor-pointer"
               onClick={handleLogout}

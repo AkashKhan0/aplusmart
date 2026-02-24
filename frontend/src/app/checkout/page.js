@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { FaHandPointRight } from "react-icons/fa";
-import { IoMdStar } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/src/context/AppContext";
 
@@ -75,14 +75,10 @@ const districts = [
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, clearCart, user } = useAppContext();
+  const searchParams = useSearchParams();
+  const [selectedItems, setSelectedItems] = useState([]);
+  const { setCart, user } = useAppContext();
   const isCustomer = user?.role === "customer";
-
-  const availablePoints = isCustomer ? user?.points || 0 : 0;
-  const POINT_VALUE = 1;
-
-  const [usePoints, setUsePoints] = useState(false);
-  const [pointsToUse, setPointsToUse] = useState(0);
 
   // Billing fields
   const [fullName, setFullName] = useState("");
@@ -102,6 +98,7 @@ export default function CheckoutPage() {
   // Errors
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Derived totals
   const getShippingCharge = (district, method) => {
@@ -134,8 +131,29 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   };
 
+  useEffect(() => {
+    const itemsString = searchParams.get("items");
+    if (itemsString) {
+      try {
+        const parsed = JSON.parse(itemsString);
+        setSelectedItems(Array.isArray(parsed) ? parsed : []);
+      } catch (err) {
+        console.error("Failed to parse selected items", err);
+      }
+    }
+  }, [searchParams]);
+
   /* ---------------- TOTAL PRODUCT PRICE ---------------- */
-  const totalProductPrice = cart.reduce((sum, item) => {
+  // const totalProductPrice = cart.reduce((sum, item) => {
+  //   const price =
+  //     user?.role === "reseller"
+  //       ? Number(item.resellerPrice) || 0
+  //       : Number(item.offerPrice) || 0;
+  //   const qty = Number(item.quantity) || 0;
+  //   return sum + price * qty;
+  // }, 0);
+
+  const totalProductPrice = selectedItems.reduce((sum, item) => {
     const price =
       user?.role === "reseller"
         ? Number(item.resellerPrice) || 0
@@ -144,53 +162,17 @@ export default function CheckoutPage() {
     return sum + price * qty;
   }, 0);
 
-  /* ---------------- POINTS CALCULATION ---------------- */
-  const maxUsablePoints =
-    user?.role === "customer"
-      ? Math.min(availablePoints, Math.floor(totalProductPrice / POINT_VALUE))
-      : 0;
-
-  const appliedPoints =
-    user?.role === "customer" && usePoints
-      ? Math.min(Number(pointsToUse) || 0, maxUsablePoints)
-      : 0;
-
-  const pointsDiscount = appliedPoints * POINT_VALUE;
 
   /* ---------------- FINAL TOTAL ---------------- */
   const finalTotalAmount =
     totalProductPrice +
-    getShippingCharge(selectedDistrict, shippingMethod) -
-    pointsDiscount;
+    getShippingCharge(selectedDistrict, shippingMethod);
 
-  const totalEarnedPoints =
-    user?.role === "customer"
-      ? cart.reduce((acc, item) => {
-          if (item.hasOffer) return acc;
-          const productPoint = Math.floor(
-            ((Number(item.offerPrice) || 0) / 100) *
-              (Number(item.quantity) || 0),
-          );
-          return acc + Math.min(productPoint, 500);
-        }, 0)
-      : 0;
-
-  const handlePointsChange = (e) => {
-    let value = Number(e.target.value);
-
-    if (isNaN(value)) value = 0;
-
-    if (value < 0) value = 0;
-
-    if (value > maxUsablePoints) {
-      value = maxUsablePoints;
-    }
-    setPointsToUse(value);
-  };
 
   // Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (!validateForm()) return;
 
     const billing = {
@@ -209,13 +191,10 @@ export default function CheckoutPage() {
         credentials: "include",
         body: JSON.stringify({
           billing,
-          cart,
+          cart: selectedItems,
           shippingMethod,
           shippingCharge: getShippingCharge(selectedDistrict, shippingMethod),
           paymentMethod,
-          usedPoints: Number(appliedPoints) || 0,
-          pointsDiscount: Number(pointsDiscount) || 0,
-          earnedPoints: Number(totalEarnedPoints) || 0,
           grandTotal: Number(finalTotalAmount) || 0,
         }),
       });
@@ -228,18 +207,38 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Success
-      setMessage(`Order placed successfully!`);
-      clearCart();
-      setTimeout(() => setMessage(""), 1500);
+      if (res.ok) {
+        setMessage(`Order placed successfully!`);
+        // Get purchased item ids
+        const purchasedItemIds = selectedItems.map((item) => item.cartItemId);
 
-      // Optional redirect
-      setTimeout(() => {
-        router.push(`/order-confirmation?orderId=${data.orderId}`);
-      }, 2000);
+        // Remove purchased items from frontend cart
+        setCart((prevCart) =>
+          prevCart.filter(
+            (cartItem) => !purchasedItemIds.includes(cartItem.cartItemId),
+          ),
+        );
+
+        // Remove purchased items from backend cart
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
+          method: "POST", // Or DELETE depending on your API
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ removeItemIds: purchasedItemIds }),
+        });
+
+        setSelectedItems([]);
+        setTimeout(() => setMessage(""), 1500);
+
+        setTimeout(() => {
+          router.push(`/order-confirmation?orderId=${data.orderId}`);
+        }, 2000);
+      }
     } catch (err) {
       console.error(err);
       setMessage("Order failed: Try again");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -392,8 +391,28 @@ export default function CheckoutPage() {
                 </tr>
               </thead>
               <tbody>
-                {cart?.map((item, index) => (
+                {/* {cart?.map((item, index) => (
                   <tr key={index} className="text-left">
+                    <td className="p-2 border border-[#dddddd]">
+                      {item.name} x {item.quantity}
+                    </td>
+                    <td className="p-2 border border-[#dddddd]">
+                      <span className="taka">৳- </span>{" "}
+                      {Number(
+                        user?.role === "reseller"
+                          ? item.resellerPrice * item.quantity
+                          : item.offerPrice * item.quantity,
+                      ).toLocaleString("en-IN")}
+                      /=
+                    </td>
+                  </tr>
+                ))} */}
+
+                {selectedItems?.map((item) => (
+                  <tr
+                    key={item.cartItemId || item._id || item.productId}
+                    className="text-left"
+                  >
                     <td className="p-2 border border-[#dddddd]">
                       {item.name} x {item.quantity}
                     </td>
@@ -441,73 +460,17 @@ export default function CheckoutPage() {
                   <th className="p-2 border border-[#dddddd] uppercase">
                     Total
                   </th>
-                  <th className="p-2 border border-[#dddddd] rounded flex items-center justify-between gap-1.5">
+                  <th className="p-2 border border-[#dddddd] rounded flex items-center gap-1.5">
                     <p>
                       <span className="taka">৳- </span>
                       {Number(finalTotalAmount).toLocaleString("en-IN")}/=
                     </p>
-                    {user?.role === "customer" && (
-                      <span className="flex items-center text-[#931905]">
-                        {totalEarnedPoints} <IoMdStar />
-                      </span>
-                    )}
                   </th>
                 </tr>
               </thead>
             </table>
           </div>
 
-          {/* use points */}
-          {isCustomer && (
-            <div className="w-full p-3 bg-gray-200 mt-5 rounded">
-              <h2 className="text-lg font-medium mb-2 flex items-center gap-2">
-                Use Reward Points <IoMdStar className="text-[#931905]" />
-              </h2>
-
-              <p className="text-base mb-2">
-                Available Points:
-                <span className="font-semibold text-[#931905] ml-1">
-                  {availablePoints}
-                </span>
-                (1 Point = {POINT_VALUE} tk)
-              </p>
-
-              <div className="flex items-center gap-2 mb-2">
-                <input
-                  type="checkbox"
-                  checked={usePoints}
-                  onChange={(e) => {
-                    setUsePoints(e.target.checked);
-                    if (!e.target.checked) setPointsToUse(0);
-                  }}
-                />
-                <span>Use points for this order</span>
-              </div>
-
-              {usePoints && (
-                <div className="flex flex-col">
-                  <input
-                    type="number"
-                    min={0}
-                    max={maxUsablePoints}
-                    value={pointsToUse === 0 ? "" : pointsToUse}
-                    onChange={handlePointsChange}
-                    className="checkout_inp w-full"
-                    placeholder="Enter points"
-                  />
-
-                  <p className="text-lg text-green-600">
-                    Discount: <span className="taka">৳ - </span>{" "}
-                    {pointsDiscount}/=
-                  </p>
-
-                  <p className="text-xs text-red-500">
-                    Max usable points: {maxUsablePoints}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
 
           {/* Payment */}
           <div className="w-full mt-5">
@@ -583,19 +546,6 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* Success / Error Message */}
-            {message && (
-              <div
-                className={`p-3 rounded font-base ${
-                  message.includes("successfully")
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                {message}
-              </div>
-            )}
-
             <div className="w-full flex items-center justify-end">
               <button
                 type="submit"
@@ -603,7 +553,13 @@ export default function CheckoutPage() {
                 disabled={!termsChecked}
                 style={{ opacity: termsChecked ? 1 : 0.6 }}
               >
-                Place Order
+                {loading
+                  ? "Please wait..."
+                  : message.includes("successfully")
+                    ? "Success!"
+                    : message && message.includes("wrong")
+                      ? "Error!"
+                      : "Place Order"}
               </button>
             </div>
           </div>

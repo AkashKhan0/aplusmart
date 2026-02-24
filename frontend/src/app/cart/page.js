@@ -3,22 +3,40 @@
 import { useAppContext } from "@/src/context/AppContext";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { FaCartArrowDown, FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { GiShoppingBag } from "react-icons/gi";
 
 export default function CartPage() {
   const { cart, user, updateQuantity, removeFromCart } = useAppContext();
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const isEmpty = !cart || cart.length === 0;
 
-  const totalPrice = cart.reduce((sum, item) => {
-  const price =
-    user?.role === "reseller"
-      ? item.resellerPrice
-      : item.offerPrice;
+  const toggleSelectItem = (itemId) => {
+    const idStr = String(itemId); // make sure it's string
+    setSelectedItems((prev) =>
+      prev.includes(idStr)
+        ? prev.filter((id) => id !== idStr)
+        : [...prev, idStr],
+    );
+  };
 
-  return sum + price * item.quantity;
-}, 0);
+  //   const totalPrice = cart.reduce((sum, item) => {
+  //   const price =
+  //     user?.role === "reseller"
+  //       ? item.resellerPrice
+  //       : item.offerPrice;
+  //   return sum + price * item.quantity;
+  // }, 0);
+
+  const totalPrice = cart
+    .filter((item) => selectedItems.includes(String(item.cartItemId)))
+    .reduce((sum, item) => {
+      const price =
+        user?.role === "reseller" ? item.resellerPrice : item.offerPrice;
+      return sum + price * item.quantity;
+    }, 0);
 
   const getStep = (item) => (item.role === "reseller" ? 10 : 1);
   const getMin = (item) => (item.role === "reseller" ? 10 : 1);
@@ -41,7 +59,7 @@ export default function CartPage() {
           <p className="text-center text-gray-500 my-5">
             Your shopping cart is empty!
           </p>
-          <Link href="/">
+          <Link href="/allproducts">
             <button className="buy_btn">
               <span>Shop now</span>
               <span className="text-sm shop_btn_icon">
@@ -64,6 +82,22 @@ export default function CartPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="text-left">
+                <th className="p-2 w-24 bg-[#dddddd] border border-gray-300">
+                  <button
+                    className="text-sm"
+                    onClick={() =>
+                      setSelectedItems(
+                        selectedItems.length === cart.length
+                          ? []
+                          : cart.map((item) => String(item.cartItemId)),
+                      )
+                    }
+                  >
+                    {selectedItems.length === cart.length
+                      ? "Deselect All"
+                      : "Select All"}
+                  </button>
+                </th>
                 <th className="p-2 bg-[#dddddd] border border-gray-300">
                   Image
                 </th>
@@ -83,8 +117,19 @@ export default function CartPage() {
             </thead>
 
             <tbody>
-              {cart.map((item, index) => (
-                <tr key={index} className="border-b border-b-gray-300">
+              {cart.map((item) => (
+                <tr
+                  key={item.cartItemId}
+                  className="border-b border-b-gray-300"
+                >
+                  {/* SELECT */}
+                  <td className="p-2 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(String(item.cartItemId))} // ensure string
+                      onChange={() => toggleSelectItem(item.cartItemId)}
+                    />
+                  </td>
                   {/* IMAGE */}
                   <td className="p-2">
                     <img
@@ -122,7 +167,7 @@ export default function CartPage() {
                       <button
                         onClick={() =>
                           updateQuantity(
-                            item._id,
+                            item.cartItemId,
                             Math.max(
                               item.quantity - getStep(item),
                               getMin(item),
@@ -141,7 +186,7 @@ export default function CartPage() {
                       <button
                         onClick={() =>
                           updateQuantity(
-                            item._id,
+                            item.cartItemId,
                             item.quantity + getStep(item),
                           )
                         }
@@ -166,7 +211,7 @@ export default function CartPage() {
                   {/* DELETE */}
                   <td className="px-2 text-end">
                     <button
-                      onClick={() => removeFromCart(item._id)}
+                      onClick={() => removeFromCart(item.cartItemId)}
                       className="text-[#000000] text-lg cursor-pointer"
                     >
                       <FaTrash />
@@ -187,16 +232,31 @@ export default function CartPage() {
 
           {/* ACTIONS */}
           <div className="flex justify-between mt-7">
-            <Link href="/">
-              <button className="buy_btn">
+            <Link href="/allproducts">
+              <button className="buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
                 <span>Shop More</span>
                 <span className="text-sm shop_btn_icon">
                   <FaCartArrowDown />
                 </span>
               </button>
             </Link>
-            <Link href="/checkout">
-              <button className="buy_btn">
+
+            <Link
+              href={{
+                pathname: "/checkout",
+                query: {
+                  items: JSON.stringify(
+                    cart.filter((item) =>
+                      selectedItems.includes(String(item.cartItemId)),
+                    ),
+                  ),
+                },
+              }}
+            >
+              <button
+                className={`buy_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900] ${selectedItems.length === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={selectedItems.length === 0}
+              >
                 <span>Purchase</span>
                 <span className="text-sm shop_btn_icon">
                   <GiShoppingBag />

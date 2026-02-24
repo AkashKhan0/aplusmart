@@ -6,6 +6,7 @@
 body {
   background-color: aliceblue;
   color: #2b2a29;
+  box-sizing: border-box;
 }
 .universal {
   display: flex;
@@ -21,6 +22,46 @@ body {
 .fixed_width {
   width: 100%;
   max-width: 1300px;
+}
+.aplus_mart_logo {
+  -webkit-box-reflect: below 3px
+    linear-gradient(transparent, transparent, #00000063);
+  line-height: 0.7em;
+  animation: ani 5s linear infinite;
+  letter-spacing: 3px;
+}
+
+@keyframes ani {
+  0%,
+  18%,
+  20%,
+  50.1%,
+  60%,
+  65.1%,
+  80%,
+  90.1%,
+  92% {
+    color: #971900;
+    text-shadow: none;
+  }
+  18.1%,
+  20.1%,
+  30%,
+  50%,
+  60.1%,
+  65%,
+  80.1%,
+  90%,
+  92.1%,
+  100% {
+    color: #590000;
+    text-shadow:
+      0 0 5px #971900,
+      0 0 10px #971900c3,
+      0 0 15px #97190099,
+      0 0 20px #97190062,
+      0 0 300px #97190027;
+  }
 }
 
 .top_bg_nav {
@@ -121,7 +162,7 @@ input {
   font-weight: 800;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-.category_sing::before{
+.category_sing::before {
   content: "";
   position: absolute;
   top: -10px;
@@ -132,7 +173,7 @@ input {
   border-right: 13px solid transparent;
   border-bottom: 11px solid #2b2a29;
 }
-.category_sing::after{
+.category_sing::after {
   content: "";
   position: absolute;
   top: -10px;
@@ -171,7 +212,12 @@ input {
   align-items: center;
   overflow-x: hidden;
   gap: 5px;
-  box-shadow: 5px 5px 10px #0008, 10px 6px 15px #0008 inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px #0004 inset, 0 0 8px #0005;
+  box-shadow:
+    5px 5px 10px #0008,
+    10px 6px 15px #0008 inset,
+    -5px -5px 8px #f5f5ff inset,
+    10px 6px 15px #0004 inset,
+    0 0 8px #0005;
   text-shadow: 2px 2px 5px #0008;
 }
 .buy_btn:hover {
@@ -179,7 +225,7 @@ input {
   color: #ffffff;
 }
 
-.buy_btn::before{
+.buy_btn::before {
   content: "";
   position: absolute;
   width: 12px;
@@ -191,7 +237,7 @@ input {
   opacity: 0.5;
   transform: rotate(-40deg);
 }
-.buy_btn::after{
+.buy_btn::after {
   content: "";
   position: absolute;
   width: 5px;
@@ -232,10 +278,15 @@ input {
   overflow-x: hidden;
   gap: 5px;
   color: rgb(91, 91, 91);
-  box-shadow: 5px 5px 10px rgba(89, 89, 89, 0.533), 10px 6px 15px rgba(84, 84, 84, 0.533) inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px rgba(196, 196, 196, 0.267) inset, 0 0 8px rgba(71, 71, 71, 0.333);
+  box-shadow:
+    5px 5px 10px rgba(89, 89, 89, 0.533),
+    10px 6px 15px rgba(84, 84, 84, 0.533) inset,
+    -5px -5px 8px #f5f5ff inset,
+    10px 6px 15px rgba(196, 196, 196, 0.267) inset,
+    0 0 8px rgba(71, 71, 71, 0.333);
   text-shadow: 2px 2px 5px #0008;
 }
-.add_to_cart_btn::before{
+.add_to_cart_btn::before {
   content: "";
   position: absolute;
   width: 6px;
@@ -247,7 +298,7 @@ input {
   opacity: 0.5;
   transform: rotate(-40deg);
 }
-.add_to_cart_btn::after{
+.add_to_cart_btn::after {
   content: "";
   position: absolute;
   width: 3px;
@@ -282,7 +333,11 @@ input {
   position: relative;
   width: 150px;
   height: 150px;
-  box-shadow: inset 20px 20px 20px rgba(0,0,0,0.05), 25px 35px 20px rgba(0,0,0,0.05), 25px 30px 30px rgba(0,0,0,0.05), inset -20px -20px 25px rgba(255,255,255,0.9);
+  box-shadow:
+    inset 20px 20px 20px rgba(0, 0, 0, 0.05),
+    25px 35px 20px rgba(0, 0, 0, 0.05),
+    25px 30px 30px rgba(0, 0, 0, 0.05),
+    inset -20px -20px 25px rgba(255, 255, 255, 0.9);
   transition: all 0.5s ease;
 }
 .drop:nth-child(1) {
@@ -294,7 +349,7 @@ input {
 .drop:nth-child(3) {
   border-radius: 76% 24% 40% 60% / 40% 69% 31% 60%;
 }
-.drop:hover{
+.drop:hover {
   border-radius: 50%;
 }
 .drop::before {
@@ -345,12 +400,21 @@ input {
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 80px;
-  box-shadow: inset 20px 20px 20px rgba(0,0,0,0.05), 25px 35px 20px rgba(0,0,0,0.05), 25px 30px 30px rgba(0,0,0,0.05), inset -20px -20px 25px rgba(255,255,255,0.9);
+  box-shadow:
+    inset 20px 20px 20px rgba(0, 0, 0, 0.05),
+    25px 35px 20px rgba(0, 0, 0, 0.05),
+    25px 30px 30px rgba(0, 0, 0, 0.05),
+    inset -20px -20px 25px rgba(255, 255, 255, 0.9);
   transition: all 0.5s ease;
   max-width: 180px;
 }
 .pagination {
-  box-shadow: 5px 5px 10px rgba(89, 89, 89, 0.533), 10px 6px 15px rgba(84, 84, 84, 0.533) inset, -5px -5px 8px #f5f5ff inset, 10px 6px 15px rgba(196, 196, 196, 0.267) inset, 0 0 8px rgba(71, 71, 71, 0.333);
+  box-shadow:
+    5px 5px 10px rgba(89, 89, 89, 0.533),
+    10px 6px 15px rgba(84, 84, 84, 0.533) inset,
+    -5px -5px 8px #f5f5ff inset,
+    10px 6px 15px rgba(196, 196, 196, 0.267) inset,
+    0 0 8px rgba(71, 71, 71, 0.333);
   transition: all 0.5s ease;
 }
 .pagination_active {
@@ -412,8 +476,12 @@ input {
 .features_icon {
   font-size: 28px;
   transition: all 0.3s ease;
-  margin-bottom: 5px;  
-  box-shadow: inset 2px 5px 10px rgba(0,0,0,0.1),  inset -2px -5px 10px rgba(255,255,255,1), 15px 15px 10px rgba(0,0,0,0.05), 15px 10px 15px rgba(0,0,0,0.025);
+  margin-bottom: 5px;
+  box-shadow:
+    inset 2px 5px 10px rgba(0, 0, 0, 0.1),
+    inset -2px -5px 10px rgba(255, 255, 255, 1),
+    15px 15px 10px rgba(0, 0, 0, 0.05),
+    15px 10px 15px rgba(0, 0, 0, 0.025);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -434,12 +502,17 @@ input {
 }
 
 .main_menu_item {
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
   padding: 2px 10px;
   border-radius: 50px;
   font-size: 14px;
   color: rgb(91, 91, 91);
-  box-shadow: 5px 5px 10px rgba(79, 79, 79, 0.533), 10px 6px 15px rgba(187, 187, 187, 0.533) inset, -5px -5px 8px #ffffff inset, 10px 6px 15px rgba(102, 102, 102, 0.267) inset, 0 0 8px rgba(88, 88, 88, 0.333);
+  box-shadow:
+    5px 5px 10px rgba(79, 79, 79, 0.533),
+    10px 6px 15px rgba(187, 187, 187, 0.533) inset,
+    -5px -5px 8px #ffffff inset,
+    10px 6px 15px rgba(102, 102, 102, 0.267) inset,
+    0 0 8px rgba(88, 88, 88, 0.333);
   text-shadow: 2px 2px 5px #0008;
 }
 label {
@@ -549,7 +622,11 @@ label {
 .point_icon {
   font-size: 32px;
   color: #464646;
-  box-shadow: inset 2px 5px 10px rgba(0,0,0,0.1),  inset -2px -5px 10px rgba(255,255,255,1), 15px 15px 10px rgba(0,0,0,0.05), 15px 10px 15px rgba(0,0,0,0.025);
+  box-shadow:
+    inset 2px 5px 10px rgba(0, 0, 0, 0.1),
+    inset -2px -5px 10px rgba(255, 255, 255, 1),
+    15px 15px 10px rgba(0, 0, 0, 0.05),
+    15px 10px 15px rgba(0, 0, 0, 0.025);
   border-radius: 100%;
   padding: 5px;
 }
@@ -603,7 +680,7 @@ label {
     -10px -10px 10px -1px #0000000c;
 }
 .tab_active {
-    background-color: #e5e7eb;
+  background-color: #e5e7eb;
 }
 
 /* toast message */

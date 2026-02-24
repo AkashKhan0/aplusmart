@@ -25,10 +25,6 @@ const ProductSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    points: {
-      type: Number,
-      default: null,
-    },
 
     images: [{ type: String }],
     shortTitle: { type: String },

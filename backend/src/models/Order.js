@@ -25,10 +25,6 @@ const orderSchema = new mongoose.Schema(
     shippingMethod: String,
     shippingCharge: Number,
     paymentMethod: String,
-    points: {
-      type: Number,
-      default: 0,
-    },
     grandTotal: Number,
     status: {
       type: String,
@@ -41,7 +37,7 @@ const orderSchema = new mongoose.Schema(
       default: "not yet",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.Order || mongoose.model("Order", orderSchema);
