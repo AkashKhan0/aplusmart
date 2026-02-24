@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { FaHandPointRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/src/context/AppContext";
@@ -75,10 +75,10 @@ const districts = [
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const [selectedItems, setSelectedItems] = useState([]);
   const { setCart, user } = useAppContext();
-  const isCustomer = user?.role === "customer";
+  // const isCustomer = user?.role === "customer";
 
   // Billing fields
   const [fullName, setFullName] = useState("");
@@ -131,8 +131,23 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0;
   };
 
+  // useEffect(() => {
+  //   const itemsString = searchParams.get("items");
+  //   if (itemsString) {
+  //     try {
+  //       const parsed = JSON.parse(itemsString);
+  //       setSelectedItems(Array.isArray(parsed) ? parsed : []);
+  //     } catch (err) {
+  //       console.error("Failed to parse selected items", err);
+  //     }
+  //   }
+  // }, [searchParams]);
+
+
   useEffect(() => {
-    const itemsString = searchParams.get("items");
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    const itemsString = params.get("items");
     if (itemsString) {
       try {
         const parsed = JSON.parse(itemsString);
@@ -141,18 +156,10 @@ export default function CheckoutPage() {
         console.error("Failed to parse selected items", err);
       }
     }
-  }, [searchParams]);
+  }
+}, []);
 
   /* ---------------- TOTAL PRODUCT PRICE ---------------- */
-  // const totalProductPrice = cart.reduce((sum, item) => {
-  //   const price =
-  //     user?.role === "reseller"
-  //       ? Number(item.resellerPrice) || 0
-  //       : Number(item.offerPrice) || 0;
-  //   const qty = Number(item.quantity) || 0;
-  //   return sum + price * qty;
-  // }, 0);
-
   const totalProductPrice = selectedItems.reduce((sum, item) => {
     const price =
       user?.role === "reseller"

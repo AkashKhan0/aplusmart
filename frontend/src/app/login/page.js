@@ -83,7 +83,7 @@ export default function Page() {
 
       setTimeout(() => {
         setButtonStatus("idle");
-        router.push("/profile");
+        router.push("/");
       }, 1000);
     } catch (error) {
       setIsSuccess(false);
