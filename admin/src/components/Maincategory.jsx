@@ -10,10 +10,10 @@ export default function Maincategory() {
   const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   // Load list
   const fetchCategories = async () => {
@@ -62,7 +62,11 @@ export default function Maincategory() {
         setMessage(data.error || "Something went wrong.");
         setIsSuccess(false);
       } else {
-        setMessage(editId ? "Category updated successfully!" : "Category added successfully!");
+        setMessage(
+          editId
+            ? "Category updated successfully!"
+            : "Category added successfully!",
+        );
         setIsSuccess(true);
         // reset
         setMainCategory("");
@@ -93,7 +97,9 @@ export default function Maincategory() {
     if (!confirm("Are you sure want to delete this category?")) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/categories/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_URL}/api/categories/${id}`, {
+        method: "DELETE",
+      });
       const data = await res.json();
       if (!res.ok) {
         setMessage(data.error || "Delete failed.");
@@ -115,7 +121,10 @@ export default function Maincategory() {
       <h1 className="text-2xl font-semibold uppercase mb-1">Add Category</h1>
 
       <div className="w-full">
-        <form onSubmit={handleSubmit} className="w-full flex flex-col sm:flex-row gap-1.5">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex flex-col sm:flex-row gap-1.5"
+        >
           <div className="w-full sm:w-full md:w-[30%]">
             <input
               type="text"
@@ -147,7 +156,9 @@ export default function Maincategory() {
 
         {/* Message */}
         {message && (
-          <p className={`mt-2 text-sm font-semibold ${isSuccess ? "text-green-600" : "text-red-600"}`}>
+          <p
+            className={`mt-2 text-sm font-semibold ${isSuccess ? "text-green-600" : "text-red-600"}`}
+          >
             {message}
           </p>
         )}
@@ -156,21 +167,32 @@ export default function Maincategory() {
       {/* List */}
       <div className="w-full flex flex-col gap-1 mt-3">
         {categories.length === 0 ? (
-          <p className="text-center text-sm text-gray-500">No categories yet.</p>
+          <p className="text-center text-sm text-gray-500">
+            No categories yet.
+          </p>
         ) : (
-          categories.map((item) => (
-            <div key={item._id} className="w-full flex items-center justify-between gap-2.5 border px-2 py-1">
-              <div className="flex items-center gap-5">
-                <p className="text-sm font-bold capitalize">{item.mainCategory}</p>
-                <p className="text-sm font-semibold capitalize">{item.subCategory}</p>
-              </div>
+          [...categories]
+            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+            .map((item) => (
+              <div
+                key={item._id}
+                className="w-full flex items-center justify-between gap-2.5 border px-2 py-1"
+              >
+                <div className="flex items-center gap-5">
+                  <p className="text-sm font-bold capitalize">
+                    {item.mainCategory}
+                  </p>
+                  <p className="text-sm font-semibold capitalize">
+                    {item.subCategory}
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-5 text-xl cursor-pointer">
-                <FaRegEdit onClick={() => handleEdit(item)} />
-                <RiDeleteBin5Fill onClick={() => handleDelete(item._id)} />
+                <div className="flex items-center gap-5 text-xl cursor-pointer">
+                  <FaRegEdit onClick={() => handleEdit(item)} />
+                  <RiDeleteBin5Fill onClick={() => handleDelete(item._id)} />
+                </div>
               </div>
-            </div>
-          ))
+            ))
         )}
       </div>
     </div>

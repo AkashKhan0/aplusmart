@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { FiChevronDown } from "react-icons/fi";
 import Link from "next/link";
+import { Reggae_One } from "next/font/google";
+
+const reggaeOne = Reggae_One({
+  subsets: ["latin"],
+  weight: "400",
+});
 
 export default function Navbar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
@@ -87,54 +93,56 @@ export default function Navbar({ isOpen, setIsOpen }) {
 
         {/* Logo */}
         <Link href="/" onClick={() => setIsOpen(false)}>
-          <h1 className="text-[#971900] text-2xl font-bold text-center mb-6 aplus_mart_logo">
-            A Plus Mart BD
+          <h1 className={`${reggaeOne.className} text-[#971900] text-2xl font-bold text-center mb-6 aplus_mart_logo`}>
+            <span className="logo-text">A Plus Mart BD</span>
           </h1>
         </Link>
 
         {/* Menu */}
         <ul className="flex flex-col gap-2 text-white">
-          {Object.entries(menuData).map(([mainCategory, subCategories]) => (
-            <li key={mainCategory} className="border-b border-white/10">
-              {/* Main Category */}
-              <button
-                onClick={() => toggleCategory(mainCategory)}
-                className="w-full flex justify-between items-center py-1 px-3 capitalize 
+          {[...Object.entries(menuData)]
+            .reverse()
+            .map(([mainCategory, subCategories]) => (
+              <li key={mainCategory} className="border-b border-white/10">
+                {/* Main Category */}
+                <button
+                  onClick={() => toggleCategory(mainCategory)}
+                  className="w-full flex justify-between items-center py-1 px-3 capitalize 
                 hover:bg-white/10 rounded transition cursor-pointer"
-              >
-                <span>{mainCategory}</span>
-                <FiChevronDown
-                  className={`transition-transform duration-300 ${
-                    activeCategory === mainCategory ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+                >
+                  <span>{mainCategory}</span>
+                  <FiChevronDown
+                    className={`transition-transform duration-300 ${
+                      activeCategory === mainCategory ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-              {/* Sub Category Dropdown */}
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out
+                {/* Sub Category Dropdown */}
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out
                 ${
                   activeCategory === mainCategory
                     ? "max-h-96 opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
-              >
-                <ul className="pl-5 flex flex-col gap-1 py-1">
-                  {subCategories.map((sub, index) => (
-                    <li key={index}>
-                      <a
-                        href={`/search?subCategory=${encodeURIComponent(sub)}`}
-                        onClick={() => setIsOpen(false)}
-                        className="block py-1 px-3 capitalize text-sm text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
-                      >
-                        {sub}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </li>
-          ))}
+                >
+                  <ul className="pl-5 flex flex-col gap-1 py-1">
+                    {subCategories.map((sub, index) => (
+                      <li key={index}>
+                        <a
+                          href={`/search?subCategory=${encodeURIComponent(sub)}`}
+                          onClick={() => setIsOpen(false)}
+                          className="block py-1 px-3 capitalize text-sm text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
+                        >
+                          {sub}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </>

@@ -57,9 +57,9 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
               <div className="w-full max-w-fit flex items-center justify-start">
                 <Link href="/">
                   <h1
-                    className={`${reggaeOne.className} text-[#971900] text-2xl hidden md:block cursor-pointer`}
+                    className={`${reggaeOne.className} text-[#971900] text-2xl hidden md:block cursor-pointer aplus_mart_logo`}
                   >
-                    A Plus Mart BD
+                    <span className="logo-text">A Plus Mart BD</span>
                   </h1>
                   <h1
                     className={`${reggaeOne.className} text-[#ffffff] hover:text-[#ffffff] transition-colors duration-300 text-2xl hidden sm:block md:hidden cursor-pointer`}
@@ -133,8 +133,14 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                     Home
                   </a>
                 </li>
-                {Object.entries(menuData).map(
-                  ([mainCategory, subCategories]) => (
+                {Object.entries(menuData)
+                  .filter(
+                    ([mainCategory]) =>
+                      !["others", "offers", "combo"].includes(
+                        mainCategory.toLowerCase(),
+                      ),
+                  )
+                  .map(([mainCategory, subCategories]) => (
                     <li
                       key={mainCategory}
                       className="relative group cursor-pointer py-1 px-0 w-fit active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
@@ -161,8 +167,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                         ))}
                       </ul>
                     </li>
-                  ),
-                )}
+                  ))}
               </ul>
             </div>
           </div>

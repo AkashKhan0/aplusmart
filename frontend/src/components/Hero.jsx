@@ -84,19 +84,12 @@ export default function Hero({ openMenu }) {
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B] relative">
-      <div className="drip drip1"></div>
-      <div className="drip drip2"></div>
-      <div className="drip drip3"></div>
-      <div className="drip drip4"></div>
-      <div className="drip drip5"></div>
-      <div className="drip drip6"></div>
-
       <div className="w-full h-20 absolute -bottom-12">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
-          className="absolute bottom-0 left-0 w-full h-[50px]"
+          className="absolute -bottom-20 left-0 w-full h-[150px]"
         >
           <path
             fill="#FFCE1B"
@@ -138,7 +131,8 @@ export default function Hero({ openMenu }) {
             <h1
               className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold aplus_mart_logo`}
             >
-              A Plus Mart BD
+              <span className="logo-text">A Plus Mart BD</span>
+              <span className="logo-reflection">A Plus Mart BD</span>
             </h1>
           </div>
 
