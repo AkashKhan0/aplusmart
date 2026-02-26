@@ -133,7 +133,8 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                     Home
                   </a>
                 </li>
-                {Object.entries(menuData)
+                {[...Object.entries(menuData)]
+                  .reverse()
                   .filter(
                     ([mainCategory]) =>
                       !["others", "offers", "combo"].includes(

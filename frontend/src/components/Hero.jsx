@@ -84,12 +84,12 @@ export default function Hero({ openMenu }) {
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B] relative">
-      <div className="w-full h-20 absolute -bottom-12">
+      <div className="w-full h-10 absolute -bottom-10">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
-          className="absolute -bottom-20 left-0 w-full h-[150px]"
+          className="absolute -bottom-00 left-0 w-full h-[30px]"
         >
           <path
             fill="#FFCE1B"
