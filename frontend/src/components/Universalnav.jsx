@@ -160,7 +160,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                           <li key={index}>
                             <a
                               href={`/search?subCategory=${encodeURIComponent(sub)}`}
-                              className="block px-4 py-1 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300"
+                              className="block px-4 py-1 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300 text-[13px]"
                             >
                               {sub}
                             </a>

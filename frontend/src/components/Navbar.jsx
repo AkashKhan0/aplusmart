@@ -99,7 +99,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
         </Link>
 
         {/* Menu */}
-        <ul className="flex flex-col gap-2 text-white">
+        <ul className="flex flex-col gap-1 text-white">
           {[...Object.entries(menuData)]
             .reverse()
             .map(([mainCategory, subCategories]) => (
@@ -108,7 +108,7 @@ export default function Navbar({ isOpen, setIsOpen }) {
                 <button
                   onClick={() => toggleCategory(mainCategory)}
                   className="w-full flex justify-between items-center py-1 px-3 capitalize 
-                hover:bg-white/10 rounded transition cursor-pointer"
+                hover:bg-white/10 rounded transition cursor-pointer text-[14px]"
                 >
                   <span>{mainCategory}</span>
                   <FiChevronDown
@@ -127,13 +127,13 @@ export default function Navbar({ isOpen, setIsOpen }) {
                     : "max-h-0 opacity-0"
                 }`}
                 >
-                  <ul className="pl-5 flex flex-col gap-1 py-1">
+                  <ul className="pl-5 flex flex-col gap-0.5 py-1">
                     {subCategories.map((sub, index) => (
                       <li key={index}>
                         <a
                           href={`/search?subCategory=${encodeURIComponent(sub)}`}
                           onClick={() => setIsOpen(false)}
-                          className="block py-1 px-3 capitalize text-sm text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
+                          className="block py-0.5 px-3 capitalize text-[13px] text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
                         >
                           {sub}
                         </a>

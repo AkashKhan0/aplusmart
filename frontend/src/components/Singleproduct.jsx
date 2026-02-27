@@ -343,14 +343,14 @@ export default function Singleproduct() {
                   {product.shortDescription}
                 </p>
                 {product.shortList?.length > 0 && (
-                  <ul className="list-none text-sm">
+                  <ul className="list-none text-base">
                     {product.shortList.map((item) => (
                       <li
                         key={item._id}
-                        className="flex items-center gap-5 my-1"
+                        className="w-full my-1"
                       >
-                        <span className="font-medium w-full max-w-fit">
-                          {item.name}
+                        <span className="font-bold w-full max-w-fit">
+                          {item.name} : {" "}
                         </span>
                         <span className="text-gray-700">{item.value}</span>
                       </li>
@@ -454,15 +454,15 @@ export default function Singleproduct() {
                     <h3 className="font-medium text-base capitalize">
                       {spec.title}
                     </h3>
-                    <p className="text-base text-gray-600 mb-2">
+                    <p className="text-base text-gray-800 mb-2">
                       {spec.description}
                     </p>
                     {spec.list?.length > 0 && (
-                      <ul className="text-base ml-2">
+                      <ul className="text-base">
                         {spec.list.map((item) => (
-                          <li key={item._id} className="flex gap-2 mb-1 w-full">
-                            <span className="font-medium w-full max-w-fit">
-                              {item.name}:
+                          <li key={item._id} className="w-full my-1">
+                            <span className="font-bold capitalize w-full max-w-fit">
+                              {item.name} : {" "}
                             </span>
                             <span className="w-full">{item.value}</span>
                           </li>
