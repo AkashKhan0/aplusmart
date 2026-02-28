@@ -148,10 +148,10 @@ export default function Allproducts() {
           </div>
 
           {/* ================= Products Grid ================= */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
             {currentProducts.map((product) => (
               <Link key={product._id} href={`/products/${product._id}`}>
-                <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9]">
+                <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden">
                   {/* Offer / Points */}
                   {user?.role === "customer" &&
                     product?.offerPrice > 0 &&
@@ -167,18 +167,18 @@ export default function Allproducts() {
                       </div>
                     )}
 
-                  <div className="h-[250px]">
+                  <div className="w-full h-[200px] overflow-hidden mb-1">
                     <Image
                       src={product.images?.[0] || "/images/placeholder.png"}
                       alt={product.name}
                       width={300}
                       height={300}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   </div>
 
-                  <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl">
-                    <h1 className="text-base font-medium text-center capitalize">
+                  <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full">
+                    <h1 className="text-sm px-1 font-medium text-center capitalize">
                       {product.name}
                     </h1>
 

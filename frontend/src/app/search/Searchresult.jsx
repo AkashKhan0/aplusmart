@@ -136,10 +136,10 @@ export default function Searchresult() {
           {products.length === 0 ? (
             <p>No products found!</p>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
               {products.map((item) => (
                 <Link key={item._id} href={`/products/${item._id}`}>
-                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer h-full overflow-hidden">
                     {/* % OFF */}
                     {user?.role === "customer" &&
                       item?.offerPrice > 0 &&
@@ -155,18 +155,18 @@ export default function Searchresult() {
                         </div>
                       )}
 
-                    <div className="w-full h-[250px]">
+                    <div className="w-full h-[200px] overflow-hidden mb-1">
                       <Image
                         src={item.images?.[0]}
                         alt={item.name}
                         width={500}
                         height={500}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl">
-                      <h1 className="text-base font-medium text-center capitalize">
+                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full">
+                      <h1 className="text-sm font-medium text-center capitalize px-1">
                         {item.name}
                       </h1>
                       <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">

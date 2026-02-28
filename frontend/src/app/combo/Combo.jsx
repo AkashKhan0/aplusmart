@@ -107,7 +107,7 @@ export default function Combo() {
           </div>
 
           {/* offer products list */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
             {products
               .filter(
                 (product) =>
@@ -116,7 +116,7 @@ export default function Combo() {
               )
               .map((product) => (
                 <Link key={product._id} href={`/products/${product._id}`}>
-                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative">
+                  <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative h-full overflow-hidden">
                     {user?.role === "customer" &&
                       product?.offerPrice > 0 &&
                       product?.regularPrice > 0 &&
@@ -131,18 +131,18 @@ export default function Combo() {
                         </div>
                       )}
 
-                    <div className="w-full h-[250px]">
+                    <div className="w-full h-[200px] overflow-hidden mb-1">
                       <Image
                         src={product.images[0] || "/images/placeholder.png"}
                         alt={product.name}
                         width={500}
                         height={500}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5">
-                      <h1 className="text-base font-medium text-center capitalize">
+                    <div className="flex flex-col items-center py-2 gap-1.5 h-full">
+                      <h1 className="text-sm px-1 font-medium text-center capitalize">
                         {product.name}
                       </h1>
 
