@@ -47,6 +47,13 @@ export default function Singleproduct() {
 
         if (productData?.images?.length > 0)
           setActiveImage(productData.images[0]);
+
+        if (productData?.colors?.length === 1) {
+          setSelectedColor([productData.colors[0]]);
+        } else {
+          setSelectedColor([]);
+        }
+
         if (user?.role === "reseller") setQuantity(10);
       } catch (err) {
         console.error("LOAD FAILED:", err);
@@ -345,12 +352,9 @@ export default function Singleproduct() {
                 {product.shortList?.length > 0 && (
                   <ul className="list-none text-base">
                     {product.shortList.map((item) => (
-                      <li
-                        key={item._id}
-                        className="w-full my-1"
-                      >
+                      <li key={item._id} className="w-full my-1">
                         <span className="font-bold w-full max-w-fit">
-                          {item.name} : {" "}
+                          {item.name} :{" "}
                         </span>
                         <span className="text-gray-700">{item.value}</span>
                       </li>
@@ -462,7 +466,7 @@ export default function Singleproduct() {
                         {spec.list.map((item) => (
                           <li key={item._id} className="w-full my-1">
                             <span className="font-bold capitalize w-full max-w-fit">
-                              {item.name} : {" "}
+                              {item.name} :{" "}
                             </span>
                             <span className="w-full">{item.value}</span>
                           </li>
