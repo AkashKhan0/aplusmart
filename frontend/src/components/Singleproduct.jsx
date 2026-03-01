@@ -458,13 +458,13 @@ export default function Singleproduct() {
                     <h3 className="font-medium text-base capitalize">
                       {spec.title}
                     </h3>
-                    <p className="text-base text-gray-800 mb-2">
+                    <p className="text-base text-gray-800 my-2">
                       {spec.description}
                     </p>
                     {spec.list?.length > 0 && (
                       <ul className="text-base">
                         {spec.list.map((item) => (
-                          <li key={item._id} className="w-full my-1">
+                          <li key={item._id} className="w-full my-0.5">
                             <span className="font-bold capitalize w-full max-w-fit">
                               {item.name} :{" "}
                             </span>
