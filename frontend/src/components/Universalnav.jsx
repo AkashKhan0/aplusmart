@@ -54,7 +54,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
         <div className="fixed_width flex justify-center h-13 px-5 py-2">
           <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
             <div className="w-full flex items-center justify-between gap-2.5 md:gap-5">
-              <div className="w-full max-w-fit flex items-center justify-start">
+              <div className="w-full max-w-fit items-center justify-start hidden sm:hidden md:flex gap-2.5 md:gap-5">
                 <Link href="/">
                   <h1
                     className={`${reggaeOne.className} text-[#971900] text-2xl hidden md:block cursor-pointer aplus_mart_logo`}

@@ -25,14 +25,32 @@ export default function Navbar({ isOpen, setIsOpen }) {
         const res = await fetch(`${API_URL}/api/categories`);
         const data = await res.json();
 
-        // 👉 Group by mainCategory + remove duplicates
-        const grouped = data.reduce((acc, item) => {
+        const blocked = ["offer", "combo"];
+
+        const filtered = data.filter((item) => {
+          const main = item.mainCategory?.toLowerCase();
+          const sub = item.subCategory?.toLowerCase();
+
+          return !blocked.includes(main) && !blocked.includes(sub);
+        });
+
+        // 👉 Group by mainCategory
+        const grouped = filtered.reduce((acc, item) => {
           if (!acc[item.mainCategory]) {
             acc[item.mainCategory] = new Set();
           }
           acc[item.mainCategory].add(item.subCategory);
           return acc;
         }, {});
+
+        // 👉 Group by mainCategory + remove duplicates
+        // const grouped = data.reduce((acc, item) => {
+        //   if (!acc[item.mainCategory]) {
+        //     acc[item.mainCategory] = new Set();
+        //   }
+        //   acc[item.mainCategory].add(item.subCategory);
+        //   return acc;
+        // }, {});
 
         // 👉 Convert Set → Array
         const formatted = {};
@@ -93,7 +111,9 @@ export default function Navbar({ isOpen, setIsOpen }) {
 
         {/* Logo */}
         <Link href="/" onClick={() => setIsOpen(false)}>
-          <h1 className={`${reggaeOne.className} text-[#971900] text-2xl font-bold text-center mb-6 aplus_mart_logo`}>
+          <h1
+            className={`${reggaeOne.className} text-[#971900] text-2xl font-bold text-center mb-6 aplus_mart_logo`}
+          >
             <span className="logo-text">A Plus Mart BD</span>
           </h1>
         </Link>

@@ -144,7 +144,7 @@ export default function Offers() {
           </div>
 
           {/* offer products list */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
             {products
               .filter(
                 (product) =>
@@ -156,9 +156,9 @@ export default function Offers() {
                 const timeLeft = timeLefts[product._id];
                 return (
                   <Link key={product._id} href={`/products/${product._id}`}>
-                    <div className="flex flex-col bg-white rounded-md hover:shadow-md cursor-pointer transition relative h-full overflow-hidden">
+                    <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                       {status === "upcoming" && (
-                        <div className="bg-[#3c3c3c] text-white text-xs px-2 w-fit h-6 flex items-center rounded-br-full rounded-tr-full">
+                        <div className="bg-[#3c3c3c] text-white text-xs px-2 w-fit h-6 flex items-center rounded-br-full rounded-tr-full absolute top-0 left-0">
                           Offer starts on{" "}
                           {new Date(
                             product.offerStartDate,
@@ -167,7 +167,7 @@ export default function Offers() {
                       )}
 
                       {status === "active" && timeLeft && (
-                        <div className="bg-[#3c3c3c] text-white text-xs font-normal px-3 w-fit h-6 flex items-center gap-2 rounded-br-full rounded-tr-full">
+                        <div className="bg-[#3c3c3c] text-white text-xs font-normal px-3 w-fit h-6 flex items-center gap-2 rounded-br-full rounded-tr-full absolute top-0 left-0">
                           <div>
                             {Math.round(
                               ((product.regularPrice - product.offerPrice) /
@@ -195,23 +195,25 @@ export default function Offers() {
                       )}
 
                       {status === "expired" && (
-                        <div className="bg-red-600 text-white w-fit text-xs font-normal capitalize px-3 h-6 flex items-center rounded-br-full rounded-tr-full">
+                        <div className="bg-red-600 text-white w-fit text-xs font-normal capitalize px-3 h-6 flex items-center rounded-br-full rounded-tr-full absolute top-0 left-0">
                           Offer Expired
                         </div>
                       )}
 
-                      <div className="w-full h-[200px] overflow-hidden mb-1">
+                      <div className="w-full h-[220px] overflow-hidden mb-1">
                         <Image
                           src={product.images[0] || "/images/placeholder.png"}
                           alt={product.name}
                           width={500}
                           height={500}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                         />
                       </div>
 
-                      <div className="flex flex-col items-center py-2 gap-1.5 h-full">
-                        <h1 className="text-sm px-1 font-medium text-center capitalize">
+                      <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
+
+                        <div className="universal_column gap-1.5">
+                          <h1 className="text-sm px-1 font-medium text-center capitalize">
                           {product.name}
                         </h1>
 
@@ -230,6 +232,8 @@ export default function Offers() {
                             </span>
                           </del>
                         </p>
+                        </div>
+                        
                         {/* add to cart button */}
                         <div className="w-full flex flex-col items-center justify-center mb-2">
                           <button

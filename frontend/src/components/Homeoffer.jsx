@@ -106,7 +106,7 @@ export default function Homeoffer() {
           </div>
 
           {/* offer products list */}
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
             {products
               .filter(
                 (product) =>
@@ -116,7 +116,7 @@ export default function Homeoffer() {
               .slice(0, 10)
               .map((product) => (
                 <Link key={product._id} href={`/products/${product._id}`}>
-                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer h-full overflow-hidden">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {user?.role === "customer" &&
                       product?.offerPrice > 0 &&
                       product?.regularPrice > 0 &&
@@ -131,7 +131,7 @@ export default function Homeoffer() {
                         </div>
                       )}
 
-                    <div className="w-full h-[200px] overflow-hidden mb-1">
+                    <div className="w-full h-[220px] overflow-hidden mb-1">
                       <Image
                         src={product.images[0] || "/images/placeholder.png"}
                         alt={product.name}
@@ -141,8 +141,10 @@ export default function Homeoffer() {
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full">
-                      <h1 className="text-sm font-medium text-center capitalize px-1">
+                    <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
+
+                      <div className="universal_column gap-1.5">
+                        <h1 className="text-sm font-medium text-center capitalize px-1">
                         {product.name}
                       </h1>
 
@@ -169,6 +171,8 @@ export default function Homeoffer() {
                             </del>
                           )}
                       </p>
+                      </div>
+                      
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">

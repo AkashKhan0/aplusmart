@@ -60,12 +60,10 @@ export default function Hero({ openMenu }) {
   ];
 
   const handleSeller = (e) => {
-    e.stopPropagation(); // 🔥 parent click বন্ধ
-    e.preventDefault(); // 🔥 default action বন্ধ
+    e.stopPropagation();
+    e.preventDefault();
 
-    if (!user) return;
-
-    if (user.role === "reseller") {
+    if (user?.role === "reseller") {
       setShowMessage(true);
       return;
     }
@@ -84,21 +82,6 @@ export default function Hero({ openMenu }) {
 
   return (
     <div className="w-full h-fit universal bg-[#FFCE1B] relative">
-      <div className="w-full h-10 absolute -bottom-10">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-          className="absolute -bottom-00 left-0 w-full h-[30px]"
-        >
-          <path
-            fill="#FFCE1B"
-            fillOpacity="1"
-            d="M0,64L15,74.7C30,85,60,107,90,128C120,149,150,171,180,160C210,149,240,107,270,80C300,53,330,43,360,58.7C390,75,420,117,450,133.3C480,149,510,139,540,133.3C570,128,600,128,630,160C660,192,690,256,720,245.3C750,235,780,149,810,133.3C840,117,870,171,900,170.7C930,171,960,117,990,117.3C1020,117,1050,171,1080,181.3C1110,192,1140,160,1170,160C1200,160,1230,192,1260,202.7C1290,213,1320,203,1350,170.7C1380,139,1410,85,1425,58.7L1440,32L1440,0L0,0Z"
-          />
-        </svg>
-      </div>
-
       <div className="fixed_width h-full">
         {/* Top offers/deals/combo bar */}
         <div className="w-full flex items-start justify-center top_nav_bar">

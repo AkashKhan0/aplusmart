@@ -139,7 +139,7 @@ export default function Searchresult() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
               {products.map((item) => (
                 <Link key={item._id} href={`/products/${item._id}`}>
-                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] cursor-pointer h-full overflow-hidden">
+                  <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* % OFF */}
                     {user?.role === "customer" &&
                       item?.offerPrice > 0 &&
@@ -155,7 +155,7 @@ export default function Searchresult() {
                         </div>
                       )}
 
-                    <div className="w-full h-[200px] overflow-hidden mb-1">
+                    <div className="w-full h-[220px] overflow-hidden mb-1">
                       <Image
                         src={item.images?.[0]}
                         alt={item.name}
@@ -165,8 +165,9 @@ export default function Searchresult() {
                       />
                     </div>
 
-                    <div className="flex flex-col items-center py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full">
-                      <h1 className="text-sm font-medium text-center capitalize px-1">
+                    <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
+                      <div className="universal_column gap-1.5">
+                        <h1 className="text-sm font-medium text-center capitalize px-1">
                         {item.name}
                       </h1>
                       <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
@@ -189,6 +190,8 @@ export default function Searchresult() {
                             </del>
                           )}
                       </p>
+                      </div>
+                      
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
