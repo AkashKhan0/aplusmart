@@ -258,6 +258,7 @@ export default function ProductList() {
               value={editProduct.name}
               onChange={handleChange}
               className="w-full border p-1 mb-2"
+              placeholder="product name"
             />
 
             <div className="flex gap-2 mb-2">
@@ -266,12 +267,14 @@ export default function ProductList() {
                 value={editProduct.mainCategory}
                 onChange={handleChange}
                 className="w-full border p-1"
+                placeholder="main category"
               />
               <input
                 name="subCategory"
                 value={editProduct.subCategory}
                 onChange={handleChange}
                 className="w-full border p-1"
+                placeholder="sub category"
               />
             </div>
 
@@ -288,6 +291,7 @@ export default function ProductList() {
                   }
                   onChange={handleChange}
                   className="border p-1 w-full"
+                  placeholder="offer start date"
                 />
                 <input
                   type="date"
@@ -299,6 +303,7 @@ export default function ProductList() {
                   }
                   onChange={handleChange}
                   className="border p-1 w-full"
+                  placeholder="offer end date"
                 />
               </div>
             )}
@@ -308,6 +313,7 @@ export default function ProductList() {
               value={editProduct.brand}
               onChange={handleChange}
               className="w-full border p-1 mb-2"
+              placeholder="brand name"
             />
 
             <div className="flex gap-2 mb-2">
@@ -317,6 +323,7 @@ export default function ProductList() {
                 value={editProduct.regularPrice}
                 onChange={handleChange}
                 className="border p-1 w-full"
+                placeholder="regular price"
               />
               <input
                 type="number"
@@ -324,6 +331,7 @@ export default function ProductList() {
                 value={editProduct.offerPrice}
                 onChange={handleChange}
                 className="border p-1 w-full"
+                placeholder="offer price"
               />
               <input
                 type="number"
@@ -331,6 +339,7 @@ export default function ProductList() {
                 value={editProduct.resellerPrice}
                 onChange={handleChange}
                 className="border p-1 w-full"
+                placeholder="reseller price"
               />
             </div>
 
