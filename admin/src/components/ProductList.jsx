@@ -12,13 +12,14 @@ export default function ProductList() {
   const [editProduct, setEditProduct] = useState(null);
   const [editImages, setEditImages] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [editCustomColor, setEditCustomColor] = useState("");
 
   // ================= FETCH =================
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
       );
       const data = await res.json();
       setProducts(Array.isArray(data) ? data : data.products || []);
@@ -48,10 +49,9 @@ export default function ProductList() {
   // ================= DELETE =================
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
-      { method: "DELETE" }
-    );
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`, {
+      method: "DELETE",
+    });
     setProducts((prev) => prev.filter((p) => p._id !== id));
   };
 
@@ -69,10 +69,43 @@ export default function ProductList() {
   const toggleColor = (color) => {
     setEditProduct((prev) => ({
       ...prev,
-      colors: prev.colors.includes(color)
+      colors: (prev.colors || []).includes(color)
         ? prev.colors.filter((c) => c !== color)
         : [...prev.colors, color],
     }));
+  };
+
+  // Image edit functions
+  const removeEditImage = (index) => {
+    setEditImages((prev) => prev.filter((_, i) => i !== index));
+  };
+  const replaceEditImage = async (index, file) => {
+    const url = await uploadImage(file, "products");
+
+    setEditImages((prev) => {
+      const updated = [...prev];
+      updated[index] = url;
+      return updated;
+    });
+  };
+
+  const addEditCustomColor = () => {
+    if (!editCustomColor) return;
+
+    const hex = editCustomColor.startsWith("#")
+      ? editCustomColor
+      : `#${editCustomColor}`;
+
+    setEditProduct((prev) => {
+      if (prev.colors.includes(hex)) return prev;
+
+      return {
+        ...prev,
+        colors: [...prev.colors, hex],
+      };
+    });
+
+    setEditCustomColor("");
   };
 
   const handleImageChange = async (e) => {
@@ -98,7 +131,7 @@ export default function ProductList() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      }
+      },
     );
 
     setEditProduct(null);
@@ -156,8 +189,17 @@ export default function ProductList() {
                     </td>
                     <td className="border">{p.brand || "-"}</td>
                     <td className="border flex flex-col">
-                     <p><span className="taka">৳- </span>{Number(p.offerPrice || p.regularPrice).toLocaleString("en-IN")}/=</p> 
-                      <p><span className="taka">Re- </span>{Number(p.resellerPrice).toLocaleString("en-IN")}/=</p>
+                      <p>
+                        <span className="taka">৳- </span>
+                        {Number(p.offerPrice || p.regularPrice).toLocaleString(
+                          "en-IN",
+                        )}
+                        /=
+                      </p>
+                      <p>
+                        <span className="taka">Re- </span>
+                        {Number(p.resellerPrice).toLocaleString("en-IN")}/=
+                      </p>
                     </td>
                     <td className="border">
                       {p.stockStatus === "inStock" ? (
@@ -167,17 +209,17 @@ export default function ProductList() {
                       )}
                     </td>
                     <td className="border">
-  <div className="flex items-center gap-1.5 flex-wrap">
-    {p.colors?.map((color, index) => (
-      <span
-        key={index}
-        title={color}
-        className="w-3 h-3 rounded-full border border-black"
-        style={{ backgroundColor: color }}
-      />
-    ))}
-  </div>
-</td>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {p.colors?.map((color, index) => (
+                          <span
+                            key={index}
+                            title={color}
+                            className="w-3 h-3 rounded-full border border-black"
+                            style={{ backgroundColor: color }}
+                          />
+                        ))}
+                      </div>
+                    </td>
 
                     <td className="border">
                       <div className="flex justify-center gap-2">
@@ -335,14 +377,51 @@ export default function ProductList() {
               ))}
             </div>
 
+            {/* Custom color add */}
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                placeholder="#HEXCODE"
+                value={editCustomColor}
+                onChange={(e) => setEditCustomColor(e.target.value)}
+                className="border p-1"
+              />
+              <button
+                type="button"
+                onClick={addEditCustomColor}
+                className="bg-[#941A06] text-white px-3"
+              >
+                Add Custom
+              </button>
+            </div>
+
             {/* Images */}
             <div className="flex gap-2 flex-wrap mb-3">
               {editImages.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  className="w-12 h-12 object-cover border"
-                />
+                <div key={i} className="relative">
+                  <img src={img} className="w-12 h-12 object-cover border" />
+
+                  {/* remove */}
+                  <button
+                    type="button"
+                    onClick={() => removeEditImage(i)}
+                    className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
+                  >
+                    ×
+                  </button>
+
+                  {/* replace */}
+                  <label className="absolute inset-0 cursor-pointer opacity-0">
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={(e) =>
+                        e.target.files?.[0] &&
+                        replaceEditImage(i, e.target.files[0])
+                      }
+                    />
+                  </label>
+                </div>
               ))}
               <input type="file" multiple onChange={handleImageChange} />
             </div>

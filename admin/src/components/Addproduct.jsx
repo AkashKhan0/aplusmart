@@ -24,7 +24,8 @@ export default function Addproduct() {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-
+  const [submitStatus, setSubmitStatus] = useState("idle");
+  const [customColor, setCustomColor] = useState("");
   const [productData, setProductData] = useState({
     name: "",
     brand: "",
@@ -92,6 +93,29 @@ export default function Addproduct() {
     });
   };
 
+  // Remove image
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addCustomColor = () => {
+    if (!customColor) return;
+
+    const hex = customColor.startsWith("#") ? customColor : `#${customColor}`;
+
+    setProductData((prev) => {
+      if (prev.colors.includes(hex)) return prev;
+
+      return {
+        ...prev,
+        colors: [...prev.colors, hex],
+      };
+    });
+
+    setCustomColor("");
+  };
+
   // Add short list
   const addShortList = () => {
     if (shortListInput.name && shortListInput.value) {
@@ -133,6 +157,7 @@ export default function Addproduct() {
   // Submit product
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitStatus("loading");
 
     try {
       // Upload images
@@ -154,8 +179,6 @@ export default function Addproduct() {
         images: flatImages,
       };
 
-      console.log("CREATE PRODUCT PAYLOAD:", payload);
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
         {
@@ -168,7 +191,8 @@ export default function Addproduct() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("Product added successfully!");
+        // setMessage("Product added successfully!");
+        setSubmitStatus("success");
 
         // Reset all fields
         setImages([]);
@@ -190,13 +214,14 @@ export default function Addproduct() {
           subCategory: "",
         });
       } else {
-        console.error("SERVER ERROR:", data);
-        setMessage(data.error || "Something went wrong");
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error("CREATE ERROR:", error);
-      setMessage("Failed to add product");
+      setSubmitStatus("error");
     }
+    setTimeout(() => {
+      setSubmitStatus("idle");
+    }, 3000);
   };
 
   return (
@@ -207,12 +232,21 @@ export default function Addproduct() {
         {/* Images */}
         <div className="flex gap-2.5 mb-2">
           {imagePreviews.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt="preview"
-              className="w-12 h-12 rounded-md object-cover border border-[#2B2A29]"
-            />
+            <div key={idx} className="relative">
+              <img
+                src={img}
+                alt="preview"
+                className="w-12 h-12 rounded-md object-cover border border-[#2B2A29]"
+              />
+
+              <button
+                type="button"
+                onClick={() => removeImage(idx)}
+                className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
+              >
+                ×
+              </button>
+            </div>
           ))}
           <label className="w-12 h-12 flex items-center justify-center rounded-md border border-[#2B2A29] cursor-pointer text-3xl text-[#898383]">
             <MdCloudUpload />
@@ -430,6 +464,25 @@ export default function Addproduct() {
             ))}
           </div>
 
+          {/* Custom color */}
+<div className="flex gap-2 items-center mt-3">
+  <input
+    type="text"
+    placeholder="#HEXCODE"
+    value={customColor}
+    onChange={(e) => setCustomColor(e.target.value)}
+    className="py-1 px-2 border rounded-md"
+  />
+
+  <button
+    type="button"
+    onClick={addCustomColor}
+    className="py-1 px-3 bg-[#941A06] text-white rounded-md"
+  >
+    Add Custom
+  </button>
+</div>
+
           {/* SHOW SELECTED COLORS */}
           <p className="text-sm mt-2">
             Selected Colors: {productData.colors.join(", ")}
@@ -586,11 +639,14 @@ export default function Addproduct() {
 
         <button
           type="submit"
-          className="py-2 px-3 bg-[#2B2A29] text-white uppercase rounded-md"
+          disabled={submitStatus === "loading"}
+          className="py-2 px-3 bg-[#2B2A29] text-white uppercase rounded-md disabled:opacity-60"
         >
-          Add Product
+          {submitStatus === "loading" && "Uploading..."}
+          {submitStatus === "success" && "Success ✓"}
+          {submitStatus === "error" && "Error ✕"}
+          {submitStatus === "idle" && "Add Product"}
         </button>
-        {message && <p className="mt-2">{message}</p>}
       </form>
     </div>
   );
