@@ -110,9 +110,19 @@ export default function ProductList() {
 
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
-    for (let file of files) {
-      const url = await uploadImage(file, "products");
-      setEditImages((prev) => [...prev, url]);
+    if (!files.length) return;
+
+    setLoading(true);
+    try {
+      const uploadedUrls = await Promise.all(
+        files.map((file) => uploadImage(file, "products")),
+      );
+
+      setEditImages((prev) => [...prev, ...uploadedUrls.flat()]);
+    } catch (err) {
+      console.error("Image upload failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -432,7 +442,15 @@ export default function ProductList() {
                   </label>
                 </div>
               ))}
-              <input type="file" multiple onChange={handleImageChange} />
+              <label className="w-12 h-12 flex items-center justify-center rounded-md border border-[#2B2A29] cursor-pointer text-3xl text-[#898383]">
+                +
+                <input
+                  type="file"
+                  multiple
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
             </div>
 
             <div className="flex justify-end gap-2">
