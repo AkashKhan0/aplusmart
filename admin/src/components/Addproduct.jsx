@@ -26,6 +26,7 @@ export default function Addproduct() {
   const [subCategories, setSubCategories] = useState([]);
   const [submitStatus, setSubmitStatus] = useState("idle");
   const [customColor, setCustomColor] = useState("");
+  const [categories, setCategories] = useState([]);
   const [productData, setProductData] = useState({
     name: "",
     brand: "",
@@ -59,13 +60,20 @@ export default function Addproduct() {
       );
       const data = await res.json();
 
-      // mainCategory unique
+      setCategories(data);
+
       const mainCats = [...new Set(data.map((cat) => cat.mainCategory))];
       setMainCategories(mainCats);
 
-      // subCategory unique
       const subCats = [...new Set(data.map((cat) => cat.subCategory))];
       setSubCategories(subCats);
+
+      // mainCategory unique
+      // const mainCats = [...new Set(data.map((cat) => cat.mainCategory))];
+      // setMainCategories(mainCats);
+      // subCategory unique
+      // const subCats = [...new Set(data.map((cat) => cat.subCategory))];
+      // setSubCategories(subCats);
     };
 
     fetchCategories();
@@ -264,12 +272,26 @@ export default function Addproduct() {
           <select
             className="w-full sm:w-[50%] py-1 px-3"
             value={productData.mainCategory}
-            onChange={(e) =>
+            onChange={(e) => {
+              const selectedMain = e.target.value;
+
               setProductData((prev) => ({
                 ...prev,
-                mainCategory: e.target.value,
-              }))
-            }
+                mainCategory: selectedMain,
+                subCategory: "",
+              }));
+
+              if (selectedMain) {
+                const filteredSubs = categories
+                  .filter((cat) => cat.mainCategory === selectedMain)
+                  .map((cat) => cat.subCategory);
+
+                setSubCategories([...new Set(filteredSubs)]);
+              } else {
+                const allSubs = categories.map((cat) => cat.subCategory);
+                setSubCategories([...new Set(allSubs)]);
+              }
+            }}
           >
             <option value="" className="w-full">
               Select Main Category
@@ -284,12 +306,21 @@ export default function Addproduct() {
           <select
             className="w-full sm:w-[50%] py-1 px-3"
             value={productData.subCategory}
-            onChange={(e) =>
+            onChange={(e) => {
+              const selectedSub = e.target.value;
+
+              const matchedCategory = categories.find(
+                (cat) => cat.subCategory === selectedSub,
+              );
+
               setProductData((prev) => ({
                 ...prev,
-                subCategory: e.target.value,
-              }))
-            }
+                subCategory: selectedSub,
+                mainCategory: matchedCategory
+                  ? matchedCategory.mainCategory
+                  : prev.mainCategory,
+              }));
+            }}
           >
             <option value="" className="w-full">
               Select Sub Category
@@ -465,23 +496,23 @@ export default function Addproduct() {
           </div>
 
           {/* Custom color */}
-<div className="flex gap-2 items-center mt-3">
-  <input
-    type="text"
-    placeholder="#HEXCODE"
-    value={customColor}
-    onChange={(e) => setCustomColor(e.target.value)}
-    className="py-1 px-2 border rounded-md"
-  />
+          <div className="flex gap-2 items-center mt-3">
+            <input
+              type="text"
+              placeholder="#HEXCODE"
+              value={customColor}
+              onChange={(e) => setCustomColor(e.target.value)}
+              className="py-1 px-2 border rounded-md"
+            />
 
-  <button
-    type="button"
-    onClick={addCustomColor}
-    className="py-1 px-3 bg-[#941A06] text-white rounded-md"
-  >
-    Add Custom
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={addCustomColor}
+              className="py-1 px-3 bg-[#941A06] text-white rounded-md"
+            >
+              Add Custom
+            </button>
+          </div>
 
           {/* SHOW SELECTED COLORS */}
           <p className="text-sm mt-2">
