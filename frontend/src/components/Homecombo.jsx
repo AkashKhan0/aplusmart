@@ -5,6 +5,17 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { FaEye, FaEyeSlash, FaShoppingCart } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { RiMessengerLine } from "react-icons/ri";
+
+const openMessenger = () => {
+  const appWindow = window.open("https://m.me/aaplusmartbd", "_blank");
+  setTimeout(() => {
+    if (!appWindow || appWindow.closed) {
+      window.open("https://www.messenger.com/t/aaplusmartbd", "_blank");
+    }
+  }, 800);
+};
 
 export default function Homecombo() {
   const [products, setProducts] = useState([]);
@@ -117,7 +128,17 @@ export default function Homecombo() {
               )
               .slice(0, 10)
               .map((product) => (
-                <Link key={product._id} href={`/products/${product._id}`}>
+                <Link
+                  key={product._id}
+                  href={
+                    user?.role === "reseller" ? "#" : `/products/${product._id}`
+                  }
+                  onClick={(e) => {
+                    if (user?.role === "reseller") {
+                      e.preventDefault();
+                    }
+                  }}
+                >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* Offer % or Earn Points - only for customer */}
                     {user?.role === "customer" &&
@@ -145,63 +166,81 @@ export default function Homecombo() {
                     </div>
 
                     <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
-
                       <div className="universal_column gap-1.5">
                         <h1 className="text-sm font-medium text-center capitalize px-1">
-                        {product.name}
-                      </h1>
+                          {product.name}
+                        </h1>
 
-                      {/* Price display */}
-                      <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
-                        <span className="taka">৳-</span>
-                        {
-                          user?.role === "reseller"
-                            ? Number(product.resellerPrice).toLocaleString(
-                                "en-IN",
-                              ) // Reseller price
-                            : Number(product.offerPrice).toLocaleString("en-IN") // Customer price
-                        }
-                        /-
-                        {/* Show regular price only for customer */}
-                        {user?.role !== "reseller" &&
-                          product?.regularPrice > 0 && (
-                            <del className="text-sm text-[#2B2A29]">
-                              <span className="taka">৳-</span>
-                              {Number(product.regularPrice).toLocaleString(
-                                "en-IN",
-                              )}
-                              /-
-                            </del>
-                          )}
-                      </p>
+                        {/* Price display */}
+                        {user?.role !== "reseller" && (
+                          <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
+                            <span className="taka">৳-</span>
+                            {Number(product.offerPrice).toLocaleString("en-IN")}
+                            /-
+                            {/* Show regular price */}
+                            {product?.regularPrice > 0 && (
+                              <del className="text-sm text-[#2B2A29]">
+                                <span className="taka">৳-</span>
+                                {Number(product.regularPrice).toLocaleString(
+                                  "en-IN",
+                                )}
+                                /-
+                              </del>
+                            )}
+                          </p>
+                        )}
                       </div>
-                      
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddToCart(product);
-                          }}
-                          className="add_to_cart_btn"
-                        >
-                          <span
-                            className={
-                              product.stockStatus !== "inStock"
-                                ? "text-red-700"
-                                : ""
-                            }
+                        {user?.role === "reseller" ? (
+                          <div className="flex flex-wrap items-center justify-center gap-2">
+                            <button
+                              onClick={() =>
+                                window.open(
+                                  "https://wa.me/8801853838891",
+                                  "_blank",
+                                )
+                              }
+                              className="w-full max-w-fit flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#25D366] to-[#1ebe5d] text-white shadow hover:scale-[1.02] transition cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                            >
+                              <FaWhatsapp size={17} />
+                              WhatsApp
+                            </button>
+
+                            <button
+                              onClick={openMessenger}
+                              className="w-full max-w-fit flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#0084FF] to-[#006eff] text-white shadow hover:scale-[1.02] transition cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                            >
+                              <RiMessengerLine size={18} />
+                              Messenger
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddToCart(product);
+                            }}
+                            className="add_to_cart_btn"
                           >
-                            {product.stockStatus === "inStock"
-                              ? "Add to Cart"
-                              : "Pre Order"}
-                          </span>
-                          <span className="shop_btn_icon">
-                            <FaShoppingCart />
-                          </span>
-                        </button>
+                            <span
+                              className={
+                                product.stockStatus !== "inStock"
+                                  ? "text-red-700"
+                                  : ""
+                              }
+                            >
+                              {product.stockStatus === "inStock"
+                                ? "Add to Cart"
+                                : "Pre Order"}
+                            </span>
+                            <span className="shop_btn_icon">
+                              <FaShoppingCart />
+                            </span>
+                          </button>
+                        )}
                         {successProductId === product._id && (
                           <p className="text-green-600 text-xs mt-1">
                             Added to cart!

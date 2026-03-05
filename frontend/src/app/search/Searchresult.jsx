@@ -5,6 +5,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAppContext } from "@/src/context/AppContext";
 import { FaEye, FaEyeSlash, FaShoppingCart } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { RiMessengerLine } from "react-icons/ri";
+
+const openMessenger = () => {
+  const appWindow = window.open("https://m.me/aaplusmartbd", "_blank");
+  setTimeout(() => {
+    if (!appWindow || appWindow.closed) {
+      window.open("https://www.messenger.com/t/aaplusmartbd", "_blank");
+    }
+  }, 800);
+};
 
 export default function Searchresult() {
   const [q, setQ] = useState(null);
@@ -27,6 +38,10 @@ export default function Searchresult() {
 
   // ✅ Fetch products from API
   useEffect(() => {
+    if (q === null && mainCategory === null && subCategory === null) {
+      return;
+    }
+
     if (!q && !mainCategory && !subCategory) {
       setLoading(false);
       return;
@@ -138,7 +153,17 @@ export default function Searchresult() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 items-stretch">
               {products.map((item) => (
-                <Link key={item._id} href={`/products/${item._id}`}>
+                <Link
+                  key={item._id}
+                  href={
+                    user?.role === "reseller" ? "#" : `/products/${item._id}`
+                  }
+                  onClick={(e) => {
+                    if (user?.role === "reseller") {
+                      e.preventDefault();
+                    }
+                  }}
+                >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* % OFF */}
                     {user?.role === "customer" &&
@@ -168,56 +193,78 @@ export default function Searchresult() {
                     <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
                       <div className="universal_column gap-1.5">
                         <h1 className="text-sm font-medium text-center capitalize px-1">
-                        {item.name}
-                      </h1>
-                      <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
-                        <span className="taka">৳-</span>
-                        {
-                          user?.role === "reseller"
-                            ? Number(item.resellerPrice).toLocaleString("en-IN") // Reseller price
-                            : Number(item.offerPrice).toLocaleString("en-IN") // Customer price
-                        }
-                        /-
-                        {/* Show regular price only for customer */}
-                        {user?.role !== "reseller" &&
-                          item?.regularPrice > 0 && (
-                            <del className="text-sm text-[#2B2A29]">
-                              <span className="taka">৳-</span>
-                              {Number(item.regularPrice).toLocaleString(
-                                "en-IN",
-                              )}
-                              /-
-                            </del>
-                          )}
-                      </p>
+                          {item.name}
+                        </h1>
+
+                        {user?.role !== "reseller" && (
+                          <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
+                            <span className="taka">৳-</span>
+                            {Number(item.offerPrice).toLocaleString("en-IN")}
+                            /-
+                            {/* Show regular price */}
+                            {item?.regularPrice > 0 && (
+                              <del className="text-sm text-[#2B2A29]">
+                                <span className="taka">৳-</span>
+                                {Number(item.regularPrice).toLocaleString(
+                                  "en-IN",
+                                )}
+                                /-
+                              </del>
+                            )}
+                          </p>
+                        )}
                       </div>
-                      
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddToCart(item);
-                          }}
-                          className="add_to_cart_btn"
-                        >
-                          <span
-                            className={
-                              item.stockStatus !== "inStock"
-                                ? "text-red-700"
-                                : ""
-                            }
+                        {user?.role === "reseller" ? (
+                          <div className="flex flex-wrap items-center justify-center gap-2">
+                            <button
+                              onClick={() =>
+                                window.open(
+                                  "https://wa.me/8801853838891",
+                                  "_blank",
+                                )
+                              }
+                              className="w-full max-w-fit flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#25D366] to-[#1ebe5d] text-white shadow hover:scale-[1.02] transition cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                            >
+                              <FaWhatsapp size={17} />
+                              WhatsApp
+                            </button>
+
+                            <button
+                              onClick={openMessenger}
+                              className="w-full max-w-fit flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#0084FF] to-[#006eff] text-white shadow hover:scale-[1.02] transition cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                            >
+                              <RiMessengerLine size={18} />
+                              Messenger
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddToCart(item);
+                            }}
+                            className="add_to_cart_btn"
                           >
-                            {item.stockStatus === "inStock"
-                              ? "Add to Cart"
-                              : "Pre Order"}
-                          </span>
-                          <span className="shop_btn_icon">
-                            <FaShoppingCart />
-                          </span>
-                        </button>
+                            <span
+                              className={
+                                item.stockStatus !== "inStock"
+                                  ? "text-red-700"
+                                  : ""
+                              }
+                            >
+                              {item.stockStatus === "inStock"
+                                ? "Add to Cart"
+                                : "Pre Order"}
+                            </span>
+                            <span className="shop_btn_icon">
+                              <FaShoppingCart />
+                            </span>
+                          </button>
+                        )}
                         {successProductId === item._id && (
                           <p className="text-green-600 text-xs mt-1">
                             Added to cart!
