@@ -5,7 +5,6 @@ import {
   FaFacebookF,
   FaInstagram,
   FaTiktok,
-  FaYoutube,
 } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { MdMail } from "react-icons/md";
@@ -153,13 +152,6 @@ export default function Footer() {
                     className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
                   >
                     <FaInstagram />
-                  </a>
-                  <a
-                    href="https://www.youtube.com/@aplusmartbd"
-                    target="_blank"
-                    className="social_btn_icn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
-                  >
-                    <FaYoutube />
                   </a>
                   <a
                     href="https://www.tiktok.com/@aplusmartbd?lang=en"
