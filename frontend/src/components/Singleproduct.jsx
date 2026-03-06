@@ -108,7 +108,7 @@ export default function Singleproduct() {
 
   const handleBuyNow = () => {
     if (!user) return;
-    if (selectedColor.length === 0) {
+    if (product.colors?.length > 0 && selectedColor.length === 0) {
       setMessage("Please select at least one color!");
       setMessageType("error");
       setTimeout(() => setMessage(""), 2000);
@@ -364,22 +364,24 @@ export default function Singleproduct() {
               </div>
 
               {/* Color */}
-              <div className="w-full flex flex-wrap items-center gap-2 my-3">
-                <span className="font-medium mr-2">Select Color:</span>
-                {product?.colors?.map((color, index) => (
-                  <div
-                    key={index}
-                    style={{ backgroundColor: color }}
-                    className={`cursor-pointer duration-300 border ${
-                      selectedColor.includes(color)
-                        ? "w-5 h-5 rounded-sm"
-                        : "w-4 h-4 rounded-full"
-                    }`}
-                    onClick={() => handleColorSelect(color)}
-                    title={color}
-                  ></div>
-                ))}
-              </div>
+              {product?.colors?.length > 0 && (
+                <div className="w-full flex flex-wrap items-center gap-2 my-3">
+                  <span className="font-medium mr-2">Select Color:</span>
+                  {product.colors.map((color, index) => (
+                    <div
+                      key={index}
+                      style={{ backgroundColor: color }}
+                      className={`cursor-pointer duration-300 border ${
+                        selectedColor.includes(color)
+                          ? "w-5 h-5 rounded-sm"
+                          : "w-4 h-4 rounded-full"
+                      }`}
+                      onClick={() => handleColorSelect(color)}
+                      title={color}
+                    ></div>
+                  ))}
+                </div>
+              )}
 
               {/* Offer / Points Badge */}
               {user?.role === "customer" && hasOffer && (
