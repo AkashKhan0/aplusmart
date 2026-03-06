@@ -57,7 +57,10 @@ export default function ProductList() {
 
   // ================= EDIT =================
   const handleEdit = (product) => {
-    setEditProduct({ ...product });
+    setEditProduct({
+      ...product,
+      colors: product.colors?.map((c) => c.toUpperCase()) || [],
+    });
     setEditImages(product.images || []);
   };
 
@@ -385,19 +388,30 @@ export default function ProductList() {
                 "#3C20A3",
                 "#00B496",
               ].map((c) => (
-                <label key={c} className="flex items-center gap-1">
+                <label
+                  key={c}
+                  className="flex items-center gap-2 border px-2 py-1 rounded"
+                >
                   <input
                     type="checkbox"
-                    checked={editProduct.colors.includes(c)}
+                    checked={editProduct.colors?.includes(c)}
                     onChange={() => toggleColor(c)}
                   />
+
+                  {/* color preview */}
+                  <span
+                    className="w-4 h-4 rounded border"
+                    style={{ backgroundColor: c }}
+                  ></span>
+
+                  {/* hex text */}
                   <span>{c}</span>
                 </label>
               ))}
             </div>
 
             {/* Custom color add */}
-            <div className="flex gap-2 mb-3">
+            <div className="flex gap-2 mb-5">
               <input
                 type="text"
                 placeholder="#HEXCODE"
