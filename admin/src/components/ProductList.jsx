@@ -5,6 +5,21 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
 import { uploadImage } from "@/lib/uploadImage";
 
+const predefinedColors = [
+  "#000000",
+  "#FFFFFF",
+  "#808080",
+  "#008000",
+  "#800080",
+  "#FF0000",
+  "#1656AD",
+  "#401E12",
+  "#F0C807",
+  "#EE0943",
+  "#3C20A3",
+  "#00B496",
+];
+
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -150,6 +165,9 @@ export default function ProductList() {
     setEditProduct(null);
     fetchProducts();
   };
+
+  const customColors =
+    editProduct?.colors?.filter((c) => !predefinedColors.includes(c)) || [];
 
   // ================= UI =================
   return (
@@ -374,20 +392,7 @@ export default function ProductList() {
 
             {/* Colors */}
             <div className="flex flex-wrap gap-2 mb-2">
-              {[
-                "#000000",
-                "#FFFFFF",
-                "#808080",
-                "#008000",
-                "#800080",
-                "#FF0000",
-                "#1656AD",
-                "#401E12",
-                "#F0C807",
-                "#EE0943",
-                "#3C20A3",
-                "#00B496",
-              ].map((c) => (
+              {predefinedColors.map((c) => (
                 <label
                   key={c}
                   className="flex items-center gap-2 border px-2 py-1 rounded"
@@ -398,13 +403,11 @@ export default function ProductList() {
                     onChange={() => toggleColor(c)}
                   />
 
-                  {/* color preview */}
                   <span
                     className="w-4 h-4 rounded border"
                     style={{ backgroundColor: c }}
                   ></span>
 
-                  {/* hex text */}
                   <span>{c}</span>
                 </label>
               ))}
@@ -427,6 +430,37 @@ export default function ProductList() {
                 Add Custom
               </button>
             </div>
+
+            {customColors.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {customColors.map((color, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 border px-2 py-1 rounded"
+                  >
+                    <span
+                      className="w-4 h-4 rounded border"
+                      style={{ backgroundColor: color }}
+                    ></span>
+
+                    <span>{color}</span>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEditProduct((prev) => ({
+                          ...prev,
+                          colors: prev.colors.filter((c) => c !== color),
+                        }))
+                      }
+                      className="text-red-600 text-xs"
+                    >
+                      remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Images */}
             <div className="flex gap-2 flex-wrap mb-3">
