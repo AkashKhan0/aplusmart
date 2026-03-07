@@ -39,7 +39,7 @@ export default function Underhero() {
     { value: "Playing Cards", label: "Gaming", icon: <IoGameController /> },
     { value: "Mini Projector", label: "Mini Projector", icon: <LuProjector /> },
     {
-      value: "Windows & MAC Hub",
+      value: "Computer Accessories",
       label: "Computer Accessories",
       icon: <FaComputer />,
     },
