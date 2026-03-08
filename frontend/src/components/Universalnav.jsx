@@ -137,9 +137,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                   .reverse()
                   .filter(
                     ([mainCategory]) =>
-                      !["others", "offer", "combo"].includes(
-                        mainCategory.toLowerCase(),
-                      ),
+                      !["offer", "combo"].includes(mainCategory.toLowerCase()),
                   )
                   .map(([mainCategory, subCategories]) => (
                     <li
