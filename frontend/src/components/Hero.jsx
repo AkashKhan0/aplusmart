@@ -56,9 +56,17 @@ export default function Hero({ openMenu }) {
   }, []);
 
   const uniqueCategories = [
-    ...new Map(categories.map((cat) => [cat.mainCategory, cat])).values(),
-  ];
-
+  ...new Map(
+    categories
+      .filter(
+        (cat) =>
+          !["combo", "offer", "others"].includes(
+            cat.mainCategory?.toLowerCase()
+          )
+      )
+      .map((cat) => [cat.mainCategory, cat])
+  ).values(),
+];
   const handleSeller = (e) => {
     e.stopPropagation();
     e.preventDefault();

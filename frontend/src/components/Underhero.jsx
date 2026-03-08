@@ -3,7 +3,6 @@ import {
   BsEarbuds,
   BsFillHandbagFill,
   BsFillLampFill,
-  BsStars,
 } from "react-icons/bs";
 import { WiHumidity } from "react-icons/wi";
 import { FaMobileAlt } from "react-icons/fa";
@@ -16,11 +15,10 @@ import {
   GiUmbrella,
 } from "react-icons/gi";
 import { IoGameController } from "react-icons/io5";
-import { LuProjector } from "react-icons/lu";
+import { SiFoodpanda } from "react-icons/si";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaComputer } from "react-icons/fa6";
 import { MdKeyboard, MdSpeaker } from "react-icons/md";
-import { ImPrinter } from "react-icons/im";
 import { MdOutlinePrivacyTip } from "react-icons/md";
 
 export default function Underhero() {
@@ -34,7 +32,6 @@ export default function Underhero() {
     { value: "Bags", label: "Women’s Bag", icon: <BsFillHandbagFill /> },
     { value: "Power Bank", label: "Power Bank", icon: <GiBatteryPack /> },
     { value: "Playing Cards", label: "Gaming", icon: <IoGameController /> },
-    { value: "Mini Projector", label: "Mini Projector", icon: <LuProjector /> },
     {
       value: "Computer Accessories",
       label: "Computer Accessories",
@@ -44,12 +41,11 @@ export default function Underhero() {
     { value: "Others", label: "Umbrella", icon: <GiUmbrella /> },
     { value: "Humidifier", label: "Humidifier", icon: <WiHumidity /> },
     {
-      value: "Skin Care",
+      value: "Beauty & Care",
       label: "beauty products",
       icon: <GiFlowerPot />,
     },
     { value: "Speaker", label: "Mini Sound Box", icon: <MdSpeaker /> },
-    { value: "Mini printer", label: "Mini printer", icon: <ImPrinter /> },
     {
       value: "Interior Lights",
       label: "Interior Lights",
@@ -75,13 +71,13 @@ export default function Underhero() {
       label: "Kitchen Accessories",
       image: "/images/kitchen.png",
     },
-    { value: "Beauty & Care", label: "Jewellery", image: "/images/jewelry.png" },
+    { value: "Jewelry", label: "Jewellery", image: "/images/jewelry.png" },
     {
-      value: "Travel Bags",
-      label: "Travel Bags",
-      image: "/images/suitcase.png",
+      value: "Toys",
+      label: "Kids Toys",
+      icon: <SiFoodpanda />,
     },
-    { value: "Toys", label: "Kids Toys", image: "/images/toys.png" },
+    { value: "Car Accessories", label: "Car Accessories", image: "/images/toys.png" },
     {
       value: "Instruments",
       label: "Musical Instruments",
@@ -153,7 +149,7 @@ export default function Underhero() {
               </p>
             </div>
 
-            <div className="w-fit grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-2 items-stretch">
+            <div className="w-fit grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 gap-3 items-stretch">
               {categories.map((cat) => (
                 <Link
                   key={cat.value}
