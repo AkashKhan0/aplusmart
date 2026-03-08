@@ -4,27 +4,24 @@ import {
   BsFillHandbagFill,
   BsFillLampFill,
   BsStars,
-  BsUsbDriveFill,
 } from "react-icons/bs";
 import { WiHumidity } from "react-icons/wi";
-import { FaMobileAlt, FaUsb } from "react-icons/fa";
+import { FaMobileAlt } from "react-icons/fa";
 import {
   GiBatteryPack,
-  GiDeliveryDrone,
   GiDeskLamp,
   GiFlowerPot,
-  GiLaptop,
   GiMouse,
   GiReturnArrow,
-  GiRobotGolem,
   GiUmbrella,
 } from "react-icons/gi";
-import { IoCamera, IoGameController } from "react-icons/io5";
+import { IoGameController } from "react-icons/io5";
 import { LuProjector } from "react-icons/lu";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaComputer } from "react-icons/fa6";
 import { MdKeyboard, MdSpeaker } from "react-icons/md";
 import { ImPrinter } from "react-icons/im";
+import { MdOutlinePrivacyTip } from "react-icons/md";
 
 export default function Underhero() {
   // 🔥 feature categories data
@@ -115,14 +112,14 @@ export default function Underhero() {
                 </div>
 
                 <div className="drop active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
-                  <Link href="/star-point-policy">
+                  <Link href="/privacy-policy">
                     <div className="w-full h-full flex flex-col items-center justify-center">
                       <span className="point_icon">
-                        <BsStars />
+                        <MdOutlinePrivacyTip />
                       </span>
                       <div className="flex flex-col items-center justify-center">
-                        <h1 className="point_h1">Star Point Policy</h1>
-                        <p className="point_p">Earn points easily.</p>
+                        <h1 className="point_h1">Privacy Policy</h1>
+                        <p className="point_p">Your privacy matters.</p>
                       </div>
                     </div>
                   </Link>

@@ -85,8 +85,8 @@ export default function Footer() {
                   <Link href="/contact">
                     <p className="ftr_span">Contact Us</p>
                   </Link>
-                  <Link href="/star-point-policy">
-                    <p className="ftr_span">Star Point Policy</p>
+                  <Link href="/allproducts">
+                    <p className="ftr_span">Our Products</p>
                   </Link>
                 </div>
                 <div className="w-full flex flex-col text-sm gap-1.5">
@@ -114,8 +114,8 @@ export default function Footer() {
                   <Link href="/terms-condition">
                     <p className="ftr_span">Terms and Conditions</p>
                   </Link>
-                  <Link href="/star-point-policy">
-                    <p className="ftr_span">Star Point Policy</p>
+                  <Link href="/allproducts">
+                    <p className="ftr_span">Our Products</p>
                   </Link>
                   <Link href="/privacy-policy">
                     <p className="ftr_span">Privacy Policy</p>

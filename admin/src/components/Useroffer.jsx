@@ -119,19 +119,19 @@ export default function Useroffer() {
         />
 
         <div className="flex items-center gap-2 mb-2">
-          <input required
+          <input 
             className="border p-2 w-full"
             placeholder="Offer Title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
-          <input required
+          <input 
             className="border p-2 w-full"
             placeholder="Offer Subtitle"
             value={form.subtitle}
             onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
           />
-          <input required
+          <input 
             className="border p-2 w-full"
             placeholder="Button URL"
             value={form.buttonUrl}
