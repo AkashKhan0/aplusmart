@@ -153,17 +153,22 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                       </a>
 
                       {/* Dropdown */}
-                      <ul className="absolute left-0 top-full mt-px hidden min-w-[180px] w-fit bg-white shadow-lg group-hover:block z-50 border-t-2 border-t-[#971900]">
-                        {subCategories.map((sub, index) => (
-                          <li key={index}>
-                            <a
-                              href={`/search?subCategory=${encodeURIComponent(sub)}`}
-                              className="block px-4 py-1 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300 text-[13px]"
-                            >
-                              {sub}
-                            </a>
-                          </li>
-                        ))}
+                      <ul className="absolute left-0 top-full mt-px hidden w-fit bg-white shadow-lg group-hover:block z-50 border-t-2 border-t-[#971900]">
+                        {subCategories
+                          .filter(
+                            (sub) =>
+                              sub.toLowerCase() !== mainCategory.toLowerCase(),
+                          )
+                          .map((sub, index) => (
+                            <li key={index}>
+                              <a
+                                href={`/search?subCategory=${encodeURIComponent(sub)}`}
+                                className="block px-4 py-1 text-base text-gray-700 hover:bg-gray-100 capitalize border-b border-b-gray-300 text-[13px] whitespace-nowrap font-medium"
+                              >
+                                {sub}
+                              </a>
+                            </li>
+                          ))}
                       </ul>
                     </li>
                   ))}

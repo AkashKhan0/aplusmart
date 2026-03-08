@@ -1,86 +1,52 @@
 import Link from "next/link";
-import {
-  BsEarbuds,
-  BsFillHandbagFill,
-  BsFillLampFill,
-} from "react-icons/bs";
-import { WiHumidity } from "react-icons/wi";
-import { FaMobileAlt } from "react-icons/fa";
-import {
-  GiBatteryPack,
-  GiDeskLamp,
-  GiFlowerPot,
-  GiMouse,
-  GiReturnArrow,
-  GiUmbrella,
-} from "react-icons/gi";
-import { IoGameController } from "react-icons/io5";
+import { BsFillHandbagFill, BsFillLampFill } from "react-icons/bs";
+import { GiDeskLamp, GiFlowerPot, GiReturnArrow } from "react-icons/gi";
 import { SiFoodpanda } from "react-icons/si";
 import { TbTruckDelivery } from "react-icons/tb";
-import { FaComputer } from "react-icons/fa6";
-import { MdKeyboard, MdSpeaker } from "react-icons/md";
 import { MdOutlinePrivacyTip } from "react-icons/md";
+import { LuPackagePlus } from "react-icons/lu";
+import { MdOutlineElectricalServices } from "react-icons/md";
+import { MdOutlineAddHomeWork } from "react-icons/md";
 
 export default function Underhero() {
   // 🔥 feature categories data
   const categories = [
     {
-      value: "Mobile Accessories",
-      label: "Mobile Accessories",
-      icon: <FaMobileAlt />,
+      value: "Accessories",
+      label: "Accessories",
+      icon: <LuPackagePlus />,
     },
     { value: "Bags", label: "Women’s Bag", icon: <BsFillHandbagFill /> },
-    { value: "Power Bank", label: "Power Bank", icon: <GiBatteryPack /> },
-    { value: "Playing Cards", label: "Gaming", icon: <IoGameController /> },
-    {
-      value: "Computer Accessories",
-      label: "Computer Accessories",
-      icon: <FaComputer />,
-    },
     { value: "Table Lamp", label: "Table Lamp", icon: <BsFillLampFill /> },
-    { value: "Others", label: "Umbrella", icon: <GiUmbrella /> },
-    { value: "Humidifier", label: "Humidifier", icon: <WiHumidity /> },
+    {
+      value: "Gadgets",
+      label: "Gadgets",
+      icon: <MdOutlineElectricalServices />,
+    },
+    {
+      value: "Smart home",
+      label: "Smart home",
+      icon: <MdOutlineAddHomeWork />,
+    },
     {
       value: "Beauty & Care",
       label: "beauty products",
       icon: <GiFlowerPot />,
     },
-    { value: "Speaker", label: "Mini Sound Box", icon: <MdSpeaker /> },
     {
       value: "Interior Lights",
       label: "Interior Lights",
       icon: <GiDeskLamp />,
     },
+    { value: "Jewelry", label: "Jewelry", image: "/images/jewelry.png" },
     {
-      value: "Keyboard Mouse",
-      label: "Keyboard & Mouse",
-      custom: (
-        <span className="relative h-8">
-          <MdKeyboard className="absolute -top-0.5 -left-1.5" />
-          <GiMouse className="absolute top-1 -right-1.5" />
-        </span>
-      ),
-    },
-    {
-      value: "Earphones & Earbuds",
-      label: "Earphones & Earbuds",
-      icon: <BsEarbuds />,
-    },
-    {
-      value: "Tools",
-      label: "Kitchen Accessories",
-      image: "/images/kitchen.png",
-    },
-    { value: "Jewelry", label: "Jewellery", image: "/images/jewelry.png" },
-    {
-      value: "Toys",
+      value: "Sports",
       label: "Kids Toys",
       icon: <SiFoodpanda />,
     },
-    { value: "Car Accessories", label: "Car Accessories", image: "/images/toys.png" },
     {
-      value: "Instruments",
-      label: "Musical Instruments",
+      value: "Music",
+      label: "Music",
       image: "/images/music.png",
     },
   ];
@@ -149,7 +115,7 @@ export default function Underhero() {
               </p>
             </div>
 
-            <div className="w-fit grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 gap-3 items-stretch">
+            <div className="w-fit grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-3 items-stretch">
               {categories.map((cat) => (
                 <Link
                   key={cat.value}

@@ -6,7 +6,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { GiShoppingBag } from "react-icons/gi";
 
 const defaultSlide = {
-  image: "/images/Best_Deals.png",
+  // image: "/images/Best_Deals.png",
   title: "Best Deals of The Season",
   subtitle: "Up to 20% Off on Electronics",
   buttonUrl: "/offers",
@@ -68,7 +68,7 @@ export default function HeroCarousel() {
     <div className="relative w-full h-fit overflow-hidden">
       {/* Background */}
       <div
-        className="w-full h-[380px] bg-cover sm:bg-contain bg-no-repeat bg-position-[center_bottom] transition-all duration-700 ease-in-out py-2 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] "
+        className="w-full h-[380px] bg-cover sm:bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out py-2 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
@@ -81,7 +81,7 @@ export default function HeroCarousel() {
             {current.subtitle}
           </p>
 
-          <Link href={current.buttonUrl} className=" absolute bottom-5 left-[50%] -translate-x-[50%]">
+          <Link href={current.buttonUrl} className="absolute bottom-0 left-[50%] -translate-x-[53%]">
             <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
               <span>Buy Now</span>
               <span className="text-sm shop_btn_icon">

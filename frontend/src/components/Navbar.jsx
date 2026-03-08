@@ -43,15 +43,6 @@ export default function Navbar({ isOpen, setIsOpen }) {
           return acc;
         }, {});
 
-        // 👉 Group by mainCategory + remove duplicates
-        // const grouped = data.reduce((acc, item) => {
-        //   if (!acc[item.mainCategory]) {
-        //     acc[item.mainCategory] = new Set();
-        //   }
-        //   acc[item.mainCategory].add(item.subCategory);
-        //   return acc;
-        // }, {});
-
         // 👉 Convert Set → Array
         const formatted = {};
         Object.keys(grouped).forEach((key) => {
@@ -122,47 +113,65 @@ export default function Navbar({ isOpen, setIsOpen }) {
         <ul className="flex flex-col gap-1 text-white">
           {[...Object.entries(menuData)]
             .reverse()
-            .map(([mainCategory, subCategories]) => (
-              <li key={mainCategory} className="border-b border-white/10">
-                {/* Main Category */}
-                <button
-                  onClick={() => toggleCategory(mainCategory)}
-                  className="w-full flex justify-between items-center py-1 px-3 capitalize 
-                hover:bg-white/10 rounded transition cursor-pointer text-[14px]"
-                >
-                  <span>{mainCategory}</span>
-                  <FiChevronDown
-                    className={`transition-transform duration-300 ${
-                      activeCategory === mainCategory ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
+            .map(([mainCategory, subCategories]) => {
+              // 🔹 Filter subcategories that are same as main category
+              const filteredSubs = subCategories.filter(
+                (sub) => sub.toLowerCase() !== mainCategory.toLowerCase(),
+              );
+              const hasDropdown = filteredSubs.length > 0;
 
-                {/* Sub Category Dropdown */}
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out
-                ${
-                  activeCategory === mainCategory
-                    ? "max-h-96 opacity-100"
-                    : "max-h-0 opacity-0"
-                }`}
-                >
-                  <ul className="pl-5 flex flex-col gap-0.5 py-1">
-                    {subCategories.map((sub, index) => (
-                      <li key={index}>
-                        <a
-                          href={`/search?subCategory=${encodeURIComponent(sub)}`}
-                          onClick={() => setIsOpen(false)}
-                          className="block py-0.5 px-3 capitalize text-[13px] text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
-                        >
-                          {sub}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
+              return (
+                <li key={mainCategory} className="border-b border-white/10">
+                  {hasDropdown ? (
+                    // Show dropdown if subcategories exist
+                    <>
+                      <button
+                        onClick={() => toggleCategory(mainCategory)}
+                        className="w-full flex justify-between items-center py-1 px-3 capitalize hover:bg-white/10 rounded transition cursor-pointer text-[14px]"
+                      >
+                        <span>{mainCategory}</span>
+                        <FiChevronDown
+                          className={`transition-transform duration-300 ${
+                            activeCategory === mainCategory ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          activeCategory === mainCategory
+                            ? "max-h-96 opacity-100"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <ul className="pl-5 flex flex-col gap-0.5 py-1">
+                          {filteredSubs.map((sub, index) => (
+                            <li key={index}>
+                              <a
+                                href={`/search?subCategory=${encodeURIComponent(sub)}`}
+                                onClick={() => setIsOpen(false)}
+                                className="block py-0.5 px-3 capitalize text-[13px] text-gray-200 hover:text-gray-400 hover:bg-white/10 rounded-sm transform duration-300 transition cursor-pointer"
+                              >
+                                {sub}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  ) : (
+                    // No dropdown → main category is a direct link
+                    <a
+                      href={`/search?mainCategory=${encodeURIComponent(mainCategory)}`}
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full py-1 px-3 capitalize hover:bg-white/10 rounded transition cursor-pointer text-[14px] text-gray-200"
+                    >
+                      {mainCategory}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
         </ul>
       </div>
     </>
