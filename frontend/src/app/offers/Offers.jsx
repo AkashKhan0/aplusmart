@@ -36,8 +36,7 @@ export default function Offers() {
             100,
         )
       : 0;
-
-
+      
     const cartItem = {
       productId: product._id,
       name: product.name,
