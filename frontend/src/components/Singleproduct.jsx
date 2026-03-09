@@ -482,7 +482,7 @@ export default function Singleproduct() {
               )}
 
               {/* ================= REVIEW SECTION ================= */}
-              <div className="w-full mt-10">
+              <div className="w-full mt-5">
                 <div className="w-full flex items-center justify-between gap-1.5">
                   <h2 className="text-xl font-bold text-[#931905]">
                     Reviews ({reviews?.totalReviews || 0})
@@ -510,7 +510,7 @@ export default function Singleproduct() {
                 </div>
 
                 {/* Review List */}
-                <div className="flex flex-col gap-4 mt-5">
+                <div className="flex flex-col gap-4 mt-2">
                   {reviews?.reviews?.length > 0 ? (
                     reviews.reviews.map((rev) => (
                       <div
@@ -630,7 +630,7 @@ export default function Singleproduct() {
             </div>
 
             {/* Related products */}
-            <div className="w-full sm:w-[30%] md:w-[30%] transform bg-[#2B2A29]/3 backdrop-blur-md p-3 rounded-md min-h-[200px] border-l border-l-gray-300">
+            <div className="w-full sm:w-[30%] md:w-[30%] transform bg-[#2B2A29]/3 backdrop-blur-md p-3 rounded-md max-h-[500px] min-h-[200px] border-l border-l-gray-300 overflow-y-scroll">
               <h1 className="text-center text-lg font-bold capitalize text-[#931905] mb-3 border-b border-b-[#93180531]">
                 Related Product
               </h1>

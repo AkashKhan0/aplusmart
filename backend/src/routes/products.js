@@ -37,8 +37,7 @@ router.get("/search", async (req, res) => {
     }
 
     const products = await Product.find(filter)
-      .sort({ createdAt: -1 })
-      .limit(20);
+      .sort({ createdAt: -1 });
 
     res.status(200).json({ products });
   } catch (error) {
@@ -96,7 +95,7 @@ router.get("/:id", async (req, res) => {
       },
       _id: { $ne: product._id },
     })
-      .limit(5)
+      // .limit(6)
       .sort({ createdAt: -1 });
 
     // --- send final response ---

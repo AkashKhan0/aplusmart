@@ -36,7 +36,7 @@ export default function Offers() {
             100,
         )
       : 0;
-      
+
     const cartItem = {
       productId: product._id,
       name: product.name,
@@ -44,9 +44,8 @@ export default function Offers() {
       offerPrice: product.offerPrice,
       regularPrice: product.regularPrice,
       quantity,
-      colors: [], // no color selection here
+      colors: [],
       role: user.role,
-
       hasOffer,
       discountPercent,
     };
@@ -210,29 +209,30 @@ export default function Offers() {
                       </div>
 
                       <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
-
                         <div className="universal_column gap-1.5">
                           <h1 className="text-sm px-1 font-medium text-center capitalize">
-                          {product.name}
-                        </h1>
+                            {product.name}
+                          </h1>
 
-                        <p className="text-[#931905] flex items-center gap-3">
-                          <span className="taka">
-                            ৳-{" "}
-                            {Number(product.offerPrice).toLocaleString("en-IN")}
-                            /=
-                          </span>
-                          <del className="text-sm text-[#2B2A29]">
+                          <p className="text-[#931905] flex items-center gap-3">
                             <span className="taka">
                               ৳-{" "}
-                              {Number(product.regularPrice).toLocaleString(
+                              {Number(product.offerPrice).toLocaleString(
                                 "en-IN",
                               )}
+                              /=
                             </span>
-                          </del>
-                        </p>
+                            <del className="text-sm text-[#2B2A29]">
+                              <span className="taka">
+                                ৳-{" "}
+                                {Number(product.regularPrice).toLocaleString(
+                                  "en-IN",
+                                )}
+                              </span>
+                            </del>
+                          </p>
                         </div>
-                        
+
                         {/* add to cart button */}
                         <div className="w-full flex flex-col items-center justify-center mb-2">
                           <button
@@ -243,11 +243,17 @@ export default function Offers() {
                             }}
                             className="add_to_cart_btn"
                           >
-                            <span className={product.stockStatus !== "inStock" ? "text-red-700" : ""}>
-                            {product.stockStatus === "inStock"
-                              ? "Add to Cart"
-                              : "Pre Order"}
-                          </span>
+                            <span
+                              className={
+                                product.stockStatus !== "inStock"
+                                  ? "text-red-700"
+                                  : ""
+                              }
+                            >
+                              {product.stockStatus === "inStock"
+                                ? "Add to Cart"
+                                : "Pre Order"}
+                            </span>
                             <span className="shop_btn_icon">
                               <FaShoppingCart />
                             </span>
