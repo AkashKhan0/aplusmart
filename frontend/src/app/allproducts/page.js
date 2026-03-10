@@ -195,17 +195,17 @@ export default function Allproducts() {
                       </div>
                     )}
 
-                  <div className="w-full h-[220px] overflow-hidden mb-1">
+                  <div className="w-full h-[200px] overflow-hidden mb-1">
                     <Image
                       src={product.images?.[0] || "/images/placeholder.png"}
                       alt={product.name}
                       width={300}
                       height={300}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-fill"
                     />
                   </div>
 
-                  <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[130px]">
+                  <div className="flex flex-col items-center justify-between py-2 gap-1.5 bg-[#e9e9e9] rounded-t-2xl h-full w-full max-h-[150px]">
                     <div className="universal_column gap-1.5">
                       <h1 className="text-sm px-1 font-medium text-center capitalize">
                         {product.name}

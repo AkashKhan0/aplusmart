@@ -68,7 +68,7 @@ export default function HeroCarousel() {
     <div className="relative w-full h-fit overflow-hidden">
       {/* Background */}
       <div
-        className="w-full h-[380px] bg-cover sm:bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out py-2 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
+        className="w-full h-[380px] bg-contain sm:bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out py-2 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
