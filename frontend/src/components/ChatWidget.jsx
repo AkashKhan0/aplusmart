@@ -72,14 +72,24 @@ export default function ChatWidget() {
       return;
     }
 
-    const interval = setInterval(() => {
-      setShowHint(true);
-      setTimeout(() => {
-        setShowHint(false);
-      }, 10000); // visible time
+    const showHintCycle = () => {
+    setShowHint(true);
+
+    // visible 5-6 seconds
+    setTimeout(() => {
+      setShowHint(false);
+
+      // hidden 20-30 seconds
+      const nextDelay = Math.random() * 10000 + 20000; // 20s - 30s
+      setTimeout(showHintCycle, nextDelay);
     }, 6000);
-    return () => clearInterval(interval);
-  }, [open]);
+  };
+
+  const startDelay = Math.random() * 10000 + 20000; // first delay 20-30s
+  const timer = setTimeout(showHintCycle, startDelay);
+
+  return () => clearTimeout(timer);
+}, [open]);
 
   // Change Support Person every 7 hours
   useEffect(() => {

@@ -180,7 +180,7 @@ export default function Searchresult() {
                         </div>
                       )}
 
-                    <div className="w-full h-[200px] overflow-hidden mb-1">
+                    <div className="w-full h-[250px] overflow-hidden mb-1">
                       <Image
                         src={item.images?.[0]}
                         alt={item.name}
