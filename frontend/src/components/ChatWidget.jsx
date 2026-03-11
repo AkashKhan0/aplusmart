@@ -208,11 +208,11 @@ export default function ChatWidget() {
               </button>
 
               <button
-                onClick={() => handleNavigate("/star-point-policy")}
+                onClick={() => handleNavigate("/privacy-policy")}
                 className="w-full border border-[#9719006f] py-1 rounded-lg
                 hover:bg-green-50 transition text-[#000000] cursor-pointer"
               >
-                Star Point Policy
+                Privacy Policy
               </button>
 
               <button
