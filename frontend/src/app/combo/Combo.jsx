@@ -152,7 +152,7 @@ export default function Combo() {
                         </div>
                       )}
 
-                    <div className="w-full h-[250px] overflow-hidden mb-1">
+                    <div className="w-full h-[220px] sm:h-[250px] overflow-hidden mb-1">
                       <Image
                         src={product.images[0] || "/images/placeholder.png"}
                         alt={product.name}

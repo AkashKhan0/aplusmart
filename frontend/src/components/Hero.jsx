@@ -190,7 +190,7 @@ export default function Hero({ openMenu }) {
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full py-[3px] px-2 outline-0"
                 />
-                <div className="px-2 bg-[#2B2A29] py-1 text-[#ffffff]">
+                <div className="px-2 py-1 universal text-[#590000] cursor-pointer">
                   <button type="submit">
                     <FaSearch />
                   </button>
@@ -247,7 +247,7 @@ export default function Hero({ openMenu }) {
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full py-[3px] px-2 outline-0"
               />
-              <div className="px-2 bg-[#2B2A29] py-1 text-[#ffffff]">
+              <div className="px-2 py-1 universal text-[#590000] cursor-pointer">
                 <button type="submit">
                   <FaSearch />
                 </button>

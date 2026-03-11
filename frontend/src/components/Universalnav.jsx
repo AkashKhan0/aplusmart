@@ -86,7 +86,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full py-[1.5px] px-2 outline-0 text-[#000000]"
                 />
-                <div className="px-2 hover:bg-[#971900] bg-[#590000] transition-colors duration-300 py-0.5 text-[#ffffff] cursor-pointer overflow-hidden">
+                <div className="px-2 transition-colors duration-300 py-0.5 text-[#590000] cursor-pointer overflow-hidden universal">
                   <button type="submit" className="cursor-pointer">
                     <FaSearch className="-mb-0.5" />
                   </button>
