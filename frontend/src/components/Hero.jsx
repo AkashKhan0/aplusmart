@@ -118,7 +118,7 @@ export default function Hero({ openMenu }) {
         {/* Logo + Menu/Search/Account/Cart */}
         <div className="flex flex-col items-center justify-center gap-2.5 w-full">
           {/* logo */}
-          <div className="w-full max-w-fit universal my-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
+          <div className="w-full max-w-fit universal mt-5 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]">
             <h1
               className={`${reggaeOne.className} text-[#971900] hover:text-[#590000] transition-colors duration-300 text-xl sm:text-2xl md:text-3xl font-bold aplus_mart_logo`}
             >

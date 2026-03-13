@@ -65,14 +65,14 @@ export default function HeroCarousel() {
   const current = offers.length > 0 ? offers[currentIndex] : defaultSlide;
 
   return (
-    <div className="relative w-full h-fit overflow-hidden">
+    <div className="relative w-full h-fit overflow-hidden pb-5">
       {/* Background */}
       <div
-        className="w-full h-[380px] bg-contain sm:bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out py-2 filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
+        className="w-full h-[300px] sm:h-[350px] bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
-        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 pb-5 relative">
+        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 relative">
           <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
             {current.title}
           </h2>
@@ -80,8 +80,10 @@ export default function HeroCarousel() {
           <p className="text-lg font-semibold text-[#2B2A29] mb-5">
             {current.subtitle}
           </p>
+        </div>
+      </div>
 
-          <Link href={current.buttonUrl} className="absolute bottom-0 left-[50%] -translate-x-[53%]">
+          <Link href={current.buttonUrl} className="absolute bottom-5 left-[50%] -translate-x-[53%]">
             <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
               <span>Buy Now</span>
               <span className="text-sm shop_btn_icon">
@@ -89,13 +91,11 @@ export default function HeroCarousel() {
               </span>
             </button>
           </Link>
-        </div>
-      </div>
 
       {/* Prev Button */}
       <button
         onClick={prevSlide}
-        className="absolute left-[30%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute left-[20%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronLeft />
       </button>
@@ -103,7 +103,7 @@ export default function HeroCarousel() {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute right-[30%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        className="absolute right-[20%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronRight />
       </button>
