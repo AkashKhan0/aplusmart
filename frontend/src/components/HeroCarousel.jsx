@@ -38,16 +38,14 @@ export default function HeroCarousel() {
   }, []);
 
   useEffect(() => {
-  if (offers.length === 0) return;
+    if (offers.length === 0) return;
 
-  const interval = setInterval(() => {
-    setCurrentIndex((prev) =>
-      prev === offers.length - 1 ? 0 : prev + 1
-    );
-  }, 5000);
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === offers.length - 1 ? 0 : prev + 1));
+    }, 5000);
 
-  return () => clearInterval(interval);
-}, [offers]);
+    return () => clearInterval(interval);
+  }, [offers]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) =>
@@ -83,14 +81,17 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-          <Link href={current.buttonUrl} className="absolute bottom-5 left-[50%] -translate-x-[53%]">
-            <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
-              <span>Buy Now</span>
-              <span className="text-sm shop_btn_icon">
-                <GiShoppingBag />
-              </span>
-            </button>
-          </Link>
+      <Link
+        href={current.buttonUrl}
+        className="absolute bottom-5 left-[50%] -translate-x-[53%]"
+      >
+        <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
+          <span>Buy Now</span>
+          <span className="text-sm shop_btn_icon">
+            <GiShoppingBag />
+          </span>
+        </button>
+      </Link>
 
       {/* Prev Button */}
       <button

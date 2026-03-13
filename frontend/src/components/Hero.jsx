@@ -235,7 +235,7 @@ export default function Hero({ openMenu }) {
           </div>
 
           {/* mobile search bar */}
-          <div className="block sm:hidden md:hidden w-full px-5 mt-3">
+          <div className="block sm:hidden md:hidden w-full px-5 mt-1">
             <form
               onSubmit={handleSearch}
               className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
