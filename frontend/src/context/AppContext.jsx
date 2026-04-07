@@ -362,7 +362,8 @@ export const AppProvider = ({ children }) => {
         setUser,
         placeOrder,
         buttonStatus,
-        setButtonStatus, siteType
+        setButtonStatus,
+        siteType,
       }}
     >
       {children}

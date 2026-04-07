@@ -19,7 +19,7 @@ const reggaeOne = Reggae_One({
 });
 
 export default function Hero({ openMenu }) {
-  const { user, search, setSearch, handleSearch, cart } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart, siteType  } = useAppContext();
   const router = useRouter();
   const dropdownRef = useRef(null);
   const [showMessage, setShowMessage] = useState(false);
@@ -136,6 +136,7 @@ export default function Hero({ openMenu }) {
                 <IoMdMenu />
               </div>
 
+{siteType !== "wholesale" && (
               <div className="font-medium text-base bg-[#2B2A29] rounded-[50px] universal gap-2.5 text-[#ffffff]">
                 <div
                   className="relative hidden sm:flex md:flex"
@@ -176,6 +177,7 @@ export default function Hero({ openMenu }) {
                   )}
                 </div>
               </div>
+)}
 
               {/* Search form */}
               <form
