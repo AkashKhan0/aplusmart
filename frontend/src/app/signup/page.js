@@ -7,8 +7,6 @@ import { useAppContext } from "@/src/context/AppContext";
 export default function SignupPage() {
   const context = useAppContext();
 
-  // const isLoading = context.isSuccess && context.message === "Registration successful";
-
   return (
     <div className="w-full universal min-h-screen p-5 mt-16">
       <div className="fixed_width universal">
@@ -18,7 +16,7 @@ export default function SignupPage() {
           </h1>
 
           {/* ROLE SELECT */}
-          <div className="flex gap-5">
+          <div className="hidden gap-5 ">
             <label className="flex items-center gap-2">
               <input
                 type="radio"

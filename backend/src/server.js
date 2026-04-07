@@ -14,7 +14,8 @@ app.use(
       "http://localhost:3001",
       "https://aplusmartfrontend.vercel.app",
       "https://aplusmartadmin.vercel.app",
-      "https://aplusmartbd.com"
+      "https://aplusmartbd.com",
+      "https://wholesale.aplusmartbd.com"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, 

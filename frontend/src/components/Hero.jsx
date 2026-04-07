@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
 import { FaCaretDown, FaSearch, FaUser } from "react-icons/fa";
