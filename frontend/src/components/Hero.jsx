@@ -200,6 +200,7 @@ export default function Hero({ openMenu }) {
             </div>
 
             {/* Account + Cart */}
+            {siteType !== "wholesale" && (
             <div className="w-fit flex items-center justify-end gap-2.5">
               {/* profile */}
               <Link href={user ? "/profile" : "/login"}>
@@ -232,7 +233,7 @@ export default function Hero({ openMenu }) {
                   )}
                 </div>
               </Link>
-            </div>
+            </div>)}
           </div>
 
           {/* mobile search bar */}
