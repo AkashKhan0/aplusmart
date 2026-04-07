@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  const [siteType, setSiteType] = useState("main");
   const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -37,6 +38,17 @@ export const AppProvider = ({ children }) => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [buttonStatus, setButtonStatus] = useState("idle");
+
+  useEffect(() => {
+    const host = window.location.host;
+    if (host.includes("wholesale")) {
+      setSiteType("wholesale");
+      console.log("Running on wholesale.aplusmartbd.com");
+    } else {
+      setSiteType("main");
+      console.log("Running on aplusmartbd.com");
+    }
+  }, []);
 
   // Helpers, email and phone number validation
   const validateEmail = (email) => {
@@ -350,7 +362,7 @@ export const AppProvider = ({ children }) => {
         setUser,
         placeOrder,
         buttonStatus,
-        setButtonStatus,
+        setButtonStatus, siteType
       }}
     >
       {children}
