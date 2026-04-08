@@ -67,11 +67,12 @@ export default function Hero({ openMenu }) {
         .map((cat) => [cat.mainCategory, cat]),
     ).values(),
   ];
+
   const handleSeller = (e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    if (user?.role === "reseller") {
+    if (siteType === "wholesale") {
       setShowMessage(true);
       return;
     }
@@ -129,7 +130,9 @@ export default function Hero({ openMenu }) {
 
           {/* menu search bar account cart */}
           <div className="w-full max-w-[900px] flex items-center justify-between gap-5 px-5 sm:px-10 md:px-5">
-            <div className={` ${siteType === "wholesale" ? "w-full" : "w-fit"} sm:w-full md:w-full flex items-center justify-between gap-2.5`}>
+            <div
+              className={` ${siteType === "wholesale" ? "w-full" : "w-fit"} sm:w-full md:w-full flex items-center justify-between gap-2.5`}
+            >
               <div
                 className="font-semibold text-4xl cursor-pointer"
                 onClick={openMenu}
@@ -241,25 +244,27 @@ export default function Hero({ openMenu }) {
           </div>
 
           {/* mobile search bar */}
-          <div className="block sm:hidden md:hidden w-full px-5 mt-1">
-            <form
-              onSubmit={handleSearch}
-              className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
-            >
-              <input
-                type="search"
-                placeholder="Search products..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full py-[3px] px-2 outline-0"
-              />
-              <div className="px-2 py-1 universal text-[#590000] cursor-pointer">
-                <button type="submit">
-                  <FaSearch />
-                </button>
-              </div>
-            </form>
-          </div>
+          {siteType !== "wholesale" && (
+            <div className="block sm:hidden md:hidden w-full px-5 mt-1">
+              <form
+                onSubmit={handleSearch}
+                className="w-full overflow-hidden flex items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))]"
+              >
+                <input
+                  type="search"
+                  placeholder="Search products..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full py-[3px] px-2 outline-0"
+                />
+                <div className="px-2 py-1 universal text-[#590000] cursor-pointer">
+                  <button type="submit">
+                    <FaSearch />
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           {/* slider images and text */}
           <HeroCarousel />
@@ -267,7 +272,7 @@ export default function Hero({ openMenu }) {
 
         {showMessage && (
           <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white text-center py-1 px-3 rounded shadow-lg animate-slideDown fade-in-out z-50">
-            Sorry! This page is only for customer users.
+            This feature is not available in wholesale mode.
           </div>
         )}
       </div>

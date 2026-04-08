@@ -20,7 +20,7 @@ const openMessenger = () => {
 
 export default function Allproducts() {
   const [products, setProducts] = useState([]);
-  const { user, addToCart } = useAppContext();
+  const { user, addToCart, siteType } = useAppContext();
   const [successProductId, setSuccessProductId] = useState(null);
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -134,18 +134,17 @@ export default function Allproducts() {
                 <Link
                   key={product._id}
                   href={
-                    user?.role === "reseller" ? "#" : `/products/${product._id}`
+                    siteType === "wholesale" ? "#" : `/products/${product._id}`
                   }
                   onClick={(e) => {
-                    if (user?.role === "reseller") {
+                    if (siteType === "wholesale") {
                       e.preventDefault();
                     }
                   }}
                 >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* Offer % or Earn Points - only for customer */}
-                    {user?.role === "customer" &&
-                      product?.offerPrice > 0 &&
+                    {product?.offerPrice > 0 &&
                       product?.regularPrice > 0 &&
                       product.offerPrice < product.regularPrice && (
                         <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-normal uppercase">
@@ -175,7 +174,7 @@ export default function Allproducts() {
                         </h1>
 
                         {/* Price display */}
-                        {user?.role !== "reseller" && (
+                        {siteType !== "wholesale" && (
                           <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                             <span className="taka">৳-</span>
                             {Number(product.offerPrice).toLocaleString("en-IN")}
@@ -196,7 +195,7 @@ export default function Allproducts() {
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
-                        {user?.role === "reseller" ? (
+                        {siteType === "wholesale" ? (
                           <div className="flex flex-wrap items-center justify-center gap-2">
                             <button
                               onClick={() =>
