@@ -144,7 +144,8 @@ export default function Allproducts() {
                 >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* Offer % or Earn Points - only for customer */}
-                    {product?.offerPrice > 0 &&
+                    {siteType !== "wholesale" && 
+                      product?.offerPrice > 0 &&
                       product?.regularPrice > 0 &&
                       product.offerPrice < product.regularPrice && (
                         <div className="w-20 h-6 rounded-br-full rounded-tr-full bg-[#3c3c3c] text-white absolute top-0 left-0 flex items-center justify-center text-sm font-normal uppercase">
