@@ -203,41 +203,41 @@ export default function Hero({ openMenu }) {
             </div>
 
             {/* Account + Cart */}
-            {siteType !== "wholesale" && (
-              <div className="w-fit flex items-center justify-end gap-2.5">
-                {/* profile */}
-                <Link href={user ? "/profile" : "/login"}>
-                  <div
-                    // onClick={handleAccountClick}
-                    className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
-                  >
-                    <p className="capitalize hidden sm:block">
-                      {user ? "profile" : "login"}
-                    </p>
-                    <span className="relative">
-                      <FaUser size={24} />
+            <div
+              className={`w-fit items-center justify-end gap-2.5 ${siteType === "wholesale" ? "hidden" : "flex"}`}
+            >
+              {/* profile */}
+              <Link href={user ? "/profile" : "/login"}>
+                <div
+                  // onClick={handleAccountClick}
+                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                >
+                  <p className="capitalize hidden sm:block">
+                    {user ? "profile" : "login"}
+                  </p>
+                  <span className="relative">
+                    <FaUser size={24} />
+                  </span>
+                </div>
+              </Link>
+
+              {/* cart */}
+              <Link href="/cart">
+                <div className="flex items-center gap-1 text-base relative">
+                  <BsCartFill size={32} />
+
+                  {cart.length > 0 ? (
+                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
+                      {cart.length}
                     </span>
-                  </div>
-                </Link>
-
-                {/* cart */}
-                <Link href="/cart">
-                  <div className="flex items-center gap-1 text-base relative">
-                    <BsCartFill size={32} />
-
-                    {cart.length > 0 ? (
-                      <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
-                        {cart.length}
-                      </span>
-                    ) : (
-                      <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
-                        0
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              </div>
-            )}
+                  ) : (
+                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
+                      0
+                    </span>
+                  )}
+                </div>
+              </Link>
+            </div>
           </div>
 
           {/* mobile search bar */}
