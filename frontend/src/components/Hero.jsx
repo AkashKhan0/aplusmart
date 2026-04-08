@@ -204,7 +204,7 @@ export default function Hero({ openMenu }) {
 
             {/* Account + Cart */}
             <div
-              className={`w-fit items-center justify-end gap-2.5 ${siteType === "wholesale" ? "hidden" : "flex"}`}
+              className={`items-center justify-end gap-2.5 ${siteType === "wholesale" ? "hidden w-0" : "flex w-fit"}`}
             >
               {/* profile */}
               <Link href={user ? "/profile" : "/login"}>
