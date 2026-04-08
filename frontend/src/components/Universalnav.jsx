@@ -17,7 +17,8 @@ const reggaeOne = Reggae_One({
 });
 
 export default function Universalnav({ openMenu, fixedOnTop }) {
-  const { user, search, setSearch, handleSearch, cart, siteType  } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart, siteType } =
+    useAppContext();
   const [menuData, setMenuData] = useState({});
 
   useEffect(() => {
@@ -93,35 +94,33 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
                 </div>
               </form>
             </div>
-{siteType !== "wholesale" && (
-            <div className="w-full max-w-fit md:w-fit  hidden sm:flex md:flex items-center justify-between gap-2.5 md:gap-5">
 
-              <Link href={user ? "/profile" : "/login"}>
-                <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent  transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] hover:text-[#c23216] text-xl md:text-base cursor-pointer profile_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
-                  <p className="capitalize hidden md:block">
-                    {user ? "profile" : "login"}
-                  </p>
-                  <FaUser />
-                </div>
-              </Link>
-
-              <div className="md:fixed md:top-[48%] md:right-0 md:cart_btn md:w-full md:max-w-fit md:px-2 md:py-2 md:rounded-l-md md:cursor-pointer hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300 cart_fix_tab_hover">
-                <Link href="/cart">
-                  <div className="w-fit items-center gap-2 text-xl md:text-base relative text-[#FFFFFF] flex">
-                    <FaShoppingCart />
-                    <span className="text-[#FFFFFF] rounded-full universal absolute -top-3 md:-top-2 left-3 font-normal text-xs">
-                      {cart.length}
-                    </span>
-                    <p className="capitalize hidden md:block font-medium items-center gap-1.5 text-sm cart_fix_tab">
-                      view cart
+            {siteType !== "wholesale" && (
+              <div className="w-full max-w-fit md:w-fit  hidden sm:flex md:flex items-center justify-between gap-2.5 md:gap-5">
+                <Link href={user ? "/profile" : "/login"}>
+                  <div className="py-1 px-0 sm:px-0 md:px-4 font-medium bg-transparent  transition-colors duration-300 rounded-sm universal gap-2.5 text-[#FFFFFF] hover:text-[#c23216] text-xl md:text-base cursor-pointer profile_btn active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
+                    <p className="capitalize hidden md:block">
+                      {user ? "profile" : "login"}
                     </p>
+                    <FaUser />
                   </div>
                 </Link>
+
+                <div className="md:fixed md:top-[48%] md:right-0 md:cart_btn md:w-full md:max-w-fit md:px-2 md:py-2 md:rounded-l-md md:cursor-pointer hover:md:bg-[#971900] md:bg-[#590000] transition-colors duration-300 cart_fix_tab_hover">
+                  <Link href="/cart">
+                    <div className="w-fit items-center gap-2 text-xl md:text-base relative text-[#FFFFFF] flex">
+                      <FaShoppingCart />
+                      <span className="text-[#FFFFFF] rounded-full universal absolute -top-3 md:-top-2 left-3 font-normal text-xs">
+                        {cart.length}
+                      </span>
+                      <p className="capitalize hidden md:block font-medium items-center gap-1.5 text-sm cart_fix_tab">
+                        view cart
+                      </p>
+                    </div>
+                  </Link>
+                </div>
               </div>
-            </div>
             )}
-
-
           </div>
         </div>
 
@@ -186,32 +185,40 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
       {/* Mobile Footer */}
       <div className="w-full h-14 block sm:hidden md:hidden fixed bottom-0 left- footer_mbl border">
         <div className="universal w-full h-full">
-          <div className="w-[95%] bg-[#590000] flex items-center justify-between text-[#FFFFFF] h-full px-3 rounded-full">
+          <div
+            className={`}w-[95%] bg-[#590000] flex items-center ${siteType === "wholesale" ? "justify-evenly" : "justify-between"} text-[#FFFFFF] h-full px-3 rounded-full`}
+          >
             <Link href="/">
               <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
                 <FaHome size={20} />
                 <p className="text-xs font-medium">Home</p>
               </div>
             </Link>
-            <Link href={user ? "/profile" : "/login"}>
-              <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
-                <FaUser size={18} />
-                <p className="text-xs font-medium">
-                  {user ? "Profile" : "Login"}
-                </p>
-              </div>
-            </Link>
-            <Link href="/cart">
-              <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
-                <div className="relative">
-                  <FaShoppingCart />
-                  <span className="absolute universal w-4 h-4 rounded-full bg-[#212121] text-xs -top-2 -right-3">
-                    {cart.length}
-                  </span>
+            {siteType !== "wholesale" && (
+              <Link href={user ? "/profile" : "/login"}>
+                <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
+                  <FaUser size={18} />
+                  <p className="text-xs font-medium">
+                    {user ? "Profile" : "Login"}
+                  </p>
                 </div>
-                <p className="text-xs font-medium">Cart</p>
-              </div>
-            </Link>
+              </Link>
+            )}
+
+            {siteType !== "wholesale" && (
+              <Link href="/cart">
+                <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
+                  <div className="relative">
+                    <FaShoppingCart />
+                    <span className="absolute universal w-4 h-4 rounded-full bg-[#212121] text-xs -top-2 -right-3">
+                      {cart.length}
+                    </span>
+                  </div>
+                  <p className="text-xs font-medium">Cart</p>
+                </div>
+              </Link>
+            )}
+
             <div
               onClick={openMenu}
               className="universal_column gap-0.5 rounded-full mbl_mnu_itm"
