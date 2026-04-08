@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { GiShoppingBag } from "react-icons/gi";
+import { useAppContext } from "../context/AppContext";
 
 const defaultSlide = {
-  // image: "/images/Best_Deals.png",
+  image: "/images/shop.png",
   title: "Best Deals of The Season",
   subtitle: "Up to 20% Off on Electronics",
   buttonUrl: "/offers",
@@ -16,6 +17,7 @@ export default function HeroCarousel() {
   const [offers, setOffers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { siteType } = useAppContext();
 
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/user-offers`;
 
@@ -60,7 +62,12 @@ export default function HeroCarousel() {
   };
 
   // Current slide: backend data if exists, else default
-  const current = offers.length > 0 ? offers[currentIndex] : defaultSlide;
+  const current =
+    siteType === "wholesale"
+      ? defaultSlide
+      : offers.length > 0
+        ? offers[currentIndex]
+        : null;
 
   return (
     <div className="relative w-full h-fit overflow-hidden pb-5">
@@ -70,6 +77,7 @@ export default function HeroCarousel() {
         style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
+        {siteType !== "wholesale" && (
         <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 relative">
           <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
             {current.title}
@@ -78,9 +86,9 @@ export default function HeroCarousel() {
           <p className="text-lg font-semibold text-[#2B2A29] mb-5">
             {current.subtitle}
           </p>
-        </div>
+        </div>)}
       </div>
-
+{siteType !== "wholesale" && (
       <Link
         href={current.buttonUrl}
         className="absolute bottom-5 left-[50%] -translate-x-[53%]"
@@ -91,23 +99,25 @@ export default function HeroCarousel() {
             <GiShoppingBag />
           </span>
         </button>
-      </Link>
+      </Link>)}
 
       {/* Prev Button */}
+      {siteType !== "wholesale" && (
       <button
         onClick={prevSlide}
         className="absolute left-[20%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronLeft />
-      </button>
+      </button>)}
 
       {/* Next Button */}
+      {siteType !== "wholesale" && (
       <button
         onClick={nextSlide}
         className="absolute right-[20%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
       >
         <FaChevronRight />
-      </button>
+      </button>)}
     </div>
   );
 }

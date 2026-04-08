@@ -7,8 +7,11 @@ import { MdOutlinePrivacyTip } from "react-icons/md";
 import { LuPackagePlus } from "react-icons/lu";
 import { MdOutlineElectricalServices } from "react-icons/md";
 import { MdOutlineAddHomeWork } from "react-icons/md";
+import { useAppContext } from "../context/AppContext";
 
 export default function Underhero() {
+  const { siteType } = useAppContext();
+
   // 🔥 feature categories data
   const categories = [
     {
@@ -56,6 +59,7 @@ export default function Underhero() {
       <div className="w-full universal_column">
         <div className="fixed_width px-3">
           {/* policys */}
+          {siteType !== "wholesale" && (
           <div className="w-full universal_column py-5 mt-5 sm:mt-10">
             <div className="fixed_width">
               <div className="w-full h-auto flex flex-wrap items-stretch justify-center gap-2.5">
@@ -103,6 +107,7 @@ export default function Underhero() {
               </div>
             </div>
           </div>
+          )}
 
           {/* featured */}
           <div className="w-full py-5 sm:py-10 universal_column">
