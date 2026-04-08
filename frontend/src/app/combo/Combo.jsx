@@ -20,7 +20,7 @@ const openMessenger = () => {
 export default function Combo() {
   const [products, setProducts] = useState([]);
   const API = `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
-  const { user, addToCart } = useAppContext();
+  const { user, addToCart, siteType  } = useAppContext();
   const [successProductId, setSuccessProductId] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -129,16 +129,16 @@ export default function Combo() {
                 <Link
                   key={product._id}
                   href={
-                    user?.role === "reseller" ? "#" : `/products/${product._id}`
+                    siteType === "wholesale" ? "#" : `/products/${product._id}`
                   }
                   onClick={(e) => {
-                    if (user?.role === "reseller") {
+                    if (siteType === "wholesale") {
                       e.preventDefault();
                     }
                   }}
                 >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
-                    {user?.role === "customer" &&
+                    {siteType !== "wholesale" && 
                       product?.offerPrice > 0 &&
                       product?.regularPrice > 0 &&
                       product.offerPrice < product.regularPrice && (
@@ -169,7 +169,7 @@ export default function Combo() {
                         </h1>
 
                         {/* Price display */}
-                        {user?.role !== "reseller" && (
+                        {siteType !== "wholesale" && (
                           <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                             <span className="taka">৳-</span>
                             {Number(product.offerPrice).toLocaleString("en-IN")}
@@ -190,7 +190,7 @@ export default function Combo() {
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
-                        {user?.role === "reseller" ? (
+                        {siteType === "wholesale" ? (
                           <div className="flex flex-wrap items-center justify-center gap-2">
                             <button
                               onClick={() =>
@@ -240,7 +240,7 @@ export default function Combo() {
                         )}
                         {successProductId === product._id && (
                           <p className="text-green-600 text-xs mt-1">
-                            Added to cart successfully!
+                            Added to cart!
                           </p>
                         )}
                       </div>
