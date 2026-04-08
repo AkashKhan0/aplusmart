@@ -19,7 +19,8 @@ const reggaeOne = Reggae_One({
 });
 
 export default function Hero({ openMenu }) {
-  const { user, search, setSearch, handleSearch, cart, siteType  } = useAppContext();
+  const { user, search, setSearch, handleSearch, cart, siteType } =
+    useAppContext();
   const router = useRouter();
   const dropdownRef = useRef(null);
   const [showMessage, setShowMessage] = useState(false);
@@ -55,17 +56,17 @@ export default function Hero({ openMenu }) {
   }, []);
 
   const uniqueCategories = [
-  ...new Map(
-    categories
-      .filter(
-        (cat) =>
-          !["combo", "offer", "others"].includes(
-            cat.mainCategory?.toLowerCase()
-          )
-      )
-      .map((cat) => [cat.mainCategory, cat])
-  ).values(),
-];
+    ...new Map(
+      categories
+        .filter(
+          (cat) =>
+            !["combo", "offer", "others"].includes(
+              cat.mainCategory?.toLowerCase(),
+            ),
+        )
+        .map((cat) => [cat.mainCategory, cat]),
+    ).values(),
+  ];
   const handleSeller = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -136,53 +137,55 @@ export default function Hero({ openMenu }) {
                 <IoMdMenu />
               </div>
 
-{siteType !== "wholesale" && (
-              <div className="font-medium text-base bg-[#2B2A29] rounded-[50px] universal gap-2.5 text-[#ffffff]">
-                <div
-                  className="relative hidden sm:flex md:flex"
-                  ref={dropdownRef}
-                >
-                  {/* Button */}
+              {siteType !== "wholesale" && (
+                <div className="font-medium text-base bg-[#2B2A29] rounded-[50px] universal gap-2.5 text-[#ffffff]">
                   <div
-                    onClick={() => setOpen(!open)}
-                    className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] hover:bg-[#ffffff] hover:text-[#2B2A29] duration-300 rounded-[50px] universal gap-2.5 text-[#ffffff] flex items-center justify-between min-w-[100px] py-1 overflow-hidden"
+                    className="relative hidden sm:flex md:flex"
+                    ref={dropdownRef}
                   >
-                    <p className="capitalize">{selected || "Category"}</p>
-                    <FaCaretDown />
-                  </div>
-
-                  {/* Dropdown */}
-                  {open && (
-                    <div className="absolute left-0 top-8 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50 category_sing">
-                      {uniqueCategories.map((cat) => (
-                        <Link
-                          className="w-full"
-                          key={cat._id}
-                          href={`/search?mainCategory=${encodeURIComponent(
-                            cat.mainCategory,
-                          )}`}
-                        >
-                          <div
-                            onClick={() => {
-                              setSelected(cat.mainCategory);
-                              setOpen(false);
-                            }}
-                            className="px-2 text-sm w-full py-1 border-b border-b-[#333333] text-white hover:bg-[#3a3938] cursor-pointer capitalize"
-                          >
-                            {cat.mainCategory}
-                          </div>
-                        </Link>
-                      ))}
+                    {/* Button */}
+                    <div
+                      onClick={() => setOpen(!open)}
+                      className="cursor-pointer px-4 font-medium text-base bg-[#2B2A29] hover:bg-[#ffffff] hover:text-[#2B2A29] duration-300 rounded-[50px] universal gap-2.5 text-[#ffffff] flex items-center justify-between min-w-[100px] py-1 overflow-hidden"
+                    >
+                      <p className="capitalize">{selected || "Category"}</p>
+                      <FaCaretDown />
                     </div>
-                  )}
+
+                    {/* Dropdown */}
+                    {open && (
+                      <div className="absolute left-0 top-8 w-full min-w-[124px] bg-[#2B2A29] shadow-lg z-50 category_sing">
+                        {uniqueCategories.map((cat) => (
+                          <Link
+                            className="w-full"
+                            key={cat._id}
+                            href={`/search?mainCategory=${encodeURIComponent(
+                              cat.mainCategory,
+                            )}`}
+                          >
+                            <div
+                              onClick={() => {
+                                setSelected(cat.mainCategory);
+                                setOpen(false);
+                              }}
+                              className="px-2 text-sm w-full py-1 border-b border-b-[#333333] text-white hover:bg-[#3a3938] cursor-pointer capitalize"
+                            >
+                              {cat.mainCategory}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-)}
+              )}
 
               {/* Search form */}
               <form
                 onSubmit={handleSearch}
-                className="w-full overflow-hidden items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] hidden sm:flex md:flex"
+                className={`w-full overflow-hidden items-center gap-0 bg-[#F8EED4] rounded-[50px] filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] ${
+                  siteType === "wholesale" ? "flex" : "hidden sm:flex md:flex"
+                }`}
               >
                 <input
                   type="search"
@@ -201,39 +204,40 @@ export default function Hero({ openMenu }) {
 
             {/* Account + Cart */}
             {siteType !== "wholesale" && (
-            <div className="w-fit flex items-center justify-end gap-2.5">
-              {/* profile */}
-              <Link href={user ? "/profile" : "/login"}>
-                <div
-                  // onClick={handleAccountClick}
-                  className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
-                >
-                  <p className="capitalize hidden sm:block">
-                    {user ? "profile" : "login"}
-                  </p>
-                  <span className="relative">
-                    <FaUser size={24} />
-                  </span>
-                </div>
-              </Link>
-
-              {/* cart */}
-              <Link href="/cart">
-                <div className="flex items-center gap-1 text-base relative">
-                  <BsCartFill size={32} />
-
-                  {cart.length > 0 ? (
-                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
-                      {cart.length}
+              <div className="w-fit flex items-center justify-end gap-2.5">
+                {/* profile */}
+                <Link href={user ? "/profile" : "/login"}>
+                  <div
+                    // onClick={handleAccountClick}
+                    className="py-1 px-0 sm:px-4 md:px-4 font-medium bg-transparent sm:bg-[#F8EED4] md:bg-[#F8EED4] md:hover:bg-[#2B2A29] md:hover:text-[#ffffff] rounded-[50px] universal gap-2.5 text-[#2B2A29] duration-300 text-base cursor-pointer active:translate-y-1 active:shadow-[0_2px_0_#d1a900]"
+                  >
+                    <p className="capitalize hidden sm:block">
+                      {user ? "profile" : "login"}
+                    </p>
+                    <span className="relative">
+                      <FaUser size={24} />
                     </span>
-                  ) : (
-                    <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
-                      0
-                    </span>
-                  )}
-                </div>
-              </Link>
-            </div>)}
+                  </div>
+                </Link>
+
+                {/* cart */}
+                <Link href="/cart">
+                  <div className="flex items-center gap-1 text-base relative">
+                    <BsCartFill size={32} />
+
+                    {cart.length > 0 ? (
+                      <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
+                        {cart.length}
+                      </span>
+                    ) : (
+                      <span className="text-[#FFFFFF] rounded-full universal absolute top-1.5 left-3 font-medium text-xs">
+                        0
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* mobile search bar */}
