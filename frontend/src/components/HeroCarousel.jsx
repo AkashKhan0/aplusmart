@@ -62,12 +62,7 @@ export default function HeroCarousel() {
   };
 
   // Current slide: backend data if exists, else default
-  const current =
-    siteType === "wholesale"
-      ? defaultSlide
-      : offers.length > 0
-        ? offers[currentIndex]
-        : null;
+  const current = offers.length > 0 ? offers[currentIndex] : defaultSlide;
 
   return (
     <div className="relative w-full h-fit overflow-hidden pb-5">
