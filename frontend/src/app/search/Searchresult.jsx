@@ -23,7 +23,7 @@ export default function Searchresult() {
   const [subCategory, setSubCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user, addToCart } = useAppContext();
+  const { user, addToCart, siteType } = useAppContext();
   const [successProductId, setSuccessProductId] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -156,17 +156,17 @@ export default function Searchresult() {
                 <Link
                   key={item._id}
                   href={
-                    user?.role === "reseller" ? "#" : `/products/${item._id}`
+                    siteType === "wholesale" ? "#" : `/products/${item._id}`
                   }
                   onClick={(e) => {
-                    if (user?.role === "reseller") {
+                    if (siteType === "wholesale") {
                       e.preventDefault();
                     }
                   }}
                 >
                   <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                     {/* % OFF */}
-                    {user?.role === "customer" &&
+                    {siteType !== "wholesale" && 
                       item?.offerPrice > 0 &&
                       item?.regularPrice > 0 &&
                       item.offerPrice < item.regularPrice && (
@@ -196,7 +196,7 @@ export default function Searchresult() {
                           {item.name}
                         </h1>
 
-                        {user?.role !== "reseller" && (
+                        {siteType !== "wholesale" && (
                           <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                             <span className="taka">৳-</span>
                             {Number(item.offerPrice).toLocaleString("en-IN")}
@@ -217,7 +217,7 @@ export default function Searchresult() {
 
                       {/* add to cart button */}
                       <div className="w-full flex flex-col items-center justify-center mb-2">
-                        {user?.role === "reseller" ? (
+                        {siteType === "wholesale" ? (
                           <div className="flex flex-wrap items-center justify-center gap-2">
                             <button
                               onClick={() =>
