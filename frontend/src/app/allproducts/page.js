@@ -19,7 +19,7 @@ const openMessenger = () => {
 };
 
 export default function Allproducts() {
-  const { user, addToCart } = useAppContext();
+  const { user, addToCart, siteType } = useAppContext();
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -171,17 +171,17 @@ export default function Allproducts() {
               <Link
                 key={product._id}
                 href={
-                  user?.role === "reseller" ? "#" : `/products/${product._id}`
+                  siteType === "wholesale" ? "#" : `/products/${product._id}`
                 }
                 onClick={(e) => {
-                  if (user?.role === "reseller") {
+                  if (siteType === "wholesale") {
                     e.preventDefault();
                   }
                 }}
               >
                 <div className="bg-white rounded-md shadow-2xl hover:shadow-md transition relative border-2 border-transparent hover:border-[#c9c9c9] h-full overflow-hidden universal_column">
                   {/* Offer / Points */}
-                  {user?.role === "customer" &&
+                  {siteType !== "wholesale" && 
                     product?.offerPrice > 0 &&
                     product?.regularPrice > 0 &&
                     product.offerPrice < product.regularPrice && (
@@ -211,7 +211,7 @@ export default function Allproducts() {
                         {product.name}
                       </h1>
 
-                      {user?.role !== "reseller" && (
+                      {siteType !== "wholesale" && (
                         <p className="text-[#d42300] text-sm flex items-center gap-1 font-bold">
                           <span className="taka">৳-</span>
                           {Number(product.offerPrice).toLocaleString("en-IN")}
@@ -230,7 +230,7 @@ export default function Allproducts() {
                       )}
                     </div>
 
-                    {user?.role === "reseller" ? (
+                    {siteType === "wholesale" ? (
                       <div className="flex flex-wrap items-center justify-center gap-2">
                         <button
                           onClick={() =>
