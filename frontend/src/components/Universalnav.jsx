@@ -186,7 +186,7 @@ export default function Universalnav({ openMenu, fixedOnTop }) {
       <div className="w-full h-14 block sm:hidden md:hidden fixed bottom-0 left- footer_mbl border">
         <div className="universal w-full h-full">
           <div
-            className={`}w-[95%] bg-[#590000] flex items-center ${siteType === "wholesale" ? "justify-evenly" : "justify-between"} text-[#FFFFFF] h-full px-3 rounded-full`}
+            className={`w-[95%] bg-[#590000] flex items-center ${siteType === "wholesale" ? "justify-evenly" : "justify-between"} text-[#FFFFFF] h-full px-3 rounded-full`}
           >
             <Link href="/">
               <div className="universal_column gap-0.5 rounded-full mbl_mnu_itm">
