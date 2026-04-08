@@ -129,7 +129,7 @@ export default function Hero({ openMenu }) {
 
           {/* menu search bar account cart */}
           <div className="w-full max-w-[900px] flex items-center justify-between gap-5 px-5 sm:px-10 md:px-5">
-            <div className="w-fit sm:w-full md:w-full flex items-center justify-between gap-2.5">
+            <div className={` ${siteType === "wholesale" ? "w-full" : "w-fit"} sm:w-full md:w-full flex items-center justify-between gap-2.5`}>
               <div
                 className="font-semibold text-4xl cursor-pointer"
                 onClick={openMenu}
