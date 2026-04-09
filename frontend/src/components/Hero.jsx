@@ -95,24 +95,26 @@ export default function Hero({ openMenu }) {
         {/* Top offers/deals/combo bar */}
         <div className="w-full flex items-start justify-center top_nav_bar">
           <div className="w-full max-w-[900px] bg-[#2B2A29] top_bg_nav">
-            <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold relative">
-              <button
-                type="button"
-                className="hero_top cursor-pointer"
-                onClick={handleSeller}
-              >
-                <BsFire className="text-[#FFCE1B]" />
-                <span className="hidden sm:block">supper</span> offers
-              </button>
-              {/* Toast Message */}
+            {siteType !== "wholesale" && (
+              <div className="w-full h-full flex items-center justify-center gap-5 text-[#FFFFFF] font-semibold relative">
+                <button
+                  type="button"
+                  className="hero_top cursor-pointer"
+                  onClick={handleSeller}
+                >
+                  <BsFire className="text-[#FFCE1B]" />
+                  <span className="hidden sm:block">supper</span> offers
+                </button>
+                {/* Toast Message */}
 
-              <Link href="/combo">
-                <div className="hero_top">
-                  <LuPackagePlus className="text-[#FFCE1B]" />
-                  combo <span className="hidden sm:block">packages</span>
-                </div>
-              </Link>
-            </div>
+                <Link href="/combo">
+                  <div className="hero_top">
+                    <LuPackagePlus className="text-[#FFCE1B]" />
+                    combo <span className="hidden sm:block">packages</span>
+                  </div>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 

@@ -5,11 +5,12 @@ import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { GiShoppingBag } from "react-icons/gi";
 import { useAppContext } from "../context/AppContext";
+import ShopeImage from "../images/shop.png";
 
 const defaultSlide = {
-  image: "/images/shop.png",
+  // image: "/images/shop.png",
   title: "Best Deals of The Season",
-  subtitle: "Up to 20% Off on Electronics",
+  subtitle: "Variety of products at unbeatable prices",
   buttonUrl: "/offers",
 };
 
@@ -69,50 +70,56 @@ export default function HeroCarousel() {
       {/* Background */}
       <div
         className="w-full h-[300px] sm:h-[350px] bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
-        style={{ backgroundImage: `url(${current.image})` }}
+        style={{
+          backgroundImage: `url(${siteType === "wholesale" ? ShopeImage : current?.image})`,
+        }}
       >
         {/* Dark Overlay */}
         {siteType !== "wholesale" && (
-        <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 relative">
-          <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
-            {current.title}
-          </h2>
+          <div className="w-full h-full bg-transparent flex flex-col items-center justify-center text-center px-4 relative">
+            <h2 className="text-2xl sm:text-5xl md:text-6xl uppercase font-bold text-white mb-2">
+              {current.title}
+            </h2>
 
-          <p className="text-lg font-semibold text-[#2B2A29] mb-5">
-            {current.subtitle}
-          </p>
-        </div>)}
+            <p className="text-lg font-semibold text-[#2B2A29] mb-5">
+              {current.subtitle}
+            </p>
+          </div>
+        )}
       </div>
-{siteType !== "wholesale" && (
-      <Link
-        href={current.buttonUrl}
-        className="absolute bottom-5 left-[50%] -translate-x-[53%]"
-      >
-        <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
-          <span>Buy Now</span>
-          <span className="text-sm shop_btn_icon">
-            <GiShoppingBag />
-          </span>
-        </button>
-      </Link>)}
+      {siteType !== "wholesale" && (
+        <Link
+          href={current.buttonUrl}
+          className="absolute bottom-5 left-[50%] -translate-x-[53%]"
+        >
+          <button className="buy_btn mb-5 sm:mb-0 active:translate-y-1 active:shadow-[0_2px_0_#d1a900]">
+            <span>Buy Now</span>
+            <span className="text-sm shop_btn_icon">
+              <GiShoppingBag />
+            </span>
+          </button>
+        </Link>
+      )}
 
       {/* Prev Button */}
       {siteType !== "wholesale" && (
-      <button
-        onClick={prevSlide}
-        className="absolute left-[20%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
-      >
-        <FaChevronLeft />
-      </button>)}
+        <button
+          onClick={prevSlide}
+          className="absolute left-[20%] sm:left-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        >
+          <FaChevronLeft />
+        </button>
+      )}
 
       {/* Next Button */}
       {siteType !== "wholesale" && (
-      <button
-        onClick={nextSlide}
-        className="absolute right-[20%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
-      >
-        <FaChevronRight />
-      </button>)}
+        <button
+          onClick={nextSlide}
+          className="absolute right-[20%] sm:right-0 bottom-0 sm:top-1/2 h-fit -translate-y-1/2 bg-black/10 duration-300 text-white p-2 rounded-full hover:bg-black/60 transition cursor-pointer"
+        >
+          <FaChevronRight />
+        </button>
+      )}
     </div>
   );
 }
