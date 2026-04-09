@@ -10,6 +10,7 @@ import { IoMdCall } from "react-icons/io";
 import { MdMail } from "react-icons/md";
 import ChatWidget from "./ChatWidget";
 import { Reggae_One } from "next/font/google";
+import { useAppContext } from "../context/AppContext";
 
 const reggaeOne = Reggae_One({
   subsets: ["latin"],
@@ -42,12 +43,15 @@ const scrollToTop = () => {
 };
 
 export default function Footer() {
+  const { siteType } = useAppContext();
   return (
     <>
       <div className="w-full h-fit universal_column bg-[#2B2A29] text-[#FFFFFF] pt-5 pb-16 sm:pb-5 md:pb-5">
         <div className="fixed_width h-full px-5">
           <div className="w-full flex flex-col sm:flex-col md:flex-row items-stretch gap-2.5">
-            <div className="w-full smw-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
+            <div
+              className={`w-full sm:w-full ${siteType === "wholesale" ? "md:w-[50%]" : "md:w-[30%]"} flex flex-col items-center sm:items-center md:items-start`}
+            >
               {/* <h1 className="ftr_h1">support</h1> */}
               <Link href="/">
                 <h1
@@ -73,61 +77,65 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="w-full smw-full md:w-[40%] flex flex-col items-center sm:items-center md:items-start">
-              <h1 className="ftr_h1">About Us</h1>
+            {siteType !== "wholesale" && (
+              <div className="w-full sm:w-full md:w-[40%] flex flex-col items-center sm:items-center md:items-start">
+                <h1 className="ftr_h1">About Us</h1>
 
-              {/* desktop part */}
-              <div className="w-full hidden sm:hidden md:flex gap-2.5">
-                <div className="w-full flex flex-col text-sm gap-1.5">
-                  <Link href="/online-delivery">
-                    <p className="ftr_span">Online Delivery</p>
-                  </Link>
-                  <Link href="/contact">
-                    <p className="ftr_span">Contact Us</p>
-                  </Link>
-                  <Link href="/allproducts">
-                    <p className="ftr_span">Our Products</p>
-                  </Link>
+                {/* desktop part */}
+                <div className="w-full hidden sm:hidden md:flex gap-2.5">
+                  <div className="w-full flex flex-col text-sm gap-1.5">
+                    <Link href="/online-delivery">
+                      <p className="ftr_span">Online Delivery</p>
+                    </Link>
+                    <Link href="/contact">
+                      <p className="ftr_span">Contact Us</p>
+                    </Link>
+                    <Link href="/allproducts">
+                      <p className="ftr_span">Our Products</p>
+                    </Link>
+                  </div>
+                  <div className="w-full flex flex-col text-sm gap-1.5">
+                    <Link href="/terms-condition">
+                      <p className="ftr_span">Terms and Conditions</p>
+                    </Link>
+                    <Link href="/privacy-policy">
+                      <p className="ftr_span">Privacy Policy</p>
+                    </Link>
+                    <Link href="/return&refund-policy">
+                      <p className="ftr_span">Refund and Return Policy</p>
+                    </Link>
+                  </div>
                 </div>
-                <div className="w-full flex flex-col text-sm gap-1.5">
-                  <Link href="/terms-condition">
-                    <p className="ftr_span">Terms and Conditions</p>
-                  </Link>
-                  <Link href="/privacy-policy">
-                    <p className="ftr_span">Privacy Policy</p>
-                  </Link>
-                  <Link href="/return&refund-policy">
-                    <p className="ftr_span">Refund and Return Policy</p>
-                  </Link>
+
+                {/* mobile part */}
+                <div className="w-full flex sm:flex md:hidden gap-2.5">
+                  <div className="w-full flex flex-wrap justify-center text-sm gap-5 gap-y-1">
+                    <Link href="/online-delivery">
+                      <p className="ftr_span">Online Delivery</p>
+                    </Link>
+                    <Link href="/contact">
+                      <p className="ftr_span">Contact Us</p>
+                    </Link>
+                    <Link href="/terms-condition">
+                      <p className="ftr_span">Terms and Conditions</p>
+                    </Link>
+                    <Link href="/allproducts">
+                      <p className="ftr_span">Our Products</p>
+                    </Link>
+                    <Link href="/privacy-policy">
+                      <p className="ftr_span">Privacy Policy</p>
+                    </Link>
+                    <Link href="/return&refund-policy">
+                      <p className="ftr_span">Refund and Return Policy</p>
+                    </Link>
+                  </div>
                 </div>
               </div>
+            )}
 
-              {/* mobile part */}
-              <div className="w-full flex sm:flex md:hidden gap-2.5">
-                <div className="w-full flex flex-wrap justify-center text-sm gap-5 gap-y-1">
-                  <Link href="/online-delivery">
-                    <p className="ftr_span">Online Delivery</p>
-                  </Link>
-                  <Link href="/contact">
-                    <p className="ftr_span">Contact Us</p>
-                  </Link>
-                  <Link href="/terms-condition">
-                    <p className="ftr_span">Terms and Conditions</p>
-                  </Link>
-                  <Link href="/allproducts">
-                    <p className="ftr_span">Our Products</p>
-                  </Link>
-                  <Link href="/privacy-policy">
-                    <p className="ftr_span">Privacy Policy</p>
-                  </Link>
-                  <Link href="/return&refund-policy">
-                    <p className="ftr_span">Refund and Return Policy</p>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full sm:w-full md:w-[30%] flex flex-col items-center sm:items-center md:items-start">
+            <div
+              className={`w-full sm:w-full ${siteType === "wholesale" ? "md:w-[50%]" : "md:w-[30%]"} flex flex-col items-center sm:items-center md:items-start`}
+            >
               <h1 className="ftr_h1">Stay Connected</h1>
               <div className="w-fit text-center sm:text-center md:text-start text-sm">
                 <p className="font-medium">A Plus Mart BD</p>
