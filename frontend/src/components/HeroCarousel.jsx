@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { GiShoppingBag } from "react-icons/gi";
 import { useAppContext } from "../context/AppContext";
-import ShopeImage from "../images/shop.png";
 
 const defaultSlide = {
   // image: "/images/shop.png",
@@ -85,12 +84,6 @@ export default function HeroCarousel() {
             </p>
           </div>
         )}
-      </div> )}
-      {siteType === "wholesale" && (
-      <div
-        className="w-full h-[300px] sm:h-[350px] bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
-      >
-        <img src={ShopeImage} alt="Shop" className="w-full h-full object-contain" />
       </div> )}
 
       {siteType !== "wholesale" && (
