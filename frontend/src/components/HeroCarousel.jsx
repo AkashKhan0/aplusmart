@@ -68,11 +68,10 @@ export default function HeroCarousel() {
   return (
     <div className="relative w-full h-fit overflow-hidden pb-5">
       {/* Background */}
+      {siteType !== "wholesale" && (
       <div
         className="w-full h-[300px] sm:h-[350px] bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
-        style={{
-          backgroundImage: `url(${siteType === "wholesale" ? ShopeImage : current?.image})`,
-        }}
+        style={{ backgroundImage: `url(${current.image})` }}
       >
         {/* Dark Overlay */}
         {siteType !== "wholesale" && (
@@ -86,7 +85,14 @@ export default function HeroCarousel() {
             </p>
           </div>
         )}
-      </div>
+      </div> )}
+      {siteType === "wholesale" && (
+      <div
+        className="w-full h-[300px] sm:h-[350px] bg-contain bg-no-repeat bg-position-[center_top] transition-all duration-700 ease-in-out filter-[drop-shadow(0_20px_20px_rgba(0,0,0,0.4))] mb-5"
+      >
+        <img src={ShopeImage} alt="Shop" className="w-full h-full object-contain" />
+      </div> )}
+
       {siteType !== "wholesale" && (
         <Link
           href={current.buttonUrl}
