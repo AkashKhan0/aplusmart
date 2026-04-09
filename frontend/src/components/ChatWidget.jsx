@@ -8,11 +8,12 @@ import { GiCrossMark } from "react-icons/gi";
 import { FaUser, FaWhatsapp } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
 import { BiSupport } from "react-icons/bi";
+import { useAppContext } from "../context/AppContext";
 
 const supportPeople = [
   { name: "Jannat", image: "/images/girl.png" },
   { name: "Naznin", image: "/images/girl1.png" },
-  { name: "Mitu", image: "/images/girl2.jpg" },
+  { name: "Preety", image: "/images/girl2.jpg" },
 ];
 
 const reggaeOne = Reggae_One({
@@ -31,7 +32,8 @@ const openMessenger = () => {
 
 const startDate = new Date("2026-01-01T00:00:00");
 
-export default function ChatWidget() {
+export default function ChatWidget() {  
+  const { siteType } = useAppContext();
   const [open, setOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [showButtons, setShowButtons] = useState(false);
@@ -199,29 +201,30 @@ export default function ChatWidget() {
           {/* Buttons */}
           {showButtons && (
             <div className="space-y-2 animate-fadeIn">
+              {siteType !== "wholesale" && (
               <button
                 onClick={() => handleNavigate("/online-delivery")}
                 className="w-full border border-[#9719006f] py-1 rounded-lg
                 hover:bg-green-50 transition text-[#000000] cursor-pointer"
               >
                 Online Delivery
-              </button>
+              </button>)}
 
-              <button
+              {siteType !== "wholesale" && (<button
                 onClick={() => handleNavigate("/privacy-policy")}
                 className="w-full border border-[#9719006f] py-1 rounded-lg
                 hover:bg-green-50 transition text-[#000000] cursor-pointer"
               >
                 Privacy Policy
-              </button>
+              </button>)}
 
-              <button
+              {siteType !== "wholesale" && (<button
                 onClick={() => handleNavigate("/return&refund-policy")}
                 className="w-full border border-[#9719006f] py-1 rounded-lg
                 hover:bg-green-50 transition text-[#000000] cursor-pointer"
               >
                 Refund & Return Policy
-              </button>
+              </button>)}
 
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <button

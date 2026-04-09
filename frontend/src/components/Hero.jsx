@@ -90,7 +90,7 @@ export default function Hero({ openMenu }) {
   }, [showMessage]);
 
   return (
-    <div className={`w-full ${siteType === "wholesale" ? "h-[300px] sm:h-[350px]" : "h-fit"} universal bg-[#FFCE1B] relative`}>
+    <div className={`w-full ${siteType === "wholesale" ? "h-[200px] sm:h-[250px]" : "h-fit"} universal bg-[#FFCE1B] relative`}>
       <div className="fixed_width h-full">
         {/* Top offers/deals/combo bar */}
         <div className="w-full flex items-start justify-center top_nav_bar">
