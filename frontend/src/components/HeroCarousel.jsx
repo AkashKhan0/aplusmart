@@ -8,8 +8,8 @@ import { useAppContext } from "../context/AppContext";
 
 const defaultSlide = {
   // image: "/images/shop.png",
-  title: "Best Deals of The Season",
-  subtitle: "Variety of products at unbeatable prices",
+  // title: "Best Deals of The Season",
+  // subtitle: "Variety of products at unbeatable prices",
   buttonUrl: "/offers",
 };
 
