@@ -134,7 +134,7 @@ export default function Footer() {
             )}
 
             <div
-              className={`w-full sm:w-full ${siteType === "wholesale" ? "md:w-[50%]" : "md:w-[30%]"} flex flex-col items-center sm:items-center md:items-start`}
+              className={`w-full sm:w-full ${siteType === "wholesale" ? "md:w-[50%] md:items-end" : "md:w-[30%] md:items-start"} flex flex-col items-center sm:items-center`}
             >
               <h1 className="ftr_h1">Stay Connected</h1>
               <div className="w-fit text-center sm:text-center md:text-start text-sm">
